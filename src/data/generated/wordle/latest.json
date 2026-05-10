@@ -1,13 +1,14 @@
 {
   "date": "2026-05-10",
   "status": "published",
-  "sourceMode": "manual_seed",
-  "solution": "PLACE",
-  "dayNumber": 1397,
+  "sourceMode": "nyt-api-v2",
+  "solution": "PARKA",
+  "dayNumber": 1786,
+  "editor": "Tracy Bennett",
   "hints": {
     "firstLetter": "P",
-    "pattern": "CCVCV",
-    "definition": "A particular position, point, or area in space; a particular spot or location."
+    "pattern": "CVCCV",
+    "definition": "A warm, hood-lined outer garment, ideal for cold weather."
   },
-  "updatedAt": "2026-05-10T00:00:00.000Z"
+  "updatedAt": "2026-05-10T10:23:20.392Z"
 }
