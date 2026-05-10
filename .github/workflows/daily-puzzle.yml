@@ -2,7 +2,10 @@ name: Daily Puzzle Update
 
 on:
   schedule:
-    - cron: '0 9 * * *'  # 09:00 UTC = 05:00 EDT (summer) / 04:00 EST (winter). NYT publishes Connections at midnight ET, so even the winter time is comfortably after publication.
+    # 09:00 UTC = 05:00 EDT (summer) / 04:00 EST (winter).
+    # All three NYT puzzles roll over by 03:00 ET (Spelling Bee is the latest).
+    # 5am ET gives CDN propagation buffer + avoids West-Coast-midnight rush.
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      HEALTHCHECKS_URL: ${{ secrets.HEALTHCHECKS_URL }}
+      GRIDHINT_FALLBACK_EYEFYRE: ${{ vars.GRIDHINT_FALLBACK_EYEFYRE || '0' }}
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,29 +27,70 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - name: Fetch and update connections puzzle
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          HEALTHCHECKS_URL: ${{ secrets.HEALTHCHECKS_URL }}
-          GRIDHINT_FALLBACK_EYEFYRE: ${{ vars.GRIDHINT_FALLBACK_EYEFYRE || '0' }}
+
+      # Each fetch step uses continue-on-error so a single 404/cooldown
+      # doesn't abort the others. We aggregate exit codes at the end and
+      # exit 1 *after* commit + IndexNow if any failed (so the run goes red
+      # but we still publish whatever did succeed).
+      - name: Fetch Connections
+        id: connections
+        continue-on-error: true
         run: npx tsx src/scripts/import-daily-puzzles.ts
+
+      - name: Brief pause before Wordle (anti-burst)
+        run: sleep 8
+
+      - name: Fetch Wordle
+        id: wordle
+        continue-on-error: true
+        run: npx tsx src/scripts/import-daily-wordle.ts
+
+      - name: Brief pause before Spelling Bee (anti-burst)
+        run: sleep 8
+
+      - name: Fetch Spelling Bee
+        id: spelling-bee
+        continue-on-error: true
+        run: npx tsx src/scripts/import-daily-spelling-bee.ts
+
       - name: Validate generated files
+        id: validate
+        continue-on-error: true
         run: npx tsx src/scripts/validate-generated.ts
+
       - name: Commit and push
         if: always()
         run: |
           git config user.name "gridhint-bot"
           git config user.email "bot@gridhint.com"
-          git add src/data/generated/connections/ && git add -A .gridhint-cooldown.json 2>/dev/null || true
+          git add src/data/generated/ && git add -A .gridhint-cooldown.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
           DATE=$(date -u +'%Y-%m-%d')
-          git commit --no-verify -m "daily: connections update $DATE"
-          # Pushes to whatever branch checkout grabbed (the repo's default branch).
-          # If you renamed master → main, GHA will use main automatically.
-          # Verify the branch matches what Hostinger watches.
+          git commit --no-verify -m "daily: puzzle update $DATE"
           git push origin HEAD
+
+      # IndexNow ping AFTER commit. The script polls each /today page for
+      # today's date string before submitting, so we don't ping until
+      # Hostinger has actually deployed the fresh content.
+      - name: Ping IndexNow
+        if: always()
+        continue-on-error: true
+        run: npx tsx src/scripts/ping-indexnow.ts
+
+      # Final observability: if any fetch or validation failed, fail the run
+      # AFTER all the work above completed (commit + IndexNow ran).
+      - name: Report partial failures
+        if: always()
+        run: |
+          C=${{ steps.connections.outcome }}
+          W=${{ steps.wordle.outcome }}
+          B=${{ steps.spelling-bee.outcome }}
+          V=${{ steps.validate.outcome }}
+          echo "Outcomes: connections=$C wordle=$W spelling-bee=$B validate=$V"
+          if [ "$C" != "success" ] || [ "$W" != "success" ] || [ "$B" != "success" ] || [ "$V" != "success" ]; then
+            echo "::error::One or more steps did not succeed — see outcomes above."
+            exit 1
+          fi

@@ -1,0 +1,19 @@
+{
+  "date": "2026-05-10",
+  "status": "published",
+  "sourceMode": "manual_seed",
+  "centerLetter": "T",
+  "outerLetters": ["A", "C", "E", "I", "L", "N"],
+  "validLetters": ["T", "A", "C", "E", "I", "L", "N"],
+  "answerHashes": [],
+  "pangramHashes": [],
+  "hints": {
+    "totalWords": 0,
+    "pangramCount": 0,
+    "lengthDistribution": {},
+    "startingLetterDistribution": {},
+    "geniusThreshold": 0,
+    "queenBeeScore": 0
+  },
+  "updatedAt": "2026-05-10T00:00:00.000Z"
+}

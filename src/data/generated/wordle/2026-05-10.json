@@ -1,0 +1,13 @@
+{
+  "date": "2026-05-10",
+  "status": "published",
+  "sourceMode": "manual_seed",
+  "solution": "PLACE",
+  "dayNumber": 1397,
+  "hints": {
+    "firstLetter": "P",
+    "pattern": "CCVCV",
+    "definition": "A particular position, point, or area in space; a particular spot or location."
+  },
+  "updatedAt": "2026-05-10T00:00:00.000Z"
+}

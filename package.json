@@ -8,6 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "data:import": "tsx src/scripts/import-daily-puzzles.ts",
+    "data:import:wordle": "tsx src/scripts/import-daily-wordle.ts",
+    "data:import:spelling-bee": "tsx src/scripts/import-daily-spelling-bee.ts",
+    "data:validate": "tsx src/scripts/validate-generated.ts",
+    "data:indexnow": "tsx src/scripts/ping-indexnow.ts",
     "data:lexicon": "tsx src/scripts/import-lexicon.ts",
     "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts"
   },

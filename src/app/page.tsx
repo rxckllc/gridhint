@@ -148,11 +148,11 @@ const dailyPuzzles = [
     eyebrowTint: "text-purple-700",
   },
   {
-    href: "/word-games/wordle/solver",
+    href: "/word-games/wordle/today",
     eyebrow: "Today's NYT Wordle",
-    title: "Wordle Solver",
+    title: "Wordle Hints & Answer",
     description:
-      "Enter your green and yellow letters to narrow down today's NYT Wordle answer in seconds. Works for today and the full archive.",
+      "Today's NYT Wordle: progressive hints (first letter, pattern, definition) plus the full answer behind a reveal — pick how much help you want.",
     Icon: Target,
     accentBar: "bg-emerald-500",
     iconTint: "text-emerald-600",
@@ -160,11 +160,11 @@ const dailyPuzzles = [
     eyebrowTint: "text-emerald-700",
   },
   {
-    href: "/word-games/spelling-bee/helper",
+    href: "/word-games/spelling-bee/today",
     eyebrow: "Today's NYT Spelling Bee",
-    title: "Spelling Bee Helper",
+    title: "Spelling Bee Hints",
     description:
-      "Every valid word, the pangram, and your Genius threshold for today's New York Times Spelling Bee — filterable by letter and length.",
+      "Today's NYT Spelling Bee letters, total word count, pangram count, and a private guess-checker — find words yourself with smart hints.",
     Icon: Hexagon,
     accentBar: "bg-amber-500",
     iconTint: "text-amber-600",
