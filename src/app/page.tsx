@@ -340,11 +340,6 @@ export default function HomePage() {
             ))}
           </ul>
 
-          <p className="mt-10 text-xs leading-relaxed text-slate-500">
-            GridHint is an independent puzzle helper and is not affiliated with, endorsed by, or sponsored by The New York Times Company.
-            &quot;NYT&quot;, &quot;New York Times&quot;, &quot;Connections&quot;, &quot;Wordle&quot;, and &quot;Spelling Bee&quot; are referenced
-            descriptively to indicate the puzzles our tools help you solve. All trademarks belong to their respective owners.
-          </p>
         </section>
       </div>
     </>
