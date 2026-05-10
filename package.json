@@ -13,13 +13,18 @@
     "data:validate": "tsx src/scripts/validate-generated.ts",
     "data:indexnow": "tsx src/scripts/ping-indexnow.ts",
     "data:lexicon": "tsx src/scripts/import-lexicon.ts",
-    "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts"
+    "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts",
+    "data:dashboard": "node src/scripts/fetch-analytics.mjs",
+    "data:report": "node src/scripts/send-daily-report.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",
+    "@google-analytics/data": "^5.2.2",
+    "nodemailer": "^8.0.7",
+    "recharts": "^3.8.1",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",

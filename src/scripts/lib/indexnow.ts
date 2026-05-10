@@ -6,7 +6,7 @@
  * scheduling. We rely on sitemap lastmod for Google.
  *
  * Requires: INDEXNOW_KEY env var, plus a public/{key}.txt file served at
- *   https://www.gridhint.com/{key}.txt
+ *   https://gridhint.com/{key}.txt
  *
  * Per Gemini 3.1 Pro review: do NOT submit URLs until the deployed site is
  * actually serving fresh content. We poll a known cache-buster (lastmod or
@@ -16,7 +16,7 @@
 import { plainFetch } from './nyt-fetch';
 import { sleep } from './atomic-write';
 
-const INDEXNOW_HOST = 'www.gridhint.com';
+const INDEXNOW_HOST = 'gridhint.com';
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
 
 export interface IndexNowSubmission {

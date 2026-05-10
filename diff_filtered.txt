@@ -1,0 +1,2349 @@
+diff --git a/src/app/about/page.tsx b/src/app/about/page.tsx
+index a0de2f7..581400b 100644
+--- a/src/app/about/page.tsx
++++ b/src/app/about/page.tsx
+@@ -27,14 +27,14 @@ export const metadata: Metadata = {
+ 
+ export default function AboutPage() {
+   const tools = [
+-    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/word-games/connections-hint" },
+-    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/word-games/wordle-solver" },
+-    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/word-games/spelling-bee-helper" },
+-    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/word-games/unscramble" },
+-    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/word-games/anagram-solver" },
+-    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/word-games/crossword-solver" },
+-    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-games/word-pattern-solver" },
+-    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/word-games/5-letter-words" },
++    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/connections-hint" },
++    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/wordle-solver" },
++    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/spelling-bee-helper" },
++    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/unscramble" },
++    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/anagram-solver" },
++    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/crossword-solver" },
++    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-pattern-solver" },
++    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/5-letter-words" },
+   ];
+ 
+   const valueProps = [
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 9923085..b20418b 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -1,5 +1,6 @@
+ import type { Metadata } from "next";
+ import { Inter } from "next/font/google";
++import Script from "next/script";
+ import "./globals.css";
+ import { Header } from "@/components/layout/Header";
+ import { Footer } from "@/components/layout/Footer";
+@@ -7,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
+ const inter = Inter({ subsets: ["latin"] });
+ 
+ export const metadata: Metadata = {
++  metadataBase: new URL("https://gridhint.com"),
+   title: "GridHint — NYT Connections Hints, Wordle Solver & Spelling Bee Helper Today",
+   description:
+     "Daily hints and answers for the NYT Connections, Wordle, and Spelling Bee puzzles, plus solvers for anagrams, crosswords, hangman, and word ladders. Free, no sign-up.",
+@@ -20,6 +22,19 @@ export default function RootLayout({
+   return (
+     <html lang="en">
+       <body className={`${inter.className} min-h-screen bg-slate-50 text-slate-900 font-sans text-lg leading-relaxed flex flex-col`}>
++        <Script
++          src="https://www.googletagmanager.com/gtag/js?id=G-XK5332Z4Z8"
++          strategy="afterInteractive"
++        />
++        <Script id="google-analytics" strategy="afterInteractive">
++          {`
++            window.dataLayer = window.dataLayer || [];
++            function gtag(){dataLayer.push(arguments);}
++            gtag('js', new Date());
++
++            gtag('config', 'G-XK5332Z4Z8');
++          `}
++        </Script>
+         <Header />
+         <main className="flex-1 w-full pb-20">
+           {children}
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index 7d89cfc..eb9f968 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -79,17 +79,30 @@ export const metadata: Metadata = {
+ const jsonLd = {
+   "@context": "https://schema.org",
+   "@graph": [
++    {
++      "@type": "Organization",
++      "@id": "https://gridhint.com/#organization",
++      "name": "GridHint",
++      "url": "https://gridhint.com",
++      "logo": {
++        "@type": "ImageObject",
++        "url": "https://gridhint.com/gridhint-logo.png"
++      }
++    },
+     {
+       "@type": "WebSite",
+       "@id": "https://gridhint.com/#website",
+       "url": "https://gridhint.com",
+       "name": "GridHint",
+       "description": "Free daily hints and solvers for NYT Connections, Wordle, Spelling Bee and more word puzzles.",
++      "publisher": {
++        "@id": "https://gridhint.com/#organization"
++      },
+       "potentialAction": {
+         "@type": "SearchAction",
+         "target": {
+           "@type": "EntryPoint",
+-          "urlTemplate": "https://gridhint.com/word-games/anagram-jumble/unscramble?letters={search_term_string}"
++          "urlTemplate": "https://gridhint.com/anagram-jumble/unscramble?letters={search_term_string}"
+         },
+         "query-input": "required name=search_term_string"
+       }
+@@ -136,7 +149,7 @@ const jsonLd = {
+ 
+ const dailyPuzzles = [
+   {
+-    href: "/word-games/connections/hints",
++    href: "/connections/hints",
+     eyebrow: "Today's NYT Connections",
+     title: "Connections Hints",
+     description:
+@@ -148,7 +161,7 @@ const dailyPuzzles = [
+     eyebrowTint: "text-purple-700",
+   },
+   {
+-    href: "/word-games/wordle/today",
++    href: "/wordle/today",
+     eyebrow: "Today's NYT Wordle",
+     title: "Wordle Hints & Answer",
+     description:
+@@ -160,7 +173,7 @@ const dailyPuzzles = [
+     eyebrowTint: "text-emerald-700",
+   },
+   {
+-    href: "/word-games/spelling-bee/today",
++    href: "/spelling-bee/today",
+     eyebrow: "Today's NYT Spelling Bee",
+     title: "Spelling Bee Hints",
+     description:
+@@ -175,55 +188,55 @@ const dailyPuzzles = [
+ 
+ const moreTools = [
+   {
+-    href: "/word-games/anagram-jumble/unscramble",
++    href: "/anagram-jumble/unscramble",
+     title: "Unscramble Letters",
+     description: "Turn jumbled tiles into every possible word.",
+     Icon: Shuffle,
+   },
+   {
+-    href: "/word-games/anagram-jumble/anagram-solver",
++    href: "/anagram-jumble/anagram-solver",
+     title: "Anagram Solver",
+     description: "Find every anagram of a word or phrase.",
+     Icon: ArrowRightLeft,
+   },
+   {
+-    href: "/word-games/anagram-jumble/word-descrambler",
++    href: "/anagram-jumble/word-descrambler",
+     title: "Word Descrambler",
+     description: "Sort scrambled letters into valid words by length.",
+     Icon: SpellCheck,
+   },
+   {
+-    href: "/word-games/anagram-jumble/word-scrambler",
++    href: "/anagram-jumble/word-scrambler",
+     title: "Word Scrambler",
+     description: "Generate scrambled letter sets for puzzles and games.",
+     Icon: Type,
+   },
+   {
+-    href: "/word-games/crossword/solver",
++    href: "/crossword/solver",
+     title: "Crossword Solver",
+     description: "Match clues and patterns across major crossword grids.",
+     Icon: LayoutGrid,
+   },
+   {
+-    href: "/word-games/hangman/solver",
++    href: "/hangman/solver",
+     title: "Hangman Solver",
+     description: "Best-guess letters based on known positions and misses.",
+     Icon: HelpCircle,
+   },
+   {
+-    href: "/word-games/word-ladder/solver",
++    href: "/word-ladder/solver",
+     title: "Word Ladder Solver",
+     description: "Build the shortest one-letter-change path between two words.",
+     Icon: MoveRight,
+   },
+   {
+-    href: "/word-games/5-letter-words",
++    href: "/5-letter-words",
+     title: "5-Letter Words",
+     description: "Browse every 5-letter word by starting letters, pattern, or endings.",
+     Icon: List,
+   },
+   {
+-    href: "/word-games/word-pattern-solver",
++    href: "/word-pattern-solver",
+     title: "Word Pattern Solver",
+     description: "Find words matching a pattern — use _ for any unknown letter (e.g. C_T, B__K).",
+     Icon: ScanText,
+diff --git a/src/app/sitemap.ts b/src/app/sitemap.ts
+index 2883ef6..8ad6f41 100644
+--- a/src/app/sitemap.ts
++++ b/src/app/sitemap.ts
+@@ -30,19 +30,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
+   // ---------------------------------------------------------------
+   const dailyRoutes: MetadataRoute.Sitemap = [
+     {
+-      url: `${baseUrl}/word-games/connections/hints/`,
++      url: `${baseUrl}/connections/hints/`,
+       lastModified: readManifestUpdatedAt('connections'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+     },
+     {
+-      url: `${baseUrl}/word-games/wordle/today/`,
++      url: `${baseUrl}/wordle/today/`,
+       lastModified: readManifestUpdatedAt('wordle'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+     },
+     {
+-      url: `${baseUrl}/word-games/spelling-bee/today/`,
++      url: `${baseUrl}/spelling-bee/today/`,
+       lastModified: readManifestUpdatedAt('spelling-bee'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+@@ -56,20 +56,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
+   // and avoid Google "Page with redirect" errors.
+   // ---------------------------------------------------------------
+   const weeklyRoutes = [
+-    '/word-games/wordle/solver/',
+-    '/word-games/spelling-bee/helper/',
+-    '/word-games/anagram-jumble/unscramble/',
+-    '/word-games/anagram-jumble/anagram-solver/',
+-    '/word-games/anagram-jumble/word-descrambler/',
+-    '/word-games/anagram-jumble/word-scrambler/',
+-    '/word-games/crossword/solver/',
+-    '/word-games/hangman/solver/',
+-    '/word-games/word-ladder/solver/',
+-    '/word-games/word-pattern-solver/',
+-    '/word-games/5-letter-words/',
+-    '/word-games/unscramble/',
+-    '/word-games/word-scrambler/',
+-    '/word-games/word-descrambler/',
++    '/wordle/solver/',
++    '/spelling-bee/helper/',
++    '/anagram-jumble/unscramble/',
++    '/anagram-jumble/anagram-solver/',
++    '/anagram-jumble/word-descrambler/',
++    '/anagram-jumble/word-scrambler/',
++    '/crossword/solver/',
++    '/hangman/solver/',
++    '/word-ladder/solver/',
++    '/word-pattern-solver/',
++    '/5-letter-words/',
++    '/unscramble/',
++    '/word-scrambler/',
++    '/word-descrambler/',
+   ].map((route) => ({
+     url: `${baseUrl}${route}`,
+     lastModified: now,
+@@ -84,14 +84,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     '/about/',
+     '/contact/',
+     '/disclaimer/',
+-    '/word-games/',
+-    '/word-games/connections/',
+-    '/word-games/wordle/',
+-    '/word-games/spelling-bee/',
+-    '/word-games/anagram-jumble/',
+-    '/word-games/crossword/',
+-    '/word-games/hangman/',
+-    '/word-games/word-ladder/',
++    '/',
++    '/connections/',
++    '/wordle/',
++    '/spelling-bee/',
++    '/anagram-jumble/',
++    '/crossword/',
++    '/hangman/',
++    '/word-ladder/',
+   ].map((route) => ({
+     url: `${baseUrl}${route}`,
+     lastModified: now,
+@@ -99,6 +99,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     priority: 0.7,
+   }));
+ 
++  // ---------------------------------------------------------------
++  // Archive Pages — Expose historical data for long-tail traffic
++  // ---------------------------------------------------------------
++  const archiveRoutes: MetadataRoute.Sitemap = [];
++  const games = [
++    { dir: 'connections', path: '/connections/hints/' },
++    { dir: 'wordle', path: '/wordle/answers/' },
++  ];
++
++  for (const game of games) {
++    try {
++      const dirPath = path.join(process.cwd(), 'src/data/generated', game.dir);
++      if (fs.existsSync(dirPath)) {
++        const files = fs.readdirSync(dirPath);
++        for (const file of files) {
++          if (file.match(/^\d{4}-\d{2}-\d{2}\.json$/)) {
++            const dateStr = file.replace('.json', '');
++            const stat = fs.statSync(path.join(dirPath, file));
++            
++            // Note: you must ensure these dynamic routes actually exist in your Next.js app
++            // e.g., src/app/connections/hints/[date]/page.tsx
++            archiveRoutes.push({
++              url: `${baseUrl}${game.path}${dateStr}/`,
++              lastModified: stat.mtime,
++              changeFrequency: 'never',
++              priority: 0.5,
++            });
++          }
++        }
++      }
++    } catch (e) {
++      // ignore
++    }
++  }
++
+   // Homepage — top priority, daily change frequency (because daily-puzzle cards rotate)
+   const homepage = {
+     url: `${baseUrl}/`,
+@@ -107,5 +142,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     priority: 1.0,
+   };
+ 
+-  return [homepage, ...dailyRoutes, ...weeklyRoutes, ...monthlyRoutes];
++  return [homepage, ...dailyRoutes, ...weeklyRoutes, ...monthlyRoutes, ...archiveRoutes];
+ }
+diff --git a/src/app/word-games/5-letter-words/page.tsx b/src/app/word-games/5-letter-words/page.tsx
+deleted file mode 100644
+index a306b3e..0000000
+--- a/src/app/word-games/5-letter-words/page.tsx
++++ /dev/null
+@@ -1,56 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function FiveLetterWordsMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          5-Letter Word Finder
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Browse and filter all valid 5-letter words. Perfect for Wordle and other daily games.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label className="block text-2xl font-bold text-slate-900">
+-              Pattern (use _ for blanks)
+-            </label>
+-            <div className="flex gap-2 sm:gap-4 justify-start">
+-              {['_', 'R', 'A', '_', 'E'].map((letter, i) => (
+-                <input 
+-                  key={i}
+-                  type="text" 
+-                  maxLength={1}
+-                  defaultValue={letter !== '_' ? letter : ''}
+-                  className="w-14 h-16 sm:w-20 sm:h-20 text-3xl sm:text-4xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase"
+-                />
+-              ))}
+-            </div>
+-          </div>
+-          
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-             <label htmlFor="includes" className="block text-xl font-bold text-slate-900">
+-              Must include letters
+-            </label>
+-            <input 
+-              id="includes"
+-              type="text" 
+-              placeholder="e.g. S, T" 
+-              className="w-full text-xl p-4 h-14 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/anagram-jumble/anagram-solver/page.tsx b/src/app/word-games/anagram-jumble/anagram-solver/page.tsx
+deleted file mode 100644
+index 0fb5b7e..0000000
+--- a/src/app/word-games/anagram-jumble/anagram-solver/page.tsx
++++ /dev/null
+@@ -1,36 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Anagram Solver | Find Exact and Partial Anagrams',
+-  description: 'Find exact anagrams, partial anagrams, and words made from your letters.',
+-  alternates: { canonical: '/word-games/anagram-jumble/anagram-solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function AnagramSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Anagram Solver',
+-    description: 'Find exact anagrams, partial anagrams, and words made from your letters.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Anagram Solver', url: `${BASE}/word-games/anagram-jumble/anagram-solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Anagram Solver"
+-        subtitle="Find every possible anagram for a word or phrase. Toggle 'Exact Only' to find perfect matches."
+-        mode="unscramble"
+-        defaultOptions={{ exactOnly: true }}
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/page.tsx b/src/app/word-games/anagram-jumble/page.tsx
+deleted file mode 100644
+index bf46b3e..0000000
+--- a/src/app/word-games/anagram-jumble/page.tsx
++++ /dev/null
+@@ -1,78 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Shuffle, ArrowLeftRight, Layers, Search } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Anagram and Jumble Solver | Unscramble Any Word',
+-  description: 'Unscramble letters, find anagrams, descramble jumbled words, and create word scrambles. Free tools for puzzle lovers.',
+-  alternates: { canonical: '/word-games/anagram-jumble/' },
+-};
+-
+-export default function AnagramJumbleHubPage() {
+-  const modes = [
+-    {
+-      title: 'Unscramble Words',
+-      desc: 'Turn scrambled letters into valid words, grouped by length.',
+-      href: '/word-games/anagram-jumble/unscramble',
+-      icon: Shuffle,
+-      color: 'bg-purple-50 text-purple-700',
+-    },
+-    {
+-      title: 'Word Descrambler',
+-      desc: 'Decode jumbled text back into real dictionary words instantly.',
+-      href: '/word-games/anagram-jumble/word-descrambler',
+-      icon: ArrowLeftRight,
+-      color: 'bg-indigo-50 text-indigo-700',
+-    },
+-    {
+-      title: 'Word Scrambler',
+-      desc: 'Scramble any word or phrase to create a custom puzzle for others.',
+-      href: '/word-games/anagram-jumble/word-scrambler',
+-      icon: Layers,
+-      color: 'bg-pink-50 text-pink-700',
+-    },
+-    {
+-      title: 'Anagram Solver',
+-      desc: 'Find exact anagrams, partial matches, and every word hiding in your letters.',
+-      href: '/word-games/anagram-jumble/anagram-solver',
+-      icon: Search,
+-      color: 'bg-blue-50 text-blue-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Anagram and Jumble Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Every tool you need to unscramble letters, solve jumbles, and find hidden anagrams in any word or phrase.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/unscramble/page.tsx b/src/app/word-games/anagram-jumble/unscramble/page.tsx
+deleted file mode 100644
+index ddc409a..0000000
+--- a/src/app/word-games/anagram-jumble/unscramble/page.tsx
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Unscramble Letters | Find Words From Scrambled Letters',
+-  description: 'Enter letters to find every valid word, grouped by length with exact anagrams and common word suggestions.',
+-  alternates: { canonical: '/word-games/anagram-jumble/unscramble/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function UnscramblePage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Unscramble Letters',
+-    description: 'Enter letters to find every valid word, grouped by length with exact anagrams and common word suggestions.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Unscramble', url: `${BASE}/word-games/anagram-jumble/unscramble/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Unscramble Letters"
+-        subtitle="Enter letters to find every valid word from our dictionary. Results are organized by word length."
+-        mode="unscramble"
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/word-descrambler/page.tsx b/src/app/word-games/anagram-jumble/word-descrambler/page.tsx
+deleted file mode 100644
+index fde8aab..0000000
+--- a/src/app/word-games/anagram-jumble/word-descrambler/page.tsx
++++ /dev/null
+@@ -1,36 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Descrambler | Decode Scrambled Letters Into Words',
+-  description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+-  alternates: { canonical: '/word-games/anagram-jumble/word-descrambler/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordDescramblerPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Descrambler',
+-    description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Word Descrambler', url: `${BASE}/word-games/anagram-jumble/word-descrambler/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Word Descrambler"
+-        subtitle="Turn jumbled letters back into valid dictionary words. Organized by length for easy solving."
+-        mode="unscramble"
+-        defaultOptions={{ minLength: 3 }}
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/word-scrambler/page.tsx b/src/app/word-games/anagram-jumble/word-scrambler/page.tsx
+deleted file mode 100644
+index 8a96b05..0000000
+--- a/src/app/word-games/anagram-jumble/word-scrambler/page.tsx
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Scrambler | Scramble Words or Unscramble Letters',
+-  description: 'Scramble a word for practice or enter letters to find valid words and anagrams.',
+-  alternates: { canonical: '/word-games/anagram-jumble/word-scrambler/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordScramblerPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Scrambler',
+-    description: 'Scramble a word for practice or enter letters to find valid words and anagrams.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Word Scrambler', url: `${BASE}/word-games/anagram-jumble/word-scrambler/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Word Scrambler"
+-        subtitle="Need to mix up a word? Enter it below to get multiple scrambled versions instantly."
+-        mode="scramble"
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-solver/page.tsx b/src/app/word-games/anagram-solver/page.tsx
+deleted file mode 100644
+index c82924f..0000000
+--- a/src/app/word-games/anagram-solver/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function AnagramSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Anagram Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find exact anagrams for any word or phrase.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="anagram" className="block text-2xl font-bold text-slate-900">
+-              Enter word or phrase
+-            </label>
+-            <input 
+-              id="anagram"
+-              type="text" 
+-              placeholder="e.g. LISTEN" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Anagrams
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/connections-hint/page.tsx b/src/app/word-games/connections-hint/page.tsx
+deleted file mode 100644
+index 46409f5..0000000
+--- a/src/app/word-games/connections-hint/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import { ArrowRight, Lightbulb } from "lucide-react";
+-
+-export default function ConnectionsHintMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hint for Today
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Get progressive clues without spoiling the whole puzzle.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+-        <div className="flex flex-col sm:flex-row gap-4">
+-          <button className="flex-1 h-16 bg-blue-700 text-white text-xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-            <Lightbulb className="w-6 h-6" /> Reveal Hint 1
+-          </button>
+-          <button className="flex-1 h-16 bg-slate-100 text-slate-900 text-xl font-bold rounded-xl hover:bg-slate-200 border-2 border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-400 transition-colors">
+-            Reveal Hint 2
+-          </button>
+-        </div>
+-
+-        <div className="p-6 bg-slate-50 border-2 border-slate-200 rounded-xl space-y-4">
+-          <h2 className="text-2xl font-bold text-slate-900">Hint 1</h2>
+-          <p className="text-xl text-slate-700 italic">
+-            "Think about things you might wear on your head..."
+-          </p>
+-        </div>
+-
+-        <div className="border-t-2 border-slate-200 pt-8">
+-          <button className="w-full h-16 bg-white text-blue-700 text-xl font-bold rounded-xl hover:bg-blue-50 border-2 border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-            Show Full Category <ArrowRight className="w-6 h-6" />
+-          </button>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/answers/[date]/page.tsx b/src/app/word-games/connections/answers/[date]/page.tsx
+deleted file mode 100644
+index 8f9dce3..0000000
+--- a/src/app/word-games/connections/answers/[date]/page.tsx
++++ /dev/null
+@@ -1,99 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import manifest from '@/data/generated/connections/manifest.json';
+-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+-import { Badge } from '@/components/ui/badge';
+-import { notFound } from 'next/navigation';
+-import Link from 'next/link';
+-import { ArrowLeft } from 'lucide-react';
+-
+-interface PageProps {
+-  params: Promise<{
+-    date: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  return manifest.dates.map(date => ({ date }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  return {
+-    title: `Connections Answer for ${resolvedParams.date} | GridHint.com`,
+-    description: `View the fully grouped answers for the Connections puzzle on ${resolvedParams.date}.`,
+-  };
+-}
+-
+-export default async function ConnectionsAnswerPage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  
+-  // TODO: When archive grows, switch to a build-time import map keyed by date.
+-  // For now, only the latest date is supported; any other date 404s.
+-  if (resolvedParams.date !== latest.date) {
+-    notFound();
+-  }
+-
+-  const typedLatest = latest as any;
+-
+-  const difficultyColors: Record<string, string> = {
+-    yellow: "bg-yellow-100 text-yellow-800 border-yellow-200",
+-    green: "bg-green-100 text-green-800 border-green-200",
+-    blue: "bg-blue-100 text-blue-800 border-blue-200",
+-    purple: "bg-purple-100 text-purple-800 border-purple-200"
+-  };
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <header className="space-y-6">
+-        <Link 
+-          href={`/word-games/connections/hints/${resolvedParams.date}`} 
+-          className="inline-flex items-center gap-2 text-blue-700 font-bold hover:underline underline-offset-4"
+-        >
+-          <ArrowLeft className="w-5 h-5" /> Back to Hints
+-        </Link>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Answer: {resolvedParams.date}
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          The following groups and categories are the reviewed solution for today's puzzle.
+-        </p>
+-      </header>
+-
+-      <div className="grid gap-8">
+-        {typedLatest.groups.map((group: any) => (
+-          <Card key={group.difficulty} className="border-2 shadow-sm rounded-2xl overflow-hidden">
+-            <CardHeader className={`${difficultyColors[group.difficulty]} py-6 border-b-2`}>
+-              <CardTitle className="text-2xl font-black uppercase tracking-widest flex justify-between items-center">
+-                <span>{group.category}</span>
+-                <Badge variant="outline" className="font-bold border-current text-lg">
+-                  {group.difficulty}
+-                </Badge>
+-              </CardTitle>
+-            </CardHeader>
+-            <CardContent className="p-8 bg-white">
+-              <div className="flex flex-wrap gap-4">
+-                {group.words.map((word: string) => (
+-                  <div key={word} className="px-6 py-4 bg-slate-900 text-white rounded-xl text-2xl font-black tracking-widest border-2 border-slate-900">
+-                    {word}
+-                  </div>
+-                ))}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        ))}
+-      </div>
+-
+-      <section className="pt-12 border-t-2 border-slate-200 text-center">
+-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Need more help?</h2>
+-        <div className="flex flex-wrap justify-center gap-4">
+-          <Link href="/word-games/connections/archive" className="h-14 px-8 bg-slate-100 text-slate-900 text-lg font-bold rounded-xl border-2 border-slate-300 hover:bg-slate-200 transition-colors flex items-center justify-center">
+-            Browse Archive
+-          </Link>
+-          <Link href="/word-games/wordle-solver" className="h-14 px-8 bg-blue-700 text-white text-lg font-bold rounded-xl hover:bg-blue-800 transition-colors flex items-center justify-center">
+-            Wordle Solver
+-          </Link>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/hints/[date]/page.tsx b/src/app/word-games/connections/hints/[date]/page.tsx
+deleted file mode 100644
+index 536b2a0..0000000
+--- a/src/app/word-games/connections/hints/[date]/page.tsx
++++ /dev/null
+@@ -1,65 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import manifest from '@/data/generated/connections/manifest.json';
+-import ConnectionsHintCards from '@/components/word-games/connections/ConnectionsHintCards';
+-import { Card } from '@/components/ui/card';
+-import { notFound } from 'next/navigation';
+-
+-interface PageProps {
+-  params: Promise<{
+-    date: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  return manifest.dates.map(date => ({ date }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  return {
+-    title: `Connections Hints for ${resolvedParams.date} | GridHint.com`,
+-    description: `Progressive Connections hints for the puzzle on ${resolvedParams.date}.`,
+-  };
+-}
+-
+-export default async function ConnectionsDateHintsPage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  
+-  // TODO: When archive grows, switch to a build-time import map keyed by date.
+-  // For now, only the latest date is supported; any other date 404s.
+-  if (resolvedParams.date !== latest.date) {
+-    notFound();
+-  }
+-
+-  const typedLatest = latest as any;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hints: {resolvedParams.date}
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Progressive clues for the Connections puzzle on {resolvedParams.date}.
+-        </p>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-2xl font-bold text-slate-900 border-b-2 border-slate-300 pb-2">Puzzle Grid</h2>
+-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+-          {typedLatest.grid.map((word: string) => (
+-            <Card key={word} className="p-4 sm:p-6 text-center border-2 border-slate-300 rounded-xl bg-white">
+-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-wider">
+-                {word}
+-              </span>
+-            </Card>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <div className="mt-12">
+-        <ConnectionsHintCards date={typedLatest.date} groups={typedLatest.groups} />
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/hints/page.tsx b/src/app/word-games/connections/hints/page.tsx
+deleted file mode 100644
+index 344137a..0000000
+--- a/src/app/word-games/connections/hints/page.tsx
++++ /dev/null
+@@ -1,87 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import ConnectionsHintCards from '@/components/word-games/connections/ConnectionsHintCards';
+-import { Card } from '@/components/ui/card';
+-import { Metadata } from 'next';
+-import { type ConnectionsPuzzle, shuffleGrid } from '@/lib/puzzles/connections';
+-
+-export const metadata: Metadata = {
+-  title: 'Connections Hints for Today | GridHint.com',
+-  description: 'Progressive Connections hints for today. Reveal one clue at a time without jumping straight to the full answer.',
+-  alternates: { canonical: '/word-games/connections/hints/' }
+-};
+-
+-export default function ConnectionsHintsPage() {
+-  // `as unknown as ConnectionsPuzzle` is intentional: JSON imports are typed as the
+-  // literal JSON shape which TypeScript can't narrow to the strict Zod-derived type
+-  // (e.g. sourceMode is inferred as a string literal, status as string).
+-  const puzzle = latest as unknown as ConnectionsPuzzle;
+-
+-  // Deterministically shuffle the grid based on the date so it's not pre-grouped
+-  const shuffledGrid = shuffleGrid(puzzle.grid, puzzle.date);
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hints for Today
+-        </h1>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-base">
+-          <span>Date: {puzzle.date}</span>
+-          <span className="hidden sm:inline" aria-hidden="true">•</span>
+-          <span className="bg-blue-100 text-blue-900 px-3 py-1 rounded-lg border-2 border-blue-200">
+-            Independent Helper
+-          </span>
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today's puzzle hasn't been published yet. Showing hints for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <section className="space-y-8">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">Today's Grid</h2>
+-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+-          {shuffledGrid.map((word, index) => (
+-            <Card key={`${word}-${index}`} className="p-5 sm:p-8 text-center border-2 border-slate-400 rounded-2xl bg-white shadow-md">
+-              <span className="text-xl sm:text-3xl font-black text-slate-900 tracking-widest uppercase">
+-                {word}
+-              </span>
+-            </Card>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <div className="mt-16 pt-12 border-t-4 border-slate-300">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">Progressive Hints</h2>
+-        <p className="text-xl text-slate-700 mt-6 font-medium">
+-          Get just enough help to solve the puzzle yourself. Reveal one level at a time.
+-        </p>
+-        <ConnectionsHintCards date={puzzle.date} groups={puzzle.groups} />
+-      </div>
+-
+-      <section className="pt-16 border-t-4 border-slate-300 space-y-8">
+-        <h2 className="text-4xl font-black text-slate-900 tracking-tight">How to use these hints</h2>
+-        <div className="prose prose-slate max-w-none text-xl text-slate-800 leading-relaxed space-y-6">
+-          <p>
+-            Stuck on today's Connections puzzle? Our helper provides a "reveal ladder" designed for players who want a nudge, not a spoiler. 
+-          </p>
+-          <ul className="list-disc pl-8 space-y-4 font-medium">
+-            <li><strong>Hint 1 & 2:</strong> Vague associations and wordplay clues to get you thinking.</li>
+-            <li><strong>Category:</strong> Tells you the relationship between the four words.</li>
+-            <li><strong>The Words:</strong> Shows the full group if you're completely stumped.</li>
+-          </ul>
+-        </div>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/page.tsx b/src/app/word-games/connections/page.tsx
+deleted file mode 100644
+index ee6e062..0000000
+--- a/src/app/word-games/connections/page.tsx
++++ /dev/null
+@@ -1,73 +0,0 @@
+-import Link from 'next/link';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Calendar, HelpCircle, CheckCircle2 } from 'lucide-react';
+-import latest from '@/data/generated/connections/latest.json';
+-
+-export default function ConnectionsHubPage() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Connections Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Get progressive hints, reveal categories, or view today's answers for the Connections word game.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        <Link href="/word-games/connections/hints" className="group">
+-          <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-            <div className="bg-blue-50 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
+-              <HelpCircle className="w-10 h-10 text-blue-700" />
+-            </div>
+-            <CardHeader className="p-0 space-y-3">
+-              <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">Today's Hints</CardTitle>
+-              <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                Need a nudge? Get progressive clues that help you solve the puzzle without giving it all away.
+-              </CardDescription>
+-            </CardHeader>
+-            <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-              <span>Get Hints</span>
+-              <ChevronRight className="w-6 h-6" />
+-            </div>
+-          </Card>
+-        </Link>
+-
+-        <Link href={`/word-games/connections/answers/${latest.date}`} className="group">
+-          <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-            <div className="bg-green-50 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-100 transition-colors">
+-              <CheckCircle2 className="w-10 h-10 text-green-700" />
+-            </div>
+-            <CardHeader className="p-0 space-y-3">
+-              <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">View Answers</CardTitle>
+-              <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                Stumped? See the fully grouped categories and words for today's Connections puzzle.
+-              </CardDescription>
+-            </CardHeader>
+-            <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-              <span>See Solution</span>
+-              <ChevronRight className="w-6 h-6" />
+-            </div>
+-          </Card>
+-        </Link>
+-      </div>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-8 sm:p-12 shadow-sm">
+-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+-          <div className="space-y-4">
+-            <div className="flex items-center gap-3 text-slate-500 uppercase font-black tracking-widest">
+-              <Calendar className="w-6 h-6" />
+-              <span>Archive</span>
+-            </div>
+-            <h2 className="text-3xl font-bold text-slate-900">Looking for a past puzzle?</h2>
+-            <p className="text-xl text-slate-700">Browse our collection of previous Connections hints and answers.</p>
+-          </div>
+-          <Link href="/word-games/connections/archive" className="w-full md:w-auto h-16 px-12 bg-slate-900 text-white text-xl font-bold rounded-xl hover:bg-black transition-colors flex items-center justify-center">
+-            Browse Archive
+-          </Link>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/crossword-solver/page.tsx b/src/app/word-games/crossword-solver/page.tsx
+deleted file mode 100644
+index f7fc3b5..0000000
+--- a/src/app/word-games/crossword-solver/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function CrosswordSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Crossword Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Fill in the known letters to find matching dictionary words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="pattern" className="block text-2xl font-bold text-slate-900">
+-              Pattern (use ? or _ for unknown letters)
+-            </label>
+-            <input 
+-              id="pattern"
+-              type="text" 
+-              placeholder="e.g. C?O?S?O?D" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Answers
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/crossword/page.tsx b/src/app/word-games/crossword/page.tsx
+deleted file mode 100644
+index d165718..0000000
+--- a/src/app/word-games/crossword/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Search } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Crossword Solver | Find Answers by Clue and Pattern',
+-  description: 'Solve crossword clues and fill in letter patterns using our free crossword solver with frequency-ranked results.',
+-  alternates: { canonical: '/word-games/crossword/' },
+-};
+-
+-export default function CrosswordHubPage() {
+-  const modes = [
+-    {
+-      title: 'Crossword Solver',
+-      desc: 'Enter a clue and known letters to find ranked crossword answers.',
+-      href: '/word-games/crossword/solver',
+-      icon: Search,
+-      color: 'bg-blue-50 text-blue-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Crossword Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Stuck on a crossword clue? Enter the letters you know and the clue text to find the best candidate answers.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/crossword/solver/page.tsx b/src/app/word-games/crossword/solver/page.tsx
+deleted file mode 100644
+index 1a88c45..0000000
+--- a/src/app/word-games/crossword/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import CrosswordSolver from '@/components/word-games/crossword/CrosswordSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Crossword Solver | Find Answers by Clue and Pattern',
+-  description: 'Enter a crossword clue, known letters, and word length to find likely crossword answers ranked by pattern and commonness.',
+-  alternates: { canonical: '/word-games/crossword/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function CrosswordSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Crossword Solver',
+-    description: 'Enter a crossword clue, known letters, and word length to find likely crossword answers ranked by pattern and commonness.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Crossword', url: `${BASE}/word-games/crossword/` },
+-      { name: 'Solver', url: `${BASE}/word-games/crossword/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Crossword Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find missing crossword answers using our powerful pattern and clue solver.
+-        </p>
+-      </section>
+-
+-      <CrosswordSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/hangman/page.tsx b/src/app/word-games/hangman/page.tsx
+deleted file mode 100644
+index 55ce0c4..0000000
+--- a/src/app/word-games/hangman/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Target } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Hangman Solver | Best Letter Guesses and Possible Words',
+-  description: 'Enter your Hangman progress to find every possible word and the safest letter to guess next. Free and instant.',
+-  alternates: { canonical: '/word-games/hangman/' },
+-};
+-
+-export default function HangmanHubPage() {
+-  const modes = [
+-    {
+-      title: 'Hangman Solver',
+-      desc: 'Enter known letters and wrong guesses to find possible words and the best next move.',
+-      href: '/word-games/hangman/solver',
+-      icon: Target,
+-      color: 'bg-red-50 text-red-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Hangman Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Never lose at Hangman again. Enter your progress to see every candidate word and the letter most likely to be in the answer.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/hangman/solver/page.tsx b/src/app/word-games/hangman/solver/page.tsx
+deleted file mode 100644
+index da0abd8..0000000
+--- a/src/app/word-games/hangman/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import HangmanSolver from '@/components/word-games/hangman/HangmanSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Hangman Solver | Best Next Letter and Possible Words',
+-  description: 'Enter your Hangman pattern and wrong letters to find possible words and the best next letter to guess.',
+-  alternates: { canonical: '/word-games/hangman/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function HangmanSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Hangman Solver',
+-    description: 'Enter your Hangman pattern and wrong letters to find possible words and the best next letter to guess.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Hangman', url: `${BASE}/word-games/hangman/` },
+-      { name: 'Solver', url: `${BASE}/word-games/hangman/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Hangman Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Win every game of Hangman. Enter your current progress and wrong guesses to see every possible word and the safest next move.
+-        </p>
+-      </section>
+-
+-      <HangmanSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/page.tsx b/src/app/word-games/page.tsx
+index ccff20c..843afaa 100644
+--- a/src/app/word-games/page.tsx
++++ b/src/app/word-games/page.tsx
+@@ -6,26 +6,26 @@ export default function WordGamesHub() {
+     {
+       title: "Daily Puzzle Solvers",
+       items: [
+-        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/word-games/connections-hint" },
+-        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/word-games/wordle-solver" },
++        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/connections-hint" },
++        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/wordle-solver" },
+       ]
+     },
+     {
+       title: "Letter Scramblers",
+       items: [
+-        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/word-games/unscramble" },
+-        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-games/word-descrambler" },
+-        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-games/word-scrambler" },
+-        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/word-games/anagram-solver" },
++        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/unscramble" },
++        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-descrambler" },
++        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-scrambler" },
++        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/anagram-solver" },
+       ]
+     },
+     {
+       title: "Finders & Patterns",
+       items: [
+-        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/word-games/5-letter-words" },
+-        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/word-games/crossword-solver" },
+-        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/word-games/spelling-bee-helper" },
+-        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-games/word-pattern-solver" },
++        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/5-letter-words" },
++        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/crossword-solver" },
++        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/spelling-bee-helper" },
++        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-pattern-solver" },
+       ]
+     }
+   ];
+diff --git a/src/app/word-games/spelling-bee-helper/page.tsx b/src/app/word-games/spelling-bee-helper/page.tsx
+deleted file mode 100644
+index 29a54e7..0000000
+--- a/src/app/word-games/spelling-bee-helper/page.tsx
++++ /dev/null
+@@ -1,52 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function SpellingBeeMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find valid words from the hive. Must use the center letter.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-             <label htmlFor="center" className="block text-2xl font-bold text-slate-900">
+-              Center Letter (Required)
+-            </label>
+-            <input 
+-              id="center"
+-              type="text" 
+-              maxLength={1}
+-              placeholder="e.g. A" 
+-              className="w-20 text-3xl font-extrabold text-center p-4 h-20 border-4 border-yellow-400 bg-yellow-50 rounded-full focus:border-blue-700 focus:outline-none uppercase"
+-            />
+-          </div>
+-
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-            <label htmlFor="outer" className="block text-2xl font-bold text-slate-900">
+-              Outer Letters (Up to 6)
+-            </label>
+-            <input 
+-              id="outer"
+-              type="text" 
+-              placeholder="e.g. B C D E F G" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase tracking-[0.5em]"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Solve Hive
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/spelling-bee/helper/page.tsx b/src/app/word-games/spelling-bee/helper/page.tsx
+deleted file mode 100644
+index 981cd99..0000000
+--- a/src/app/word-games/spelling-bee/helper/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import SpellingBeeHelper from '@/components/word-games/spelling-bee/SpellingBeeHelper';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Spelling Bee Helper | Find Words and Pangrams',
+-  description: 'Enter a center letter and six outer letters to find valid words, pangrams, and hint counts for a 7-letter word game.',
+-  alternates: { canonical: '/word-games/spelling-bee/helper/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function SpellingBeeHelperPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Spelling Bee Helper',
+-    description: 'Enter a center letter and six outer letters to find valid words, pangrams, and hint counts for a 7-letter word game.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Spelling Bee', url: `${BASE}/word-games/spelling-bee/` },
+-      { name: 'Helper', url: `${BASE}/word-games/spelling-bee/helper/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Get help finding all valid words and pangrams for today's Spelling Bee hive.
+-        </p>
+-      </section>
+-
+-      <SpellingBeeHelper />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/spelling-bee/page.tsx b/src/app/word-games/spelling-bee/page.tsx
+deleted file mode 100644
+index 64f2aed..0000000
+--- a/src/app/word-games/spelling-bee/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Hexagon } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Spelling Bee Helper | Find Words and Pangrams',
+-  description: 'Find all valid words and pangrams for the NYT Spelling Bee or any 7-letter hive puzzle. Free, instant results.',
+-  alternates: { canonical: '/word-games/spelling-bee/' },
+-};
+-
+-export default function SpellingBeeHubPage() {
+-  const modes = [
+-    {
+-      title: 'Spelling Bee Helper',
+-      desc: 'Enter center and outer letters to find every valid word and all pangrams.',
+-      href: '/word-games/spelling-bee/helper',
+-      icon: Hexagon,
+-      color: 'bg-yellow-50 text-yellow-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find all valid words and hidden pangrams for any 7-letter Spelling Bee hive — with optional hint mode to avoid spoilers.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/spelling-bee/today/page.tsx b/src/app/word-games/spelling-bee/today/page.tsx
+deleted file mode 100644
+index c169cb2..0000000
+--- a/src/app/word-games/spelling-bee/today/page.tsx
++++ /dev/null
+@@ -1,107 +0,0 @@
+-import latest from '@/data/generated/spelling-bee/latest.json';
+-import { type SpellingBeeDaily } from '@/lib/puzzles/spelling-bee-schema';
+-import { Metadata } from 'next';
+-import Link from 'next/link';
+-import SpellingBeeTodayClient from '@/components/word-games/spelling-bee/SpellingBeeTodayClient';
+-
+-export const metadata: Metadata = {
+-  title: "Today's NYT Spelling Bee Hints, Letters & Pangram Helper | GridHint",
+-  description:
+-    "Today's NYT Spelling Bee letters, pangram count, length distribution, and a guess-checker. We won't spoil the answer list — test your words against today's puzzle.",
+-  alternates: { canonical: '/word-games/spelling-bee/today/' },
+-};
+-
+-export default function SpellingBeeTodayPage() {
+-  const puzzle = latest as unknown as SpellingBeeDaily;
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  // Sort length distribution keys numerically
+-  const lengthEntries = Object.entries(puzzle.hints.lengthDistribution)
+-    .map(([k, v]) => [Number(k), v as number] as const)
+-    .sort(([a], [b]) => a - b);
+-
+-  const startingEntries = Object.entries(puzzle.hints.startingLetterDistribution)
+-    .sort(([a], [b]) => a.localeCompare(b));
+-
+-  return (
+-    <div className="max-w-3xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-4">
+-        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">
+-          Today&apos;s NYT Spelling Bee
+-        </p>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Today&apos;s Spelling Bee Hints &amp; Helper
+-        </h1>
+-        <p className="text-xl text-slate-700 font-medium leading-relaxed">
+-          Today&apos;s 7 letters, total word count, pangram count, and a guess-checker — find words yourself with smart hints, no spoilers.
+-        </p>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-sm">
+-          <span>Date: {puzzle.date}</span>
+-          <span aria-hidden="true">•</span>
+-          <span>{puzzle.hints.totalWords} words to find</span>
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today&apos;s Spelling Bee hasn&apos;t been published yet. Showing data for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <SpellingBeeTodayClient
+-        centerLetter={puzzle.centerLetter}
+-        outerLetters={puzzle.outerLetters}
+-        answerHashes={puzzle.answerHashes}
+-        pangramHashes={puzzle.pangramHashes}
+-        totalWords={puzzle.hints.totalWords}
+-        pangramCount={puzzle.hints.pangramCount}
+-        geniusThreshold={puzzle.hints.geniusThreshold}
+-        queenBeeScore={puzzle.hints.queenBeeScore}
+-      />
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Word Length Distribution
+-        </h2>
+-        <p className="text-lg text-slate-700">How many valid words exist for each length:</p>
+-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+-          {lengthEntries.map(([len, count]) => (
+-            <div key={len} className="bg-white border-2 border-slate-300 rounded-xl p-4 text-center">
+-              <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{len} letters</p>
+-              <p className="text-2xl font-extrabold text-amber-700 mt-1">{count}</p>
+-            </div>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Starting Letter Distribution
+-        </h2>
+-        <p className="text-lg text-slate-700">How many valid words start with each letter:</p>
+-        <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+-          {startingEntries.map(([letter, count]) => (
+-            <div key={letter} className="bg-white border-2 border-slate-300 rounded-xl p-4 text-center">
+-              <p className="text-xl font-extrabold text-slate-900">{letter}</p>
+-              <p className="text-2xl font-extrabold text-amber-700 mt-1">{count as number}</p>
+-            </div>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <section className="space-y-4 pt-8 border-t-2 border-slate-200">
+-        <h2 className="text-2xl font-extrabold text-slate-900">Want a different solver?</h2>
+-        <p className="text-lg text-slate-700">
+-          The <Link href="/word-games/spelling-bee/helper" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">general Spelling Bee Helper</Link> works with any 7 letters — useful for older puzzles or your own letter sets.
+-        </p>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/unscramble/[letters]/page.tsx b/src/app/word-games/unscramble/[letters]/page.tsx
+deleted file mode 100644
+index 2b8ee6a..0000000
+--- a/src/app/word-games/unscramble/[letters]/page.tsx
++++ /dev/null
+@@ -1,74 +0,0 @@
+-import { unscrambleWords } from "@/lib/words/dictionary";
+-import { Badge } from "@/components/ui/badge";
+-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+-
+-interface PageProps {
+-  params: Promise<{
+-    letters: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  // Phase 1: Generate a small safe test set first
+-  const testLetters = ['sbitmu', 'elzzpu', 'pleap'];
+-  
+-  return testLetters.map((letters) => ({
+-    letters: letters,
+-  }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  const upperLetters = resolvedParams.letters.toUpperCase();
+-  return {
+-    title: `Unscramble ${upperLetters} - Word Descrambler & Anagram Solver`,
+-    description: `Find all valid words that can be made from the letters ${upperLetters}. Grouped by word length for easy puzzle solving.`,
+-  };
+-}
+-
+-export default async function ProgrammaticUnscramblePage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  const letters = resolvedParams.letters.toLowerCase();
+-  const upperLetters = letters.toUpperCase();
+-  
+-  const results = unscrambleWords(letters);
+-  const lengths = Object.keys(results).map(Number).sort((a, b) => b - a);
+-  const hasResults = lengths.length > 0;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto space-y-8 py-8">
+-      <h1 className="text-4xl font-extrabold text-slate-900">Unscramble {upperLetters}</h1>
+-      
+-      {!hasResults ? (
+-        <p className="text-lg text-slate-600">No words found for these letters.</p>
+-      ) : (
+-        <div className="space-y-8">
+-          {lengths.map((len) => (
+-            <Card key={len} className="border-slate-200 shadow-sm">
+-              <CardHeader className="bg-slate-50 border-b border-slate-100 pb-4">
+-                <CardTitle className="text-xl text-slate-800 flex justify-between items-center">
+-                  <span>{len}-Letter Words</span>
+-                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+-                    {results[len].length}
+-                  </Badge>
+-                </CardTitle>
+-              </CardHeader>
+-              <CardContent className="pt-6">
+-                <div className="flex flex-wrap gap-3">
+-                  {results[len].map((word) => (
+-                    <div 
+-                      key={word} 
+-                      className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-lg font-medium text-slate-800 shadow-sm"
+-                    >
+-                      {word}
+-                    </div>
+-                  ))}
+-                </div>
+-              </CardContent>
+-            </Card>
+-          ))}
+-        </div>
+-      )}
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/unscramble/page.tsx b/src/app/word-games/unscramble/page.tsx
+deleted file mode 100644
+index fca7006..0000000
+--- a/src/app/word-games/unscramble/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function UnscrambleMainMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Unscramble Letters
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter your scrambled letters below to find all possible valid words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="unscramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to unscramble
+-            </label>
+-            <input 
+-              id="unscramble"
+-              type="text" 
+-              placeholder="e.g. SBITMU" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-descrambler/page.tsx b/src/app/word-games/word-descrambler/page.tsx
+deleted file mode 100644
+index 4e596be..0000000
+--- a/src/app/word-games/word-descrambler/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordDescramblerMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Descrambler
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Turn jumbled letters back into valid dictionary words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="descramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to descramble
+-            </label>
+-            <input 
+-              id="descramble"
+-              type="text" 
+-              placeholder="e.g. ELZZPU" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Descramble
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-ladder/page.tsx b/src/app/word-games/word-ladder/page.tsx
+deleted file mode 100644
+index da48918..0000000
+--- a/src/app/word-games/word-ladder/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, ArrowRight } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Ladder Solver | Find the Shortest Word Path',
+-  description: 'Find the shortest word ladder between any two words, changing one letter at a time. Free solver with step-by-step path.',
+-  alternates: { canonical: '/word-games/word-ladder/' },
+-};
+-
+-export default function WordLadderHubPage() {
+-  const modes = [
+-    {
+-      title: 'Word Ladder Solver',
+-      desc: 'Enter a start and end word to find the shortest path by changing one letter per step.',
+-      href: '/word-games/word-ladder/solver',
+-      icon: ArrowRight,
+-      color: 'bg-teal-50 text-teal-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Word Ladder Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Go from any word to any other by changing one letter at a time. Our solver finds the shortest possible path automatically.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/word-ladder/solver/page.tsx b/src/app/word-games/word-ladder/solver/page.tsx
+deleted file mode 100644
+index 6c262c5..0000000
+--- a/src/app/word-games/word-ladder/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import WordLadderSolver from '@/components/word-games/word-ladder/WordLadderSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Ladder Solver | Find the Shortest Word Path',
+-  description: 'Enter a start word and end word to find the shortest word ladder where each step changes one letter.',
+-  alternates: { canonical: '/word-games/word-ladder/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordLadderSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Ladder Solver',
+-    description: 'Enter a start word and end word to find the shortest word ladder where each step changes one letter.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Word Ladder', url: `${BASE}/word-games/word-ladder/` },
+-      { name: 'Solver', url: `${BASE}/word-games/word-ladder/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Word Ladder Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find the shortest path between any two words by changing one letter at a time.
+-        </p>
+-      </section>
+-
+-      <WordLadderSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/word-pattern-solver/page.tsx b/src/app/word-games/word-pattern-solver/page.tsx
+deleted file mode 100644
+index 1765343..0000000
+--- a/src/app/word-games/word-pattern-solver/page.tsx
++++ /dev/null
+@@ -1,51 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordPatternSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Pattern Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find words that match a specific letter pattern. Use wildcards for unknown letters.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="pattern" className="block text-2xl font-bold text-slate-900">
+-              Pattern (use _ for any single letter)
+-            </label>
+-            <input 
+-              id="pattern"
+-              type="text" 
+-              placeholder="e.g. S_ING" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-             <label htmlFor="exclude" className="block text-xl font-bold text-slate-900">
+-              Exclude letters
+-            </label>
+-            <input 
+-              id="exclude"
+-              type="text" 
+-              placeholder="e.g. X, Y, Z" 
+-              className="w-full text-xl p-4 h-14 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Matching Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-scrambler/page.tsx b/src/app/word-games/word-scrambler/page.tsx
+deleted file mode 100644
+index b56db2b..0000000
+--- a/src/app/word-games/word-scrambler/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordScramblerMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Scrambler
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter a word or letters to instantly jumble them up.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="scramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to scramble
+-            </label>
+-            <input 
+-              id="scramble"
+-              type="text" 
+-              placeholder="e.g. PUZZLE" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Scramble
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/wordle-solver/page.tsx b/src/app/word-games/wordle-solver/page.tsx
+deleted file mode 100644
+index d3ba5d1..0000000
+--- a/src/app/word-games/wordle-solver/page.tsx
++++ /dev/null
+@@ -1,54 +0,0 @@
+-import { CheckCircle2 } from "lucide-react";
+-
+-export default function WordleSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Wordle Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter your guess and colors to find the best next word.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+-        <div className="space-y-4">
+-          <label className="block text-2xl font-bold text-slate-900">
+-            Enter your guess
+-          </label>
+-          <div className="flex gap-2 sm:gap-4 justify-center">
+-            {['S', 'L', 'A', 'T', 'E'].map((letter, i) => (
+-              <input 
+-                key={i}
+-                type="text" 
+-                maxLength={1}
+-                defaultValue={letter}
+-                className="w-14 h-16 sm:w-20 sm:h-24 text-3xl sm:text-4xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase"
+-              />
+-            ))}
+-          </div>
+-          <div className="flex justify-center gap-4 mt-6">
+-             <button className="px-6 py-3 bg-slate-500 text-white font-bold rounded-lg">Gray</button>
+-             <button className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg">Yellow</button>
+-             <button className="px-6 py-3 bg-green-600 text-white font-bold rounded-lg">Green</button>
+-          </div>
+-        </div>
+-
+-        <button className="w-full h-16 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-          <CheckCircle2 className="w-6 h-6" /> Analyze
+-        </button>
+-
+-        <div className="bg-slate-50 p-6 border-2 border-slate-200 rounded-xl">
+-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Best Next Guesses</h2>
+-          <ul className="space-y-3">
+-            <li className="flex justify-between items-center bg-white p-4 border-2 border-slate-200 rounded-lg">
+-              <span className="text-2xl font-bold text-blue-900 tracking-widest">CRANE</span>
+-              <span className="text-lg text-slate-500 font-bold">99% match</span>
+-            </li>
+-          </ul>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/page.tsx b/src/app/word-games/wordle/page.tsx
+deleted file mode 100644
+index 109a498..0000000
+--- a/src/app/word-games/wordle/page.tsx
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import Link from 'next/link';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Calculator } from 'lucide-react';
+-
+-export default function WordleHubPage() {
+-  const modes = [
+-    {
+-      title: "Wordle Solver",
+-      desc: "Enter your guesses and feedback to find the solution.",
+-      href: "/word-games/wordle/solver",
+-      icon: Calculator,
+-      color: "bg-blue-50 text-blue-700"
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Wordle Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Master the daily word game with our solver, hint system, and analysis tools.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/solver/page.tsx b/src/app/word-games/wordle/solver/page.tsx
+deleted file mode 100644
+index a524231..0000000
+--- a/src/app/word-games/wordle/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import WordleSolver from '@/components/word-games/wordle/WordleSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Wordle Solver | Best Next Guess and Possible Answers',
+-  description: 'Enter green, yellow, and gray feedback to filter possible Wordle answers and rank the best next guess by information gain.',
+-  alternates: { canonical: '/word-games/wordle/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordleSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Wordle Solver',
+-    description: 'Enter green, yellow, and gray feedback to filter possible Wordle answers and rank the best next guess by information gain.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Wordle', url: `${BASE}/word-games/wordle/` },
+-      { name: 'Solver', url: `${BASE}/word-games/wordle/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Wordle Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 font-medium">
+-          Stuck on Wordle? Enter your guesses and tile colors below to find the most likely answers and the mathematically best next guess.
+-        </p>
+-      </section>
+-
+-      <WordleSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/today/page.tsx b/src/app/word-games/wordle/today/page.tsx
+deleted file mode 100644
+index bf3cc77..0000000
+--- a/src/app/word-games/wordle/today/page.tsx
++++ /dev/null
+@@ -1,99 +0,0 @@
+-import latest from '@/data/generated/wordle/latest.json';
+-import { type WordleDaily } from '@/lib/puzzles/wordle-schema';
+-import { Metadata } from 'next';
+-import Link from 'next/link';
+-import WordleAnswerReveal from '@/components/word-games/wordle/WordleAnswerReveal';
+-
+-export const metadata: Metadata = {
+-  title: "Today's NYT Wordle Hints & Answer | GridHint",
+-  description:
+-    "Today's NYT Wordle hints and answer — start with progressive clues (first letter, pattern, definition) before revealing the full solution.",
+-  alternates: { canonical: '/word-games/wordle/today/' },
+-};
+-
+-export default function WordleTodayPage() {
+-  const puzzle = latest as unknown as WordleDaily;
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  return (
+-    <div className="max-w-3xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-4">
+-        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+-          Today&apos;s NYT Wordle
+-        </p>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Today&apos;s Wordle Hints &amp; Answer
+-        </h1>
+-        <p className="text-xl text-slate-700 font-medium leading-relaxed">
+-          Stuck on today&apos;s New York Times Wordle? Reveal one hint at a time, or jump straight to the answer.
+-        </p>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-sm">
+-          <span>Date: {puzzle.date}</span>
+-          {puzzle.dayNumber !== undefined && (
+-            <>
+-              <span aria-hidden="true">•</span>
+-              <span>Wordle #{puzzle.dayNumber}</span>
+-            </>
+-          )}
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today&apos;s Wordle hasn&apos;t been published yet. Showing data for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Progressive Hints
+-        </h2>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 1 — First Letter</p>
+-          <p className="text-3xl font-extrabold text-emerald-700">
+-            Today&apos;s answer starts with <span className="text-slate-900">{puzzle.hints.firstLetter}</span>
+-          </p>
+-        </div>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 2 — Letter Pattern</p>
+-          <p className="text-2xl font-bold text-slate-900">
+-            Vowel/consonant pattern: <span className="font-mono text-emerald-700">{puzzle.hints.pattern}</span>
+-          </p>
+-          <p className="text-base text-slate-600">
+-            (V = vowel, C = consonant)
+-          </p>
+-        </div>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 3 — Definition</p>
+-          <p className="text-xl text-slate-900 leading-relaxed">
+-            {puzzle.hints.definition}
+-          </p>
+-        </div>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Today&apos;s Wordle Answer
+-        </h2>
+-        <WordleAnswerReveal solution={puzzle.solution} />
+-      </section>
+-
+-      <section className="space-y-4 pt-8 border-t-2 border-slate-200">
+-        <h2 className="text-2xl font-extrabold text-slate-900">Want to solve it yourself?</h2>
+-        <p className="text-lg text-slate-700">
+-          Use our <Link href="/word-games/wordle/solver" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">Wordle Solver</Link> to narrow down possibilities from your green and yellow letters.
+-        </p>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/scripts/ping-indexnow.ts b/src/scripts/ping-indexnow.ts
+index 3e8c682..0815c67 100644
+--- a/src/scripts/ping-indexnow.ts
++++ b/src/scripts/ping-indexnow.ts
+@@ -4,9 +4,9 @@
+  * Submits today's just-updated URLs to IndexNow (Bing/Yandex/Seznam/Naver/Yep).
+  *
+  * Honours GRIDHINT_INDEXNOW_TARGET env var:
+- *   - "connections"   → submit just /word-games/connections/hints/
+- *   - "wordle"        → submit just /word-games/wordle/today/
+- *   - "spelling-bee"  → submit just /word-games/spelling-bee/today/
++ *   - "connections"   → submit just /connections/hints/
++ *   - "wordle"        → submit just /wordle/today/
++ *   - "spelling-bee"  → submit just /spelling-bee/today/
+  *   - "all" / unset   → submit all three
+  *
+  * In all cases we also submit the homepage + sitemap.
+@@ -24,9 +24,9 @@ import { getNYDate } from './lib/atomic-write';
+ type Target = 'connections' | 'wordle' | 'spelling-bee' | 'all';
+ 
+ const URL_BY_GAME: Record<Exclude<Target, 'all'>, string> = {
+-  'connections': 'https://www.gridhint.com/word-games/connections/hints/',
+-  'wordle': 'https://www.gridhint.com/word-games/wordle/today/',
+-  'spelling-bee': 'https://www.gridhint.com/word-games/spelling-bee/today/',
++  'connections': 'https://www.gridhint.com/connections/hints/',
++  'wordle': 'https://www.gridhint.com/wordle/today/',
++  'spelling-bee': 'https://www.gridhint.com/spelling-bee/today/',
+ };
+ 
+ async function main(): Promise<void> {

@@ -4,9 +4,9 @@
  * Submits today's just-updated URLs to IndexNow (Bing/Yandex/Seznam/Naver/Yep).
  *
  * Honours GRIDHINT_INDEXNOW_TARGET env var:
- *   - "connections"   → submit just /word-games/connections/hints/
- *   - "wordle"        → submit just /word-games/wordle/today/
- *   - "spelling-bee"  → submit just /word-games/spelling-bee/today/
+ *   - "connections"   → submit just /connections/hints/
+ *   - "wordle"        → submit just /wordle/today/
+ *   - "spelling-bee"  → submit just /spelling-bee/today/
  *   - "all" / unset   → submit all three
  *
  * In all cases we also submit the homepage + sitemap.
@@ -24,9 +24,9 @@ import { getNYDate } from './lib/atomic-write';
 type Target = 'connections' | 'wordle' | 'spelling-bee' | 'all';
 
 const URL_BY_GAME: Record<Exclude<Target, 'all'>, string> = {
-  'connections': 'https://www.gridhint.com/word-games/connections/hints/',
-  'wordle': 'https://www.gridhint.com/word-games/wordle/today/',
-  'spelling-bee': 'https://www.gridhint.com/word-games/spelling-bee/today/',
+  'connections': 'https://gridhint.com/connections/hints/',
+  'wordle': 'https://gridhint.com/wordle/today/',
+  'spelling-bee': 'https://gridhint.com/spelling-bee/today/',
 };
 
 async function main(): Promise<void> {
@@ -50,8 +50,8 @@ async function main(): Promise<void> {
   }
 
   // Always include homepage + sitemap (no fresh-token check — they're always recent)
-  submissions.push({ url: 'https://www.gridhint.com/' });
-  submissions.push({ url: 'https://www.gridhint.com/sitemap.xml' });
+  submissions.push({ url: 'https://gridhint.com/' });
+  submissions.push({ url: 'https://gridhint.com/sitemap.xml' });
 
   await submitToIndexNow(submissions);
 }

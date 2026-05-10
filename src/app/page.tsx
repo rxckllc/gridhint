@@ -80,16 +80,29 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "https://gridhint.com/#organization",
+      "name": "GridHint",
+      "url": "https://gridhint.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://gridhint.com/gridhint-logo.png"
+      }
+    },
+    {
       "@type": "WebSite",
       "@id": "https://gridhint.com/#website",
       "url": "https://gridhint.com",
       "name": "GridHint",
       "description": "Free daily hints and solvers for NYT Connections, Wordle, Spelling Bee and more word puzzles.",
+      "publisher": {
+        "@id": "https://gridhint.com/#organization"
+      },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://gridhint.com/word-games/anagram-jumble/unscramble?letters={search_term_string}"
+          "urlTemplate": "https://gridhint.com/anagram-jumble/unscramble?letters={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       }
@@ -136,7 +149,7 @@ const jsonLd = {
 
 const dailyPuzzles = [
   {
-    href: "/word-games/connections/hints",
+    href: "/connections/hints",
     eyebrow: "Today's NYT Connections",
     title: "Connections Hints",
     description:
@@ -148,7 +161,7 @@ const dailyPuzzles = [
     eyebrowTint: "text-purple-700",
   },
   {
-    href: "/word-games/wordle/today",
+    href: "/wordle/today",
     eyebrow: "Today's NYT Wordle",
     title: "Wordle Hints & Answer",
     description:
@@ -160,7 +173,7 @@ const dailyPuzzles = [
     eyebrowTint: "text-emerald-700",
   },
   {
-    href: "/word-games/spelling-bee/today",
+    href: "/spelling-bee/today",
     eyebrow: "Today's NYT Spelling Bee",
     title: "Spelling Bee Hints",
     description:
@@ -175,55 +188,55 @@ const dailyPuzzles = [
 
 const moreTools = [
   {
-    href: "/word-games/anagram-jumble/unscramble",
+    href: "/anagram-jumble/unscramble",
     title: "Unscramble Letters",
     description: "Turn jumbled tiles into every possible word.",
     Icon: Shuffle,
   },
   {
-    href: "/word-games/anagram-jumble/anagram-solver",
+    href: "/anagram-jumble/anagram-solver",
     title: "Anagram Solver",
     description: "Find every anagram of a word or phrase.",
     Icon: ArrowRightLeft,
   },
   {
-    href: "/word-games/anagram-jumble/word-descrambler",
+    href: "/anagram-jumble/word-descrambler",
     title: "Word Descrambler",
     description: "Sort scrambled letters into valid words by length.",
     Icon: SpellCheck,
   },
   {
-    href: "/word-games/anagram-jumble/word-scrambler",
+    href: "/anagram-jumble/word-scrambler",
     title: "Word Scrambler",
     description: "Generate scrambled letter sets for puzzles and games.",
     Icon: Type,
   },
   {
-    href: "/word-games/crossword/solver",
+    href: "/crossword/solver",
     title: "Crossword Solver",
     description: "Match clues and patterns across major crossword grids.",
     Icon: LayoutGrid,
   },
   {
-    href: "/word-games/hangman/solver",
+    href: "/hangman/solver",
     title: "Hangman Solver",
     description: "Best-guess letters based on known positions and misses.",
     Icon: HelpCircle,
   },
   {
-    href: "/word-games/word-ladder/solver",
+    href: "/word-ladder/solver",
     title: "Word Ladder Solver",
     description: "Build the shortest one-letter-change path between two words.",
     Icon: MoveRight,
   },
   {
-    href: "/word-games/5-letter-words",
+    href: "/5-letter-words",
     title: "5-Letter Words",
     description: "Browse every 5-letter word by starting letters, pattern, or endings.",
     Icon: List,
   },
   {
-    href: "/word-games/word-pattern-solver",
+    href: "/word-pattern-solver",
     title: "Word Pattern Solver",
     description: "Find words matching a pattern — use _ for any unknown letter (e.g. C_T, B__K).",
     Icon: ScanText,

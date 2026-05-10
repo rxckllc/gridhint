@@ -1,0 +1,42 @@
+name: Daily Analytics Report
+
+on:
+  schedule:
+    # 3 PM UTC is 8 AM PST / 7 AM PDT. 
+    # Adjust to '0 16 * * *' if you prefer 8 AM during Daylight Savings (PDT).
+    - cron: '0 15 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-code: '20'
+          cache: 'npm'
+          cache-dependency-path: daily-grid-help/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: daily-grid-help
+
+      - name: Fetch Analytics Data
+        run: npm run data:dashboard
+        working-directory: daily-grid-help
+        env:
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_KEY: ${{ secrets.GA4_SERVICE_ACCOUNT_KEY }}
+
+      - name: Send Email Report
+        run: npm run data:report
+        working-directory: daily-grid-help
+        env:
+          REPORT_SMTP_USER: ${{ secrets.REPORT_SMTP_USER }}
+          REPORT_SMTP_PASS: ${{ secrets.REPORT_SMTP_PASS }}
+          REPORT_RECEIVER: ${{ secrets.REPORT_RECEIVER }}
+          REPORT_SMTP_HOST: ${{ secrets.REPORT_SMTP_HOST }}
+          REPORT_SMTP_PORT: ${{ secrets.REPORT_SMTP_PORT }}

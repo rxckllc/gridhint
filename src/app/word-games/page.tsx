@@ -6,26 +6,26 @@ export default function WordGamesHub() {
     {
       title: "Daily Puzzle Solvers",
       items: [
-        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/word-games/connections-hint" },
-        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/word-games/wordle-solver" },
+        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/connections-hint" },
+        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/wordle-solver" },
       ]
     },
     {
       title: "Letter Scramblers",
       items: [
-        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/word-games/unscramble" },
-        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-games/word-descrambler" },
-        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-games/word-scrambler" },
-        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/word-games/anagram-solver" },
+        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/unscramble" },
+        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-descrambler" },
+        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-scrambler" },
+        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/anagram-solver" },
       ]
     },
     {
       title: "Finders & Patterns",
       items: [
-        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/word-games/5-letter-words" },
-        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/word-games/crossword-solver" },
-        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/word-games/spelling-bee-helper" },
-        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-games/word-pattern-solver" },
+        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/5-letter-words" },
+        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/crossword-solver" },
+        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/spelling-bee-helper" },
+        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-pattern-solver" },
       ]
     }
   ];

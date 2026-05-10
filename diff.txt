@@ -1,0 +1,4041 @@
+diff --git a/package-lock.json b/package-lock.json
+index eb2aca0..4d74ccc 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -9,12 +9,15 @@
+       "version": "0.1.0",
+       "dependencies": {
+         "@base-ui/react": "^1.4.1",
++        "@google-analytics/data": "^5.2.2",
+         "class-variance-authority": "^0.7.1",
+         "clsx": "^2.1.1",
+         "lucide-react": "^1.14.0",
+         "next": "16.2.6",
++        "nodemailer": "^8.0.7",
+         "react": "19.2.4",
+         "react-dom": "19.2.4",
++        "recharts": "^3.8.1",
+         "shadcn": "^4.7.0",
+         "tailwind-merge": "^3.5.0",
+         "tw-animate-css": "^1.4.0",
+@@ -1383,6 +1386,18 @@
+       "integrity": "sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==",
+       "license": "MIT"
+     },
++    "node_modules/@google-analytics/data": {
++      "version": "5.2.2",
++      "resolved": "https://registry.npmjs.org/@google-analytics/data/-/data-5.2.2.tgz",
++      "integrity": "sha512-W6p4Z8IG5Uol2x9NNYA1IfCGbAClyt/dGHv+d1KO8ML658hBq/RUPg4iXc3whdgiJIu6QkVGgcXUO65lkEiLnA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "google-gax": "^5.0.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/@google/generative-ai": {
+       "version": "0.24.1",
+       "resolved": "https://registry.npmjs.org/@google/generative-ai/-/generative-ai-0.24.1.tgz",
+@@ -1393,6 +1408,37 @@
+         "node": ">=18.0.0"
+       }
+     },
++    "node_modules/@grpc/grpc-js": {
++      "version": "1.14.3",
++      "resolved": "https://registry.npmjs.org/@grpc/grpc-js/-/grpc-js-1.14.3.tgz",
++      "integrity": "sha512-Iq8QQQ/7X3Sac15oB6p0FmUg/klxQvXLeileoqrTRGJYLV+/9tubbr9ipz0GKHjmXVsgFPo/+W+2cA8eNcR+XA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@grpc/proto-loader": "^0.8.0",
++        "@js-sdsl/ordered-map": "^4.4.2"
++      },
++      "engines": {
++        "node": ">=12.10.0"
++      }
++    },
++    "node_modules/@grpc/proto-loader": {
++      "version": "0.8.1",
++      "resolved": "https://registry.npmjs.org/@grpc/proto-loader/-/proto-loader-0.8.1.tgz",
++      "integrity": "sha512-wtF6h+DY6M3YaDBPAmvuuA6jV8Sif9MjtOI5euKFWRgCDl5PeDpPsHR9u2l6St5ceY8AZgoNDww5+HvEsXFsGg==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "lodash.camelcase": "^4.3.0",
++        "long": "^5.0.0",
++        "protobufjs": "^7.5.5",
++        "yargs": "^17.7.2"
++      },
++      "bin": {
++        "proto-loader-gen-types": "build/bin/proto-loader-gen-types.js"
++      },
++      "engines": {
++        "node": ">=6"
++      }
++    },
+     "node_modules/@hono/node-server": {
+       "version": "1.19.14",
+       "resolved": "https://registry.npmjs.org/@hono/node-server/-/node-server-1.19.14.tgz",
+@@ -2019,6 +2065,69 @@
+         }
+       }
+     },
++    "node_modules/@isaacs/cliui": {
++      "version": "8.0.2",
++      "resolved": "https://registry.npmjs.org/@isaacs/cliui/-/cliui-8.0.2.tgz",
++      "integrity": "sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==",
++      "license": "ISC",
++      "dependencies": {
++        "string-width": "^5.1.2",
++        "string-width-cjs": "npm:string-width@^4.2.0",
++        "strip-ansi": "^7.0.1",
++        "strip-ansi-cjs": "npm:strip-ansi@^6.0.1",
++        "wrap-ansi": "^8.1.0",
++        "wrap-ansi-cjs": "npm:wrap-ansi@^7.0.0"
++      },
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/@isaacs/cliui/node_modules/ansi-styles": {
++      "version": "6.2.3",
++      "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.3.tgz",
++      "integrity": "sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/ansi-styles?sponsor=1"
++      }
++    },
++    "node_modules/@isaacs/cliui/node_modules/string-width": {
++      "version": "5.1.2",
++      "resolved": "https://registry.npmjs.org/string-width/-/string-width-5.1.2.tgz",
++      "integrity": "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==",
++      "license": "MIT",
++      "dependencies": {
++        "eastasianwidth": "^0.2.0",
++        "emoji-regex": "^9.2.2",
++        "strip-ansi": "^7.0.1"
++      },
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/sindresorhus"
++      }
++    },
++    "node_modules/@isaacs/cliui/node_modules/wrap-ansi": {
++      "version": "8.1.0",
++      "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-8.1.0.tgz",
++      "integrity": "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-styles": "^6.1.0",
++        "string-width": "^5.0.1",
++        "strip-ansi": "^7.0.1"
++      },
++      "engines": {
++        "node": ">=12"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
++      }
++    },
+     "node_modules/@jridgewell/gen-mapping": {
+       "version": "0.3.13",
+       "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
+@@ -2064,6 +2173,16 @@
+         "@jridgewell/sourcemap-codec": "^1.4.14"
+       }
+     },
++    "node_modules/@js-sdsl/ordered-map": {
++      "version": "4.4.2",
++      "resolved": "https://registry.npmjs.org/@js-sdsl/ordered-map/-/ordered-map-4.4.2.tgz",
++      "integrity": "sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==",
++      "license": "MIT",
++      "funding": {
++        "type": "opencollective",
++        "url": "https://opencollective.com/js-sdsl"
++      }
++    },
+     "node_modules/@modelcontextprotocol/sdk": {
+       "version": "1.29.0",
+       "resolved": "https://registry.npmjs.org/@modelcontextprotocol/sdk/-/sdk-1.29.0.tgz",
+@@ -2412,6 +2531,116 @@
+       "integrity": "sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==",
+       "license": "MIT"
+     },
++    "node_modules/@pkgjs/parseargs": {
++      "version": "0.11.0",
++      "resolved": "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz",
++      "integrity": "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==",
++      "license": "MIT",
++      "optional": true,
++      "engines": {
++        "node": ">=14"
++      }
++    },
++    "node_modules/@protobufjs/aspromise": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@protobufjs/aspromise/-/aspromise-1.1.2.tgz",
++      "integrity": "sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/base64": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@protobufjs/base64/-/base64-1.1.2.tgz",
++      "integrity": "sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/codegen": {
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/@protobufjs/codegen/-/codegen-2.0.5.tgz",
++      "integrity": "sha512-zgXFLzW3Ap33e6d0Wlj4MGIm6Ce8O89n/apUaGNB/jx+hw+ruWEp7EwGUshdLKVRCxZW12fp9r40E1mQrf/34g==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/eventemitter": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@protobufjs/eventemitter/-/eventemitter-1.1.0.tgz",
++      "integrity": "sha512-j9ednRT81vYJ9OfVuXG6ERSTdEL1xVsNgqpkxMsbIabzSo3goCjDIveeGv5d03om39ML71RdmrGNjG5SReBP/Q==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/fetch": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@protobufjs/fetch/-/fetch-1.1.0.tgz",
++      "integrity": "sha512-lljVXpqXebpsijW71PZaCYeIcE5on1w5DlQy5WH6GLbFryLUrBD4932W/E2BSpfRJWseIL4v/KPgBFxDOIdKpQ==",
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@protobufjs/aspromise": "^1.1.1",
++        "@protobufjs/inquire": "^1.1.0"
++      }
++    },
++    "node_modules/@protobufjs/float": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/@protobufjs/float/-/float-1.0.2.tgz",
++      "integrity": "sha512-Ddb+kVXlXst9d+R9PfTIxh1EdNkgoRe5tOX6t01f1lYWOvJnSPDBlG241QLzcyPdoNTsblLUdujGSE4RzrTZGQ==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/inquire": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@protobufjs/inquire/-/inquire-1.1.1.tgz",
++      "integrity": "sha512-mnzgDV26ueAvk7rsbt9L7bE0SuAoqyuys/sMMrmVcN5x9VsxpcG3rqAUSgDyLp0UZlmNfIbQ4fHfCtreVBk8Ew==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/path": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@protobufjs/path/-/path-1.1.2.tgz",
++      "integrity": "sha512-6JOcJ5Tm08dOHAbdR3GrvP+yUUfkjG5ePsHYczMFLq3ZmMkAD98cDgcT2iA1lJ9NVwFd4tH/iSSoe44YWkltEA==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/pool": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@protobufjs/pool/-/pool-1.1.0.tgz",
++      "integrity": "sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@protobufjs/utf8": {
++      "version": "1.1.1",
++      "resolved": "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.1.tgz",
++      "integrity": "sha512-oOAWABowe8EAbMyWKM0tYDKi8Yaox52D+HWZhAIJqQXbqe0xI/GV7FhLWqlEKreMkfDjshR5FKgi3mnle0h6Eg==",
++      "license": "BSD-3-Clause"
++    },
++    "node_modules/@reduxjs/toolkit": {
++      "version": "2.11.2",
++      "resolved": "https://registry.npmjs.org/@reduxjs/toolkit/-/toolkit-2.11.2.tgz",
++      "integrity": "sha512-Kd6kAHTA6/nUpp8mySPqj3en3dm0tdMIgbttnQ1xFMVpufoj+ADi8pXLBsd4xzTRHQa7t/Jv8W5UnCuW4kuWMQ==",
++      "license": "MIT",
++      "dependencies": {
++        "@standard-schema/spec": "^1.0.0",
++        "@standard-schema/utils": "^0.3.0",
++        "immer": "^11.0.0",
++        "redux": "^5.0.1",
++        "redux-thunk": "^3.1.0",
++        "reselect": "^5.1.0"
++      },
++      "peerDependencies": {
++        "react": "^16.9.0 || ^17.0.0 || ^18 || ^19",
++        "react-redux": "^7.2.1 || ^8.1.3 || ^9.0.0"
++      },
++      "peerDependenciesMeta": {
++        "react": {
++          "optional": true
++        },
++        "react-redux": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@reduxjs/toolkit/node_modules/immer": {
++      "version": "11.1.8",
++      "resolved": "https://registry.npmjs.org/immer/-/immer-11.1.8.tgz",
++      "integrity": "sha512-/tbkHMW7y10Lx6i1crLjD4/OhNkRG+Fo7byZHtah0547nIeXYcpIXaUh0IAQY6gO5459qpGGYapcEOHtFXkIuA==",
++      "license": "MIT",
++      "funding": {
++        "type": "opencollective",
++        "url": "https://opencollective.com/immer"
++      }
++    },
+     "node_modules/@rtsao/scc": {
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/@rtsao/scc/-/scc-1.1.0.tgz",
+@@ -2437,6 +2666,18 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/@standard-schema/spec": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@standard-schema/spec/-/spec-1.1.0.tgz",
++      "integrity": "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==",
++      "license": "MIT"
++    },
++    "node_modules/@standard-schema/utils": {
++      "version": "0.3.0",
++      "resolved": "https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz",
++      "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==",
++      "license": "MIT"
++    },
+     "node_modules/@swc/helpers": {
+       "version": "0.5.15",
+       "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz",
+@@ -2803,6 +3044,69 @@
+         "tslib": "^2.4.0"
+       }
+     },
++    "node_modules/@types/d3-array": {
++      "version": "3.2.2",
++      "resolved": "https://registry.npmjs.org/@types/d3-array/-/d3-array-3.2.2.tgz",
++      "integrity": "sha512-hOLWVbm7uRza0BYXpIIW5pxfrKe0W+D5lrFiAEYR+pb6w3N2SwSMaJbXdUfSEv+dT4MfHBLtn5js0LAWaO6otw==",
++      "license": "MIT"
++    },
++    "node_modules/@types/d3-color": {
++      "version": "3.1.3",
++      "resolved": "https://registry.npmjs.org/@types/d3-color/-/d3-color-3.1.3.tgz",
++      "integrity": "sha512-iO90scth9WAbmgv7ogoq57O9YpKmFBbmoEoCHDB2xMBY0+/KVrqAaCDyCE16dUspeOvIxFFRI+0sEtqDqy2b4A==",
++      "license": "MIT"
++    },
++    "node_modules/@types/d3-ease": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/@types/d3-ease/-/d3-ease-3.0.2.tgz",
++      "integrity": "sha512-NcV1JjO5oDzoK26oMzbILE6HW7uVXOHLQvHshBUW4UMdZGfiY6v5BeQwh9a9tCzv+CeefZQHJt5SRgK154RtiA==",
++      "license": "MIT"
++    },
++    "node_modules/@types/d3-interpolate": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-3.0.4.tgz",
++      "integrity": "sha512-mgLPETlrpVV1YRJIglr4Ez47g7Yxjl1lj7YKsiMCb27VJH9W8NVM6Bb9d8kkpG/uAQS5AmbA48q2IAolKKo1MA==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/d3-color": "*"
++      }
++    },
++    "node_modules/@types/d3-path": {
++      "version": "3.1.1",
++      "resolved": "https://registry.npmjs.org/@types/d3-path/-/d3-path-3.1.1.tgz",
++      "integrity": "sha512-VMZBYyQvbGmWyWVea0EHs/BwLgxc+MKi1zLDCONksozI4YJMcTt8ZEuIR4Sb1MMTE8MMW49v0IwI5+b7RmfWlg==",
++      "license": "MIT"
++    },
++    "node_modules/@types/d3-scale": {
++      "version": "4.0.9",
++      "resolved": "https://registry.npmjs.org/@types/d3-scale/-/d3-scale-4.0.9.tgz",
++      "integrity": "sha512-dLmtwB8zkAeO/juAMfnV+sItKjlsw2lKdZVVy6LRr0cBmegxSABiLEpGVmSJJ8O08i4+sGR6qQtb6WtuwJdvVw==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/d3-time": "*"
++      }
++    },
++    "node_modules/@types/d3-shape": {
++      "version": "3.1.8",
++      "resolved": "https://registry.npmjs.org/@types/d3-shape/-/d3-shape-3.1.8.tgz",
++      "integrity": "sha512-lae0iWfcDeR7qt7rA88BNiqdvPS5pFVPpo5OfjElwNaT2yyekbM0C9vK+yqBqEmHr6lDkRnYNoTBYlAgJa7a4w==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/d3-path": "*"
++      }
++    },
++    "node_modules/@types/d3-time": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npmjs.org/@types/d3-time/-/d3-time-3.0.4.tgz",
++      "integrity": "sha512-yuzZug1nkAAaBlBBikKZTgzCeA+k1uy4ZFwWANOfKw5z5LRhV0gNA7gNkKm7HoK+HRN0wX3EkxGk0fpbWhmB7g==",
++      "license": "MIT"
++    },
++    "node_modules/@types/d3-timer": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/@types/d3-timer/-/d3-timer-3.0.2.tgz",
++      "integrity": "sha512-Ps3T8E8dZDam6fUyNiMkekK3XUsaUEik+idO9/YjPtfj2qruF8tFBXS7XhtE4iIXBLxhmLjP3SXpLhVf21I9Lw==",
++      "license": "MIT"
++    },
+     "node_modules/@types/estree": {
+       "version": "1.0.9",
+       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz",
+@@ -2868,6 +3172,12 @@
+       "integrity": "sha512-xMAgYwceFhRA2zY+XbEA7mxYbA093wdiW8Vu6gZPGWy9cmOyU9XesH1tNcEWsKFd5Vzrqx5T3D38PWx1FIIXkA==",
+       "license": "MIT"
+     },
++    "node_modules/@types/use-sync-external-store": {
++      "version": "0.0.6",
++      "resolved": "https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz",
++      "integrity": "sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==",
++      "license": "MIT"
++    },
+     "node_modules/@types/validate-npm-package-name": {
+       "version": "4.0.2",
+       "resolved": "https://registry.npmjs.org/@types/validate-npm-package-name/-/validate-npm-package-name-4.0.2.tgz",
+@@ -3811,7 +4121,26 @@
+       "version": "1.0.2",
+       "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",
+       "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==",
+-      "dev": true,
++      "license": "MIT"
++    },
++    "node_modules/base64-js": {
++      "version": "1.5.1",
++      "resolved": "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz",
++      "integrity": "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
+       "license": "MIT"
+     },
+     "node_modules/baseline-browser-mapping": {
+@@ -3826,6 +4155,15 @@
+         "node": ">=6.0.0"
+       }
+     },
++    "node_modules/bignumber.js": {
++      "version": "9.3.1",
++      "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.3.1.tgz",
++      "integrity": "sha512-Ko0uX15oIUS7wJ3Rb30Fs6SkVbLmPBAKdlm7q9+ak9bbIeFf0MwuBsQV6z7+X768/cHsfg+WlysDWJcmthjsjQ==",
++      "license": "MIT",
++      "engines": {
++        "node": "*"
++      }
++    },
+     "node_modules/body-parser": {
+       "version": "2.2.2",
+       "resolved": "https://registry.npmjs.org/body-parser/-/body-parser-2.2.2.tgz",
+@@ -3906,6 +4244,12 @@
+         "node": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
+       }
+     },
++    "node_modules/buffer-equal-constant-time": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz",
++      "integrity": "sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==",
++      "license": "BSD-3-Clause"
++    },
+     "node_modules/bundle-name": {
+       "version": "4.1.0",
+       "resolved": "https://registry.npmjs.org/bundle-name/-/bundle-name-4.1.0.tgz",
+@@ -4322,74 +4666,195 @@
+       "devOptional": true,
+       "license": "MIT"
+     },
+-    "node_modules/damerau-levenshtein": {
+-      "version": "1.0.8",
+-      "resolved": "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz",
+-      "integrity": "sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==",
+-      "dev": true,
+-      "license": "BSD-2-Clause"
++    "node_modules/d3-array": {
++      "version": "3.2.4",
++      "resolved": "https://registry.npmjs.org/d3-array/-/d3-array-3.2.4.tgz",
++      "integrity": "sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==",
++      "license": "ISC",
++      "dependencies": {
++        "internmap": "1 - 2"
++      },
++      "engines": {
++        "node": ">=12"
++      }
+     },
+-    "node_modules/data-uri-to-buffer": {
+-      "version": "4.0.1",
+-      "resolved": "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz",
+-      "integrity": "sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==",
+-      "license": "MIT",
++    "node_modules/d3-color": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz",
++      "integrity": "sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==",
++      "license": "ISC",
+       "engines": {
+-        "node": ">= 12"
++        "node": ">=12"
+       }
+     },
+-    "node_modules/data-view-buffer": {
+-      "version": "1.0.2",
+-      "resolved": "https://registry.npmjs.org/data-view-buffer/-/data-view-buffer-1.0.2.tgz",
+-      "integrity": "sha512-EmKO5V3OLXh1rtK2wgXRansaK1/mtVdTUEiEI0W8RkvgT05kfxaH29PliLnpLP73yYO6142Q72QNa8Wx/A5CqQ==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "call-bound": "^1.0.3",
+-        "es-errors": "^1.3.0",
+-        "is-data-view": "^1.0.2"
+-      },
++    "node_modules/d3-ease": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/d3-ease/-/d3-ease-3.0.1.tgz",
++      "integrity": "sha512-wR/XK3D3XcLIZwpbvQwQ5fK+8Ykds1ip7A2Txe0yxncXSdq1L9skcG7blcedkOX+ZcgxGAmLX1FrRGbADwzi0w==",
++      "license": "BSD-3-Clause",
+       "engines": {
+-        "node": ">= 0.4"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/ljharb"
++        "node": ">=12"
+       }
+     },
+-    "node_modules/data-view-byte-length": {
+-      "version": "1.0.2",
+-      "resolved": "https://registry.npmjs.org/data-view-byte-length/-/data-view-byte-length-1.0.2.tgz",
+-      "integrity": "sha512-tuhGbE6CfTM9+5ANGf+oQb72Ky/0+s3xKUpHvShfiz2RxMFgFPjsXuRLBVMtvMs15awe45SRb83D6wH4ew6wlQ==",
+-      "dev": true,
+-      "license": "MIT",
+-      "dependencies": {
+-        "call-bound": "^1.0.3",
+-        "es-errors": "^1.3.0",
+-        "is-data-view": "^1.0.2"
+-      },
++    "node_modules/d3-format": {
++      "version": "3.1.2",
++      "resolved": "https://registry.npmjs.org/d3-format/-/d3-format-3.1.2.tgz",
++      "integrity": "sha512-AJDdYOdnyRDV5b6ArilzCPPwc1ejkHcoyFarqlPqT7zRYjhavcT3uSrqcMvsgh2CgoPbK3RCwyHaVyxYcP2Arg==",
++      "license": "ISC",
+       "engines": {
+-        "node": ">= 0.4"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/inspect-js"
++        "node": ">=12"
+       }
+     },
+-    "node_modules/data-view-byte-offset": {
+-      "version": "1.0.1",
+-      "resolved": "https://registry.npmjs.org/data-view-byte-offset/-/data-view-byte-offset-1.0.1.tgz",
+-      "integrity": "sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==",
+-      "dev": true,
+-      "license": "MIT",
++    "node_modules/d3-interpolate": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-3.0.1.tgz",
++      "integrity": "sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==",
++      "license": "ISC",
+       "dependencies": {
+-        "call-bound": "^1.0.2",
+-        "es-errors": "^1.3.0",
+-        "is-data-view": "^1.0.1"
++        "d3-color": "1 - 3"
+       },
+       "engines": {
+-        "node": ">= 0.4"
+-      },
+-      "funding": {
+-        "url": "https://github.com/sponsors/ljharb"
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-path": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/d3-path/-/d3-path-3.1.0.tgz",
++      "integrity": "sha512-p3KP5HCf/bvjBSSKuXid6Zqijx7wIfNW+J/maPs+iwR35at5JCbLUT0LzF1cnjbCHWhqzQTIN2Jpe8pRebIEFQ==",
++      "license": "ISC",
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-scale": {
++      "version": "4.0.2",
++      "resolved": "https://registry.npmjs.org/d3-scale/-/d3-scale-4.0.2.tgz",
++      "integrity": "sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ==",
++      "license": "ISC",
++      "dependencies": {
++        "d3-array": "2.10.0 - 3",
++        "d3-format": "1 - 3",
++        "d3-interpolate": "1.2.0 - 3",
++        "d3-time": "2.1.1 - 3",
++        "d3-time-format": "2 - 4"
++      },
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-shape": {
++      "version": "3.2.0",
++      "resolved": "https://registry.npmjs.org/d3-shape/-/d3-shape-3.2.0.tgz",
++      "integrity": "sha512-SaLBuwGm3MOViRq2ABk3eLoxwZELpH6zhl3FbAoJ7Vm1gofKx6El1Ib5z23NUEhF9AsGl7y+dzLe5Cw2AArGTA==",
++      "license": "ISC",
++      "dependencies": {
++        "d3-path": "^3.1.0"
++      },
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-time": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/d3-time/-/d3-time-3.1.0.tgz",
++      "integrity": "sha512-VqKjzBLejbSMT4IgbmVgDjpkYrNWUYJnbCGo874u7MMKIWsILRX+OpX/gTk8MqjpT1A/c6HY2dCA77ZN0lkQ2Q==",
++      "license": "ISC",
++      "dependencies": {
++        "d3-array": "2 - 3"
++      },
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-time-format": {
++      "version": "4.1.0",
++      "resolved": "https://registry.npmjs.org/d3-time-format/-/d3-time-format-4.1.0.tgz",
++      "integrity": "sha512-dJxPBlzC7NugB2PDLwo9Q8JiTR3M3e4/XANkreKSUxF8vvXKqm1Yfq4Q5dl8budlunRVlUUaDUgFt7eA8D6NLg==",
++      "license": "ISC",
++      "dependencies": {
++        "d3-time": "1 - 3"
++      },
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/d3-timer": {
++      "version": "3.0.1",
++      "resolved": "https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz",
++      "integrity": "sha512-ndfJ/JxxMd3nw31uyKoY2naivF+r29V+Lc0svZxe1JvvIRmi8hUsrMvdOwgS1o6uBHmiz91geQ0ylPP0aj1VUA==",
++      "license": "ISC",
++      "engines": {
++        "node": ">=12"
++      }
++    },
++    "node_modules/damerau-levenshtein": {
++      "version": "1.0.8",
++      "resolved": "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz",
++      "integrity": "sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==",
++      "dev": true,
++      "license": "BSD-2-Clause"
++    },
++    "node_modules/data-uri-to-buffer": {
++      "version": "4.0.1",
++      "resolved": "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz",
++      "integrity": "sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==",
++      "license": "MIT",
++      "engines": {
++        "node": ">= 12"
++      }
++    },
++    "node_modules/data-view-buffer": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/data-view-buffer/-/data-view-buffer-1.0.2.tgz",
++      "integrity": "sha512-EmKO5V3OLXh1rtK2wgXRansaK1/mtVdTUEiEI0W8RkvgT05kfxaH29PliLnpLP73yYO6142Q72QNa8Wx/A5CqQ==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "call-bound": "^1.0.3",
++        "es-errors": "^1.3.0",
++        "is-data-view": "^1.0.2"
++      },
++      "engines": {
++        "node": ">= 0.4"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/ljharb"
++      }
++    },
++    "node_modules/data-view-byte-length": {
++      "version": "1.0.2",
++      "resolved": "https://registry.npmjs.org/data-view-byte-length/-/data-view-byte-length-1.0.2.tgz",
++      "integrity": "sha512-tuhGbE6CfTM9+5ANGf+oQb72Ky/0+s3xKUpHvShfiz2RxMFgFPjsXuRLBVMtvMs15awe45SRb83D6wH4ew6wlQ==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "call-bound": "^1.0.3",
++        "es-errors": "^1.3.0",
++        "is-data-view": "^1.0.2"
++      },
++      "engines": {
++        "node": ">= 0.4"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/inspect-js"
++      }
++    },
++    "node_modules/data-view-byte-offset": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/data-view-byte-offset/-/data-view-byte-offset-1.0.1.tgz",
++      "integrity": "sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "call-bound": "^1.0.2",
++        "es-errors": "^1.3.0",
++        "is-data-view": "^1.0.1"
++      },
++      "engines": {
++        "node": ">= 0.4"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/ljharb"
+       }
+     },
+     "node_modules/debug": {
+@@ -4409,6 +4874,12 @@
+         }
+       }
+     },
++    "node_modules/decimal.js-light": {
++      "version": "2.5.1",
++      "resolved": "https://registry.npmjs.org/decimal.js-light/-/decimal.js-light-2.5.1.tgz",
++      "integrity": "sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==",
++      "license": "MIT"
++    },
+     "node_modules/dedent": {
+       "version": "1.7.2",
+       "resolved": "https://registry.npmjs.org/dedent/-/dedent-1.7.2.tgz",
+@@ -4582,6 +5053,33 @@
+         "node": ">= 0.4"
+       }
+     },
++    "node_modules/duplexify": {
++      "version": "4.1.3",
++      "resolved": "https://registry.npmjs.org/duplexify/-/duplexify-4.1.3.tgz",
++      "integrity": "sha512-M3BmBhwJRZsSx38lZyhE53Csddgzl5R7xGJNk7CVddZD6CcmwMCH8J+7AprIrQKH7TonKxaCjcv27Qmf+sQ+oA==",
++      "license": "MIT",
++      "dependencies": {
++        "end-of-stream": "^1.4.1",
++        "inherits": "^2.0.3",
++        "readable-stream": "^3.1.1",
++        "stream-shift": "^1.0.2"
++      }
++    },
++    "node_modules/eastasianwidth": {
++      "version": "0.2.0",
++      "resolved": "https://registry.npmjs.org/eastasianwidth/-/eastasianwidth-0.2.0.tgz",
++      "integrity": "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==",
++      "license": "MIT"
++    },
++    "node_modules/ecdsa-sig-formatter": {
++      "version": "1.0.11",
++      "resolved": "https://registry.npmjs.org/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz",
++      "integrity": "sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "safe-buffer": "^5.0.1"
++      }
++    },
+     "node_modules/eciesjs": {
+       "version": "0.4.18",
+       "resolved": "https://registry.npmjs.org/eciesjs/-/eciesjs-0.4.18.tgz",
+@@ -4615,7 +5113,6 @@
+       "version": "9.2.2",
+       "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-9.2.2.tgz",
+       "integrity": "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==",
+-      "dev": true,
+       "license": "MIT"
+     },
+     "node_modules/encodeurl": {
+@@ -4627,6 +5124,15 @@
+         "node": ">= 0.8"
+       }
+     },
++    "node_modules/end-of-stream": {
++      "version": "1.4.5",
++      "resolved": "https://registry.npmjs.org/end-of-stream/-/end-of-stream-1.4.5.tgz",
++      "integrity": "sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==",
++      "license": "MIT",
++      "dependencies": {
++        "once": "^1.4.0"
++      }
++    },
+     "node_modules/enhanced-resolve": {
+       "version": "5.21.2",
+       "resolved": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.21.2.tgz",
+@@ -4833,6 +5339,16 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/es-toolkit": {
++      "version": "1.46.1",
++      "resolved": "https://registry.npmjs.org/es-toolkit/-/es-toolkit-1.46.1.tgz",
++      "integrity": "sha512-5eNtXOs3tbfxXOj04tjjseeWkRWaoCjdEI+96DgwzZoe6c9juL49pXlzAFTI72aWC9Y8p7168g6XIKjh7k6pyQ==",
++      "license": "MIT",
++      "workspaces": [
++        "docs",
++        "benchmarks"
++      ]
++    },
+     "node_modules/esbuild": {
+       "version": "0.27.7",
+       "resolved": "https://registry.npmjs.org/esbuild/-/esbuild-0.27.7.tgz",
+@@ -5331,6 +5847,12 @@
+         "node": ">= 0.6"
+       }
+     },
++    "node_modules/eventemitter3": {
++      "version": "5.0.4",
++      "resolved": "https://registry.npmjs.org/eventemitter3/-/eventemitter3-5.0.4.tgz",
++      "integrity": "sha512-mlsTRyGaPBjPedk6Bvw+aqbsXDtoAyAzm5MO7JgU+yVRyMQ5O8bD4Kcci7BS85f93veegeCPkL8R4GLClnjLFw==",
++      "license": "MIT"
++    },
+     "node_modules/eventsource": {
+       "version": "3.0.7",
+       "resolved": "https://registry.npmjs.org/eventsource/-/eventsource-3.0.7.tgz",
+@@ -5439,6 +5961,12 @@
+         "express": ">= 4.11"
+       }
+     },
++    "node_modules/extend": {
++      "version": "3.0.2",
++      "resolved": "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz",
++      "integrity": "sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==",
++      "license": "MIT"
++    },
+     "node_modules/fast-deep-equal": {
+       "version": "3.1.3",
+       "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+@@ -5676,6 +6204,22 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/foreground-child": {
++      "version": "3.3.1",
++      "resolved": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.1.tgz",
++      "integrity": "sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==",
++      "license": "ISC",
++      "dependencies": {
++        "cross-spawn": "^7.0.6",
++        "signal-exit": "^4.0.1"
++      },
++      "engines": {
++        "node": ">=14"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
+     "node_modules/formdata-polyfill": {
+       "version": "4.0.10",
+       "resolved": "https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz",
+@@ -5781,6 +6325,34 @@
+       "integrity": "sha512-sR9BNCjBg6LNgwvxlBd0sBABvQitkLzoVY9MYYROQVX/FvfJ4Mai9LsGhDgd8qYdds0bY77VzYd5iuB+v5rwQQ==",
+       "license": "MIT"
+     },
++    "node_modules/gaxios": {
++      "version": "7.1.4",
++      "resolved": "https://registry.npmjs.org/gaxios/-/gaxios-7.1.4.tgz",
++      "integrity": "sha512-bTIgTsM2bWn3XklZISBTQX7ZSddGW+IO3bMdGaemHZ3tbqExMENHLx6kKZ/KlejgrMtj8q7wBItt51yegqalrA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "extend": "^3.0.2",
++        "https-proxy-agent": "^7.0.1",
++        "node-fetch": "^3.3.2"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/gcp-metadata": {
++      "version": "8.1.2",
++      "resolved": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-8.1.2.tgz",
++      "integrity": "sha512-zV/5HKTfCeKWnxG0Dmrw51hEWFGfcF2xiXqcA3+J90WDuP0SvoiSO5ORvcBsifmx/FoIjgQN3oNOGaQ5PhLFkg==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "gaxios": "^7.0.0",
++        "google-logging-utils": "^1.0.0",
++        "json-bigint": "^1.0.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/generator-function": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/generator-function/-/generator-function-2.0.1.tgz",
+@@ -5917,6 +6489,27 @@
+         "url": "https://github.com/privatenumber/get-tsconfig?sponsor=1"
+       }
+     },
++    "node_modules/glob": {
++      "version": "10.5.0",
++      "resolved": "https://registry.npmjs.org/glob/-/glob-10.5.0.tgz",
++      "integrity": "sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==",
++      "deprecated": "Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me",
++      "license": "ISC",
++      "dependencies": {
++        "foreground-child": "^3.1.0",
++        "jackspeak": "^3.1.2",
++        "minimatch": "^9.0.4",
++        "minipass": "^7.1.2",
++        "package-json-from-dist": "^1.0.0",
++        "path-scurry": "^1.11.1"
++      },
++      "bin": {
++        "glob": "dist/esm/bin.mjs"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
+     "node_modules/glob-parent": {
+       "version": "6.0.2",
+       "resolved": "https://registry.npmjs.org/glob-parent/-/glob-parent-6.0.2.tgz",
+@@ -5930,6 +6523,30 @@
+         "node": ">=10.13.0"
+       }
+     },
++    "node_modules/glob/node_modules/brace-expansion": {
++      "version": "2.1.0",
++      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.1.0.tgz",
++      "integrity": "sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==",
++      "license": "MIT",
++      "dependencies": {
++        "balanced-match": "^1.0.0"
++      }
++    },
++    "node_modules/glob/node_modules/minimatch": {
++      "version": "9.0.9",
++      "resolved": "https://registry.npmjs.org/minimatch/-/minimatch-9.0.9.tgz",
++      "integrity": "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==",
++      "license": "ISC",
++      "dependencies": {
++        "brace-expansion": "^2.0.2"
++      },
++      "engines": {
++        "node": ">=16 || 14 >=14.17"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
+     "node_modules/globals": {
+       "version": "14.0.0",
+       "resolved": "https://registry.npmjs.org/globals/-/globals-14.0.0.tgz",
+@@ -5960,6 +6577,54 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/google-auth-library": {
++      "version": "10.6.2",
++      "resolved": "https://registry.npmjs.org/google-auth-library/-/google-auth-library-10.6.2.tgz",
++      "integrity": "sha512-e27Z6EThmVNNvtYASwQxose/G57rkRuaRbQyxM2bvYLLX/GqWZ5chWq2EBoUchJbCc57eC9ArzO5wMsEmWftCw==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "base64-js": "^1.3.0",
++        "ecdsa-sig-formatter": "^1.0.11",
++        "gaxios": "^7.1.4",
++        "gcp-metadata": "8.1.2",
++        "google-logging-utils": "1.1.3",
++        "jws": "^4.0.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/google-gax": {
++      "version": "5.0.6",
++      "resolved": "https://registry.npmjs.org/google-gax/-/google-gax-5.0.6.tgz",
++      "integrity": "sha512-1kGbqVQBZPAAu4+/R1XxPQKP0ydbNYoLAr4l0ZO2bMV0kLyLW4I1gAk++qBLWt7DPORTzmWRMsCZe86gDjShJA==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "@grpc/grpc-js": "^1.12.6",
++        "@grpc/proto-loader": "^0.8.0",
++        "duplexify": "^4.1.3",
++        "google-auth-library": "^10.1.0",
++        "google-logging-utils": "^1.1.1",
++        "node-fetch": "^3.3.2",
++        "object-hash": "^3.0.0",
++        "proto3-json-serializer": "^3.0.0",
++        "protobufjs": "^7.5.3",
++        "retry-request": "^8.0.0",
++        "rimraf": "^5.0.1"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/google-logging-utils": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/google-logging-utils/-/google-logging-utils-1.1.3.tgz",
++      "integrity": "sha512-eAmLkjDjAFCVXg7A1unxHsLf961m6y17QFqXqAXGj/gVkKFrEICfStRfwUlGNfeCEjNRa32JEWOUTlYXPyyKvA==",
++      "license": "Apache-2.0",
++      "engines": {
++        "node": ">=14"
++      }
++    },
+     "node_modules/gopd": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz",
+@@ -6135,6 +6800,19 @@
+         "url": "https://opencollective.com/express"
+       }
+     },
++    "node_modules/http-proxy-agent": {
++      "version": "7.0.2",
++      "resolved": "https://registry.npmjs.org/http-proxy-agent/-/http-proxy-agent-7.0.2.tgz",
++      "integrity": "sha512-T1gkAiYYDWYx3V5Bmyu7HcfcvL7mUrTWiM6yOfa3PIphViJ/gFPbvidQ+veqSOHci/PxBcDabeUNCzpOODJZig==",
++      "license": "MIT",
++      "dependencies": {
++        "agent-base": "^7.1.0",
++        "debug": "^4.3.4"
++      },
++      "engines": {
++        "node": ">= 14"
++      }
++    },
+     "node_modules/https-proxy-agent": {
+       "version": "7.0.6",
+       "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-7.0.6.tgz",
+@@ -6182,6 +6860,16 @@
+         "node": ">= 4"
+       }
+     },
++    "node_modules/immer": {
++      "version": "10.2.0",
++      "resolved": "https://registry.npmjs.org/immer/-/immer-10.2.0.tgz",
++      "integrity": "sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==",
++      "license": "MIT",
++      "funding": {
++        "type": "opencollective",
++        "url": "https://opencollective.com/immer"
++      }
++    },
+     "node_modules/import-fresh": {
+       "version": "3.3.1",
+       "resolved": "https://registry.npmjs.org/import-fresh/-/import-fresh-3.3.1.tgz",
+@@ -6229,6 +6917,15 @@
+         "node": ">= 0.4"
+       }
+     },
++    "node_modules/internmap": {
++      "version": "2.0.3",
++      "resolved": "https://registry.npmjs.org/internmap/-/internmap-2.0.3.tgz",
++      "integrity": "sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==",
++      "license": "ISC",
++      "engines": {
++        "node": ">=12"
++      }
++    },
+     "node_modules/ip-address": {
+       "version": "10.2.0",
+       "resolved": "https://registry.npmjs.org/ip-address/-/ip-address-10.2.0.tgz",
+@@ -6849,6 +7546,21 @@
+         "node": ">= 0.4"
+       }
+     },
++    "node_modules/jackspeak": {
++      "version": "3.4.3",
++      "resolved": "https://registry.npmjs.org/jackspeak/-/jackspeak-3.4.3.tgz",
++      "integrity": "sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==",
++      "license": "BlueOak-1.0.0",
++      "dependencies": {
++        "@isaacs/cliui": "^8.0.2"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      },
++      "optionalDependencies": {
++        "@pkgjs/parseargs": "^0.11.0"
++      }
++    },
+     "node_modules/jiti": {
+       "version": "2.7.0",
+       "resolved": "https://registry.npmjs.org/jiti/-/jiti-2.7.0.tgz",
+@@ -6898,6 +7610,15 @@
+         "node": ">=6"
+       }
+     },
++    "node_modules/json-bigint": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz",
++      "integrity": "sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==",
++      "license": "MIT",
++      "dependencies": {
++        "bignumber.js": "^9.0.0"
++      }
++    },
+     "node_modules/json-buffer": {
+       "version": "3.0.1",
+       "resolved": "https://registry.npmjs.org/json-buffer/-/json-buffer-3.0.1.tgz",
+@@ -6971,6 +7692,27 @@
+         "node": ">=4.0"
+       }
+     },
++    "node_modules/jwa": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/jwa/-/jwa-2.0.1.tgz",
++      "integrity": "sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==",
++      "license": "MIT",
++      "dependencies": {
++        "buffer-equal-constant-time": "^1.0.1",
++        "ecdsa-sig-formatter": "1.0.11",
++        "safe-buffer": "^5.0.1"
++      }
++    },
++    "node_modules/jws": {
++      "version": "4.0.1",
++      "resolved": "https://registry.npmjs.org/jws/-/jws-4.0.1.tgz",
++      "integrity": "sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==",
++      "license": "MIT",
++      "dependencies": {
++        "jwa": "^2.0.1",
++        "safe-buffer": "^5.0.1"
++      }
++    },
+     "node_modules/keyv": {
+       "version": "4.5.4",
+       "resolved": "https://registry.npmjs.org/keyv/-/keyv-4.5.4.tgz",
+@@ -7307,6 +8049,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/lodash.camelcase": {
++      "version": "4.3.0",
++      "resolved": "https://registry.npmjs.org/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz",
++      "integrity": "sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==",
++      "license": "MIT"
++    },
+     "node_modules/lodash.merge": {
+       "version": "4.6.2",
+       "resolved": "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz",
+@@ -7354,6 +8102,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/long": {
++      "version": "5.3.2",
++      "resolved": "https://registry.npmjs.org/long/-/long-5.3.2.tgz",
++      "integrity": "sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==",
++      "license": "Apache-2.0"
++    },
+     "node_modules/loose-envify": {
+       "version": "1.4.0",
+       "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz",
+@@ -7521,6 +8275,15 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/minipass": {
++      "version": "7.1.3",
++      "resolved": "https://registry.npmjs.org/minipass/-/minipass-7.1.3.tgz",
++      "integrity": "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==",
++      "license": "BlueOak-1.0.0",
++      "engines": {
++        "node": ">=16 || 14 >=14.17"
++      }
++    },
+     "node_modules/ms": {
+       "version": "2.1.3",
+       "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+@@ -7787,6 +8550,15 @@
+       "integrity": "sha512-3qT/88Y3FbH/Kx4szpQQ4HzUbVrHPKTLVpVocKiLfoYvw9XSGOX2FmD2d6DrXbVYyAQTF2HeF6My8jmzx7/CRw==",
+       "license": "MIT"
+     },
++    "node_modules/nodemailer": {
++      "version": "8.0.7",
++      "resolved": "https://registry.npmjs.org/nodemailer/-/nodemailer-8.0.7.tgz",
++      "integrity": "sha512-pkjE4mkBzQjdJT4/UmlKl3pX0rC9fZmjh7c6C9o7lv66Ac6w9WCnzPzhbPNxwZAzlF4mdq4CSWB5+FbK6FWCow==",
++      "license": "MIT-0",
++      "engines": {
++        "node": ">=6.0.0"
++      }
++    },
+     "node_modules/npm-run-path": {
+       "version": "6.0.0",
+       "resolved": "https://registry.npmjs.org/npm-run-path/-/npm-run-path-6.0.0.tgz",
+@@ -7824,6 +8596,15 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/object-hash": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/object-hash/-/object-hash-3.0.0.tgz",
++      "integrity": "sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==",
++      "license": "MIT",
++      "engines": {
++        "node": ">= 6"
++      }
++    },
+     "node_modules/object-inspect": {
+       "version": "1.13.4",
+       "resolved": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz",
+@@ -8110,6 +8891,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/package-json-from-dist": {
++      "version": "1.0.1",
++      "resolved": "https://registry.npmjs.org/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz",
++      "integrity": "sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==",
++      "license": "BlueOak-1.0.0"
++    },
+     "node_modules/parent-module": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz",
+@@ -8193,6 +8980,28 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/path-scurry": {
++      "version": "1.11.1",
++      "resolved": "https://registry.npmjs.org/path-scurry/-/path-scurry-1.11.1.tgz",
++      "integrity": "sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==",
++      "license": "BlueOak-1.0.0",
++      "dependencies": {
++        "lru-cache": "^10.2.0",
++        "minipass": "^5.0.0 || ^6.0.2 || ^7.0.0"
++      },
++      "engines": {
++        "node": ">=16 || 14 >=14.18"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
++    "node_modules/path-scurry/node_modules/lru-cache": {
++      "version": "10.4.3",
++      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.4.3.tgz",
++      "integrity": "sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==",
++      "license": "ISC"
++    },
+     "node_modules/path-to-regexp": {
+       "version": "6.3.0",
+       "resolved": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-6.3.0.tgz",
+@@ -8348,6 +9157,42 @@
+         "react-is": "^16.13.1"
+       }
+     },
++    "node_modules/proto3-json-serializer": {
++      "version": "3.0.4",
++      "resolved": "https://registry.npmjs.org/proto3-json-serializer/-/proto3-json-serializer-3.0.4.tgz",
++      "integrity": "sha512-E1sbAYg3aEbXrq0n1ojJkRHQJGE1kaE/O6GLA94y8rnJBfgvOPTOd1b9hOceQK1FFZI9qMh1vBERCyO2ifubcw==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "protobufjs": "^7.4.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
++    "node_modules/protobufjs": {
++      "version": "7.5.7",
++      "resolved": "https://registry.npmjs.org/protobufjs/-/protobufjs-7.5.7.tgz",
++      "integrity": "sha512-NGnrxS/nLKUo5nkbVQxlC71sB4hdfImdYIbFeSCidxtwATx0AHRPcANSLd0q5Bb2BkoSWo2iisQhGg5/r+ihbA==",
++      "hasInstallScript": true,
++      "license": "BSD-3-Clause",
++      "dependencies": {
++        "@protobufjs/aspromise": "^1.1.2",
++        "@protobufjs/base64": "^1.1.2",
++        "@protobufjs/codegen": "^2.0.5",
++        "@protobufjs/eventemitter": "^1.1.0",
++        "@protobufjs/fetch": "^1.1.0",
++        "@protobufjs/float": "^1.0.2",
++        "@protobufjs/inquire": "^1.1.1",
++        "@protobufjs/path": "^1.1.2",
++        "@protobufjs/pool": "^1.1.0",
++        "@protobufjs/utf8": "^1.1.1",
++        "@types/node": ">=13.7.0",
++        "long": "^5.0.0"
++      },
++      "engines": {
++        "node": ">=12.0.0"
++      }
++    },
+     "node_modules/proxy-addr": {
+       "version": "2.0.7",
+       "resolved": "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.7.tgz",
+@@ -8455,9 +9300,45 @@
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+-      "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/react-redux": {
++      "version": "9.2.0",
++      "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-9.2.0.tgz",
++      "integrity": "sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==",
++      "license": "MIT",
++      "dependencies": {
++        "@types/use-sync-external-store": "^0.0.6",
++        "use-sync-external-store": "^1.4.0"
++      },
++      "peerDependencies": {
++        "@types/react": "^18.2.25 || ^19",
++        "react": "^18.0 || ^19",
++        "redux": "^5.0.0"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "redux": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/readable-stream": {
++      "version": "3.6.2",
++      "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.2.tgz",
++      "integrity": "sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==",
++      "license": "MIT",
++      "dependencies": {
++        "inherits": "^2.0.3",
++        "string_decoder": "^1.1.1",
++        "util-deprecate": "^1.0.1"
++      },
++      "engines": {
++        "node": ">= 6"
++      }
++    },
+     "node_modules/recast": {
+       "version": "0.23.11",
+       "resolved": "https://registry.npmjs.org/recast/-/recast-0.23.11.tgz",
+@@ -8474,6 +9355,51 @@
+         "node": ">= 4"
+       }
+     },
++    "node_modules/recharts": {
++      "version": "3.8.1",
++      "resolved": "https://registry.npmjs.org/recharts/-/recharts-3.8.1.tgz",
++      "integrity": "sha512-mwzmO1s9sFL0TduUpwndxCUNoXsBw3u3E/0+A+cLcrSfQitSG62L32N69GhqUrrT5qKcAE3pCGVINC6pqkBBQg==",
++      "license": "MIT",
++      "workspaces": [
++        "www"
++      ],
++      "dependencies": {
++        "@reduxjs/toolkit": "^1.9.0 || 2.x.x",
++        "clsx": "^2.1.1",
++        "decimal.js-light": "^2.5.1",
++        "es-toolkit": "^1.39.3",
++        "eventemitter3": "^5.0.1",
++        "immer": "^10.1.1",
++        "react-redux": "8.x.x || 9.x.x",
++        "reselect": "5.1.1",
++        "tiny-invariant": "^1.3.3",
++        "use-sync-external-store": "^1.2.2",
++        "victory-vendor": "^37.0.2"
++      },
++      "engines": {
++        "node": ">=18"
++      },
++      "peerDependencies": {
++        "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
++        "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
++        "react-is": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
++      }
++    },
++    "node_modules/redux": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/redux/-/redux-5.0.1.tgz",
++      "integrity": "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==",
++      "license": "MIT"
++    },
++    "node_modules/redux-thunk": {
++      "version": "3.1.0",
++      "resolved": "https://registry.npmjs.org/redux-thunk/-/redux-thunk-3.1.0.tgz",
++      "integrity": "sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==",
++      "license": "MIT",
++      "peerDependencies": {
++        "redux": "^5.0.0"
++      }
++    },
+     "node_modules/reflect.getprototypeof": {
+       "version": "1.0.10",
+       "resolved": "https://registry.npmjs.org/reflect.getprototypeof/-/reflect.getprototypeof-1.0.10.tgz",
+@@ -8601,6 +9527,19 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/retry-request": {
++      "version": "8.0.2",
++      "resolved": "https://registry.npmjs.org/retry-request/-/retry-request-8.0.2.tgz",
++      "integrity": "sha512-JzFPAfklk1kjR1w76f0QOIhoDkNkSqW8wYKT08n9yysTmZfB+RQ2QoXoTAeOi1HD9ZipTyTAZg3c4pM/jeqgSw==",
++      "license": "MIT",
++      "dependencies": {
++        "extend": "^3.0.2",
++        "teeny-request": "^10.0.0"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/rettime": {
+       "version": "0.11.11",
+       "resolved": "https://registry.npmjs.org/rettime/-/rettime-0.11.11.tgz",
+@@ -8617,6 +9556,21 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/rimraf": {
++      "version": "5.0.10",
++      "resolved": "https://registry.npmjs.org/rimraf/-/rimraf-5.0.10.tgz",
++      "integrity": "sha512-l0OE8wL34P4nJH/H2ffoaniAokM2qSmrtXHmlpvYr5AVVX8msAyW0l8NVJFDxlSK4u3Uh/f41cQheDVdnYijwQ==",
++      "license": "ISC",
++      "dependencies": {
++        "glob": "^10.3.7"
++      },
++      "bin": {
++        "rimraf": "dist/esm/bin.mjs"
++      },
++      "funding": {
++        "url": "https://github.com/sponsors/isaacs"
++      }
++    },
+     "node_modules/router": {
+       "version": "2.2.0",
+       "resolved": "https://registry.npmjs.org/router/-/router-2.2.0.tgz",
+@@ -8698,6 +9652,26 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
++    "node_modules/safe-buffer": {
++      "version": "5.2.1",
++      "resolved": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz",
++      "integrity": "sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/feross"
++        },
++        {
++          "type": "patreon",
++          "url": "https://www.patreon.com/feross"
++        },
++        {
++          "type": "consulting",
++          "url": "https://feross.org/support"
++        }
++      ],
++      "license": "MIT"
++    },
+     "node_modules/safe-push-apply": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/safe-push-apply/-/safe-push-apply-1.0.0.tgz",
+@@ -9185,12 +10159,36 @@
+         "node": ">= 0.4"
+       }
+     },
++    "node_modules/stream-events": {
++      "version": "1.0.5",
++      "resolved": "https://registry.npmjs.org/stream-events/-/stream-events-1.0.5.tgz",
++      "integrity": "sha512-E1GUzBSgvct8Jsb3v2X15pjzN1tYebtbLaMg+eBOUOAxgbLoSbT2NS91ckc5lJD1KfLjId+jXJRgo0qnV5Nerg==",
++      "license": "MIT",
++      "dependencies": {
++        "stubs": "^3.0.0"
++      }
++    },
++    "node_modules/stream-shift": {
++      "version": "1.0.3",
++      "resolved": "https://registry.npmjs.org/stream-shift/-/stream-shift-1.0.3.tgz",
++      "integrity": "sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==",
++      "license": "MIT"
++    },
+     "node_modules/strict-event-emitter": {
+       "version": "0.5.1",
+       "resolved": "https://registry.npmjs.org/strict-event-emitter/-/strict-event-emitter-0.5.1.tgz",
+       "integrity": "sha512-vMgjE/GGEPEFnhFub6pa4FmJBRBVOLpIII2hvCZ8Kzb7K0hlHo7mQv6xYrBvCL2LtAIBwFUK8wvuJgTVSQ5MFQ==",
+       "license": "MIT"
+     },
++    "node_modules/string_decoder": {
++      "version": "1.3.0",
++      "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz",
++      "integrity": "sha512-hkRX8U1WjJFd8LsDJ2yQ/wWWxaopEsABU1XfkM8A+j0+85JAGppt16cr1Whg6KIbb4okU6Mql6BOj+uup/wKeA==",
++      "license": "MIT",
++      "dependencies": {
++        "safe-buffer": "~5.2.0"
++      }
++    },
+     "node_modules/string-width": {
+       "version": "7.2.0",
+       "resolved": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz",
+@@ -9208,6 +10206,48 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/string-width-cjs": {
++      "name": "string-width",
++      "version": "4.2.3",
++      "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
++      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
++      "license": "MIT",
++      "dependencies": {
++        "emoji-regex": "^8.0.0",
++        "is-fullwidth-code-point": "^3.0.0",
++        "strip-ansi": "^6.0.1"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/string-width-cjs/node_modules/ansi-regex": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz",
++      "integrity": "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/string-width-cjs/node_modules/emoji-regex": {
++      "version": "8.0.0",
++      "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
++      "integrity": "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==",
++      "license": "MIT"
++    },
++    "node_modules/string-width-cjs/node_modules/strip-ansi": {
++      "version": "6.0.1",
++      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
++      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-regex": "^5.0.1"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
+     "node_modules/string-width/node_modules/emoji-regex": {
+       "version": "10.6.0",
+       "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.6.0.tgz",
+@@ -9359,6 +10399,28 @@
+         "url": "https://github.com/chalk/strip-ansi?sponsor=1"
+       }
+     },
++    "node_modules/strip-ansi-cjs": {
++      "name": "strip-ansi",
++      "version": "6.0.1",
++      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
++      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-regex": "^5.0.1"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/strip-ansi-cjs/node_modules/ansi-regex": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz",
++      "integrity": "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=8"
++      }
++    },
+     "node_modules/strip-bom": {
+       "version": "3.0.0",
+       "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-3.0.0.tgz",
+@@ -9393,6 +10455,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/stubs": {
++      "version": "3.0.0",
++      "resolved": "https://registry.npmjs.org/stubs/-/stubs-3.0.0.tgz",
++      "integrity": "sha512-PdHt7hHUJKxvTCgbKX9C1V/ftOcjJQgz8BZwNfV5c4B6dcGqlpelTbJ999jBGZ2jYiPAwcX5dP6oBwVlBlUbxw==",
++      "license": "MIT"
++    },
+     "node_modules/styled-jsx": {
+       "version": "5.1.6",
+       "resolved": "https://registry.npmjs.org/styled-jsx/-/styled-jsx-5.1.6.tgz",
+@@ -9485,6 +10553,21 @@
+         "url": "https://opencollective.com/webpack"
+       }
+     },
++    "node_modules/teeny-request": {
++      "version": "10.1.2",
++      "resolved": "https://registry.npmjs.org/teeny-request/-/teeny-request-10.1.2.tgz",
++      "integrity": "sha512-Xj0ZAQ0CeuQn6UxCDPLbFRlgcSTUEyO3+wiepr2grjIjyL/lMMs1Z4OwXn8kLvn/V1OuaEP0UY7Na6UDNNsYrQ==",
++      "license": "Apache-2.0",
++      "dependencies": {
++        "http-proxy-agent": "^7.0.0",
++        "https-proxy-agent": "^7.0.1",
++        "node-fetch": "^3.3.2",
++        "stream-events": "^1.0.5"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/tiny-invariant": {
+       "version": "1.3.3",
+       "resolved": "https://registry.npmjs.org/tiny-invariant/-/tiny-invariant-1.3.3.tgz",
+@@ -10004,6 +11087,28 @@
+         "node": ">= 0.8"
+       }
+     },
++    "node_modules/victory-vendor": {
++      "version": "37.3.6",
++      "resolved": "https://registry.npmjs.org/victory-vendor/-/victory-vendor-37.3.6.tgz",
++      "integrity": "sha512-SbPDPdDBYp+5MJHhBCAyI7wKM3d5ivekigc2Dk2s7pgbZ9wIgIBYGVw4zGHBml/qTFbexrofXW6Gu4noGxrOwQ==",
++      "license": "MIT AND ISC",
++      "dependencies": {
++        "@types/d3-array": "^3.0.3",
++        "@types/d3-ease": "^3.0.0",
++        "@types/d3-interpolate": "^3.0.1",
++        "@types/d3-scale": "^4.0.2",
++        "@types/d3-shape": "^3.1.0",
++        "@types/d3-time": "^3.0.0",
++        "@types/d3-timer": "^3.0.0",
++        "d3-array": "^3.1.6",
++        "d3-ease": "^3.0.1",
++        "d3-interpolate": "^3.0.1",
++        "d3-scale": "^4.0.2",
++        "d3-shape": "^3.1.0",
++        "d3-time": "^3.0.0",
++        "d3-timer": "^3.0.1"
++      }
++    },
+     "node_modules/web-streams-polyfill": {
+       "version": "3.3.3",
+       "resolved": "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz",
+@@ -10144,6 +11249,65 @@
+         "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
+       }
+     },
++    "node_modules/wrap-ansi-cjs": {
++      "name": "wrap-ansi",
++      "version": "7.0.0",
++      "resolved": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz",
++      "integrity": "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-styles": "^4.0.0",
++        "string-width": "^4.1.0",
++        "strip-ansi": "^6.0.0"
++      },
++      "engines": {
++        "node": ">=10"
++      },
++      "funding": {
++        "url": "https://github.com/chalk/wrap-ansi?sponsor=1"
++      }
++    },
++    "node_modules/wrap-ansi-cjs/node_modules/ansi-regex": {
++      "version": "5.0.1",
++      "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz",
++      "integrity": "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/wrap-ansi-cjs/node_modules/emoji-regex": {
++      "version": "8.0.0",
++      "resolved": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-8.0.0.tgz",
++      "integrity": "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==",
++      "license": "MIT"
++    },
++    "node_modules/wrap-ansi-cjs/node_modules/string-width": {
++      "version": "4.2.3",
++      "resolved": "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz",
++      "integrity": "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==",
++      "license": "MIT",
++      "dependencies": {
++        "emoji-regex": "^8.0.0",
++        "is-fullwidth-code-point": "^3.0.0",
++        "strip-ansi": "^6.0.1"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
++    "node_modules/wrap-ansi-cjs/node_modules/strip-ansi": {
++      "version": "6.0.1",
++      "resolved": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-6.0.1.tgz",
++      "integrity": "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==",
++      "license": "MIT",
++      "dependencies": {
++        "ansi-regex": "^5.0.1"
++      },
++      "engines": {
++        "node": ">=8"
++      }
++    },
+     "node_modules/wrap-ansi/node_modules/ansi-regex": {
+       "version": "5.0.1",
+       "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-5.0.1.tgz",
+diff --git a/package.json b/package.json
+index b022786..5a8ae20 100644
+--- a/package.json
++++ b/package.json
+@@ -13,13 +13,18 @@
+     "data:validate": "tsx src/scripts/validate-generated.ts",
+     "data:indexnow": "tsx src/scripts/ping-indexnow.ts",
+     "data:lexicon": "tsx src/scripts/import-lexicon.ts",
+-    "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts"
++    "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts",
++    "data:dashboard": "node src/scripts/fetch-analytics.mjs",
++    "data:report": "node src/scripts/send-daily-report.mjs"
+   },
+   "dependencies": {
+     "@base-ui/react": "^1.4.1",
+     "class-variance-authority": "^0.7.1",
+     "clsx": "^2.1.1",
+     "lucide-react": "^1.14.0",
++    "@google-analytics/data": "^5.2.2",
++    "nodemailer": "^8.0.7",
++    "recharts": "^3.8.1",
+     "next": "16.2.6",
+     "react": "19.2.4",
+     "react-dom": "19.2.4",
+diff --git a/src/app/about/page.tsx b/src/app/about/page.tsx
+index a0de2f7..581400b 100644
+--- a/src/app/about/page.tsx
++++ b/src/app/about/page.tsx
+@@ -27,14 +27,14 @@ export const metadata: Metadata = {
+ 
+ export default function AboutPage() {
+   const tools = [
+-    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/word-games/connections-hint" },
+-    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/word-games/wordle-solver" },
+-    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/word-games/spelling-bee-helper" },
+-    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/word-games/unscramble" },
+-    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/word-games/anagram-solver" },
+-    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/word-games/crossword-solver" },
+-    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-games/word-pattern-solver" },
+-    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/word-games/5-letter-words" },
++    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/connections-hint" },
++    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/wordle-solver" },
++    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/spelling-bee-helper" },
++    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/unscramble" },
++    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/anagram-solver" },
++    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/crossword-solver" },
++    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-pattern-solver" },
++    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/5-letter-words" },
+   ];
+ 
+   const valueProps = [
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 9923085..b20418b 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -1,5 +1,6 @@
+ import type { Metadata } from "next";
+ import { Inter } from "next/font/google";
++import Script from "next/script";
+ import "./globals.css";
+ import { Header } from "@/components/layout/Header";
+ import { Footer } from "@/components/layout/Footer";
+@@ -7,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
+ const inter = Inter({ subsets: ["latin"] });
+ 
+ export const metadata: Metadata = {
++  metadataBase: new URL("https://gridhint.com"),
+   title: "GridHint — NYT Connections Hints, Wordle Solver & Spelling Bee Helper Today",
+   description:
+     "Daily hints and answers for the NYT Connections, Wordle, and Spelling Bee puzzles, plus solvers for anagrams, crosswords, hangman, and word ladders. Free, no sign-up.",
+@@ -20,6 +22,19 @@ export default function RootLayout({
+   return (
+     <html lang="en">
+       <body className={`${inter.className} min-h-screen bg-slate-50 text-slate-900 font-sans text-lg leading-relaxed flex flex-col`}>
++        <Script
++          src="https://www.googletagmanager.com/gtag/js?id=G-XK5332Z4Z8"
++          strategy="afterInteractive"
++        />
++        <Script id="google-analytics" strategy="afterInteractive">
++          {`
++            window.dataLayer = window.dataLayer || [];
++            function gtag(){dataLayer.push(arguments);}
++            gtag('js', new Date());
++
++            gtag('config', 'G-XK5332Z4Z8');
++          `}
++        </Script>
+         <Header />
+         <main className="flex-1 w-full pb-20">
+           {children}
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index 7d89cfc..eb9f968 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -79,17 +79,30 @@ export const metadata: Metadata = {
+ const jsonLd = {
+   "@context": "https://schema.org",
+   "@graph": [
++    {
++      "@type": "Organization",
++      "@id": "https://gridhint.com/#organization",
++      "name": "GridHint",
++      "url": "https://gridhint.com",
++      "logo": {
++        "@type": "ImageObject",
++        "url": "https://gridhint.com/gridhint-logo.png"
++      }
++    },
+     {
+       "@type": "WebSite",
+       "@id": "https://gridhint.com/#website",
+       "url": "https://gridhint.com",
+       "name": "GridHint",
+       "description": "Free daily hints and solvers for NYT Connections, Wordle, Spelling Bee and more word puzzles.",
++      "publisher": {
++        "@id": "https://gridhint.com/#organization"
++      },
+       "potentialAction": {
+         "@type": "SearchAction",
+         "target": {
+           "@type": "EntryPoint",
+-          "urlTemplate": "https://gridhint.com/word-games/anagram-jumble/unscramble?letters={search_term_string}"
++          "urlTemplate": "https://gridhint.com/anagram-jumble/unscramble?letters={search_term_string}"
+         },
+         "query-input": "required name=search_term_string"
+       }
+@@ -136,7 +149,7 @@ const jsonLd = {
+ 
+ const dailyPuzzles = [
+   {
+-    href: "/word-games/connections/hints",
++    href: "/connections/hints",
+     eyebrow: "Today's NYT Connections",
+     title: "Connections Hints",
+     description:
+@@ -148,7 +161,7 @@ const dailyPuzzles = [
+     eyebrowTint: "text-purple-700",
+   },
+   {
+-    href: "/word-games/wordle/today",
++    href: "/wordle/today",
+     eyebrow: "Today's NYT Wordle",
+     title: "Wordle Hints & Answer",
+     description:
+@@ -160,7 +173,7 @@ const dailyPuzzles = [
+     eyebrowTint: "text-emerald-700",
+   },
+   {
+-    href: "/word-games/spelling-bee/today",
++    href: "/spelling-bee/today",
+     eyebrow: "Today's NYT Spelling Bee",
+     title: "Spelling Bee Hints",
+     description:
+@@ -175,55 +188,55 @@ const dailyPuzzles = [
+ 
+ const moreTools = [
+   {
+-    href: "/word-games/anagram-jumble/unscramble",
++    href: "/anagram-jumble/unscramble",
+     title: "Unscramble Letters",
+     description: "Turn jumbled tiles into every possible word.",
+     Icon: Shuffle,
+   },
+   {
+-    href: "/word-games/anagram-jumble/anagram-solver",
++    href: "/anagram-jumble/anagram-solver",
+     title: "Anagram Solver",
+     description: "Find every anagram of a word or phrase.",
+     Icon: ArrowRightLeft,
+   },
+   {
+-    href: "/word-games/anagram-jumble/word-descrambler",
++    href: "/anagram-jumble/word-descrambler",
+     title: "Word Descrambler",
+     description: "Sort scrambled letters into valid words by length.",
+     Icon: SpellCheck,
+   },
+   {
+-    href: "/word-games/anagram-jumble/word-scrambler",
++    href: "/anagram-jumble/word-scrambler",
+     title: "Word Scrambler",
+     description: "Generate scrambled letter sets for puzzles and games.",
+     Icon: Type,
+   },
+   {
+-    href: "/word-games/crossword/solver",
++    href: "/crossword/solver",
+     title: "Crossword Solver",
+     description: "Match clues and patterns across major crossword grids.",
+     Icon: LayoutGrid,
+   },
+   {
+-    href: "/word-games/hangman/solver",
++    href: "/hangman/solver",
+     title: "Hangman Solver",
+     description: "Best-guess letters based on known positions and misses.",
+     Icon: HelpCircle,
+   },
+   {
+-    href: "/word-games/word-ladder/solver",
++    href: "/word-ladder/solver",
+     title: "Word Ladder Solver",
+     description: "Build the shortest one-letter-change path between two words.",
+     Icon: MoveRight,
+   },
+   {
+-    href: "/word-games/5-letter-words",
++    href: "/5-letter-words",
+     title: "5-Letter Words",
+     description: "Browse every 5-letter word by starting letters, pattern, or endings.",
+     Icon: List,
+   },
+   {
+-    href: "/word-games/word-pattern-solver",
++    href: "/word-pattern-solver",
+     title: "Word Pattern Solver",
+     description: "Find words matching a pattern — use _ for any unknown letter (e.g. C_T, B__K).",
+     Icon: ScanText,
+diff --git a/src/app/sitemap.ts b/src/app/sitemap.ts
+index 2883ef6..8ad6f41 100644
+--- a/src/app/sitemap.ts
++++ b/src/app/sitemap.ts
+@@ -30,19 +30,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
+   // ---------------------------------------------------------------
+   const dailyRoutes: MetadataRoute.Sitemap = [
+     {
+-      url: `${baseUrl}/word-games/connections/hints/`,
++      url: `${baseUrl}/connections/hints/`,
+       lastModified: readManifestUpdatedAt('connections'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+     },
+     {
+-      url: `${baseUrl}/word-games/wordle/today/`,
++      url: `${baseUrl}/wordle/today/`,
+       lastModified: readManifestUpdatedAt('wordle'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+     },
+     {
+-      url: `${baseUrl}/word-games/spelling-bee/today/`,
++      url: `${baseUrl}/spelling-bee/today/`,
+       lastModified: readManifestUpdatedAt('spelling-bee'),
+       changeFrequency: 'daily',
+       priority: 1.0,
+@@ -56,20 +56,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
+   // and avoid Google "Page with redirect" errors.
+   // ---------------------------------------------------------------
+   const weeklyRoutes = [
+-    '/word-games/wordle/solver/',
+-    '/word-games/spelling-bee/helper/',
+-    '/word-games/anagram-jumble/unscramble/',
+-    '/word-games/anagram-jumble/anagram-solver/',
+-    '/word-games/anagram-jumble/word-descrambler/',
+-    '/word-games/anagram-jumble/word-scrambler/',
+-    '/word-games/crossword/solver/',
+-    '/word-games/hangman/solver/',
+-    '/word-games/word-ladder/solver/',
+-    '/word-games/word-pattern-solver/',
+-    '/word-games/5-letter-words/',
+-    '/word-games/unscramble/',
+-    '/word-games/word-scrambler/',
+-    '/word-games/word-descrambler/',
++    '/wordle/solver/',
++    '/spelling-bee/helper/',
++    '/anagram-jumble/unscramble/',
++    '/anagram-jumble/anagram-solver/',
++    '/anagram-jumble/word-descrambler/',
++    '/anagram-jumble/word-scrambler/',
++    '/crossword/solver/',
++    '/hangman/solver/',
++    '/word-ladder/solver/',
++    '/word-pattern-solver/',
++    '/5-letter-words/',
++    '/unscramble/',
++    '/word-scrambler/',
++    '/word-descrambler/',
+   ].map((route) => ({
+     url: `${baseUrl}${route}`,
+     lastModified: now,
+@@ -84,14 +84,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     '/about/',
+     '/contact/',
+     '/disclaimer/',
+-    '/word-games/',
+-    '/word-games/connections/',
+-    '/word-games/wordle/',
+-    '/word-games/spelling-bee/',
+-    '/word-games/anagram-jumble/',
+-    '/word-games/crossword/',
+-    '/word-games/hangman/',
+-    '/word-games/word-ladder/',
++    '/',
++    '/connections/',
++    '/wordle/',
++    '/spelling-bee/',
++    '/anagram-jumble/',
++    '/crossword/',
++    '/hangman/',
++    '/word-ladder/',
+   ].map((route) => ({
+     url: `${baseUrl}${route}`,
+     lastModified: now,
+@@ -99,6 +99,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     priority: 0.7,
+   }));
+ 
++  // ---------------------------------------------------------------
++  // Archive Pages — Expose historical data for long-tail traffic
++  // ---------------------------------------------------------------
++  const archiveRoutes: MetadataRoute.Sitemap = [];
++  const games = [
++    { dir: 'connections', path: '/connections/hints/' },
++    { dir: 'wordle', path: '/wordle/answers/' },
++  ];
++
++  for (const game of games) {
++    try {
++      const dirPath = path.join(process.cwd(), 'src/data/generated', game.dir);
++      if (fs.existsSync(dirPath)) {
++        const files = fs.readdirSync(dirPath);
++        for (const file of files) {
++          if (file.match(/^\d{4}-\d{2}-\d{2}\.json$/)) {
++            const dateStr = file.replace('.json', '');
++            const stat = fs.statSync(path.join(dirPath, file));
++            
++            // Note: you must ensure these dynamic routes actually exist in your Next.js app
++            // e.g., src/app/connections/hints/[date]/page.tsx
++            archiveRoutes.push({
++              url: `${baseUrl}${game.path}${dateStr}/`,
++              lastModified: stat.mtime,
++              changeFrequency: 'never',
++              priority: 0.5,
++            });
++          }
++        }
++      }
++    } catch (e) {
++      // ignore
++    }
++  }
++
+   // Homepage — top priority, daily change frequency (because daily-puzzle cards rotate)
+   const homepage = {
+     url: `${baseUrl}/`,
+@@ -107,5 +142,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
+     priority: 1.0,
+   };
+ 
+-  return [homepage, ...dailyRoutes, ...weeklyRoutes, ...monthlyRoutes];
++  return [homepage, ...dailyRoutes, ...weeklyRoutes, ...monthlyRoutes, ...archiveRoutes];
+ }
+diff --git a/src/app/word-games/5-letter-words/page.tsx b/src/app/word-games/5-letter-words/page.tsx
+deleted file mode 100644
+index a306b3e..0000000
+--- a/src/app/word-games/5-letter-words/page.tsx
++++ /dev/null
+@@ -1,56 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function FiveLetterWordsMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          5-Letter Word Finder
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Browse and filter all valid 5-letter words. Perfect for Wordle and other daily games.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label className="block text-2xl font-bold text-slate-900">
+-              Pattern (use _ for blanks)
+-            </label>
+-            <div className="flex gap-2 sm:gap-4 justify-start">
+-              {['_', 'R', 'A', '_', 'E'].map((letter, i) => (
+-                <input 
+-                  key={i}
+-                  type="text" 
+-                  maxLength={1}
+-                  defaultValue={letter !== '_' ? letter : ''}
+-                  className="w-14 h-16 sm:w-20 sm:h-20 text-3xl sm:text-4xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase"
+-                />
+-              ))}
+-            </div>
+-          </div>
+-          
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-             <label htmlFor="includes" className="block text-xl font-bold text-slate-900">
+-              Must include letters
+-            </label>
+-            <input 
+-              id="includes"
+-              type="text" 
+-              placeholder="e.g. S, T" 
+-              className="w-full text-xl p-4 h-14 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/anagram-jumble/anagram-solver/page.tsx b/src/app/word-games/anagram-jumble/anagram-solver/page.tsx
+deleted file mode 100644
+index 0fb5b7e..0000000
+--- a/src/app/word-games/anagram-jumble/anagram-solver/page.tsx
++++ /dev/null
+@@ -1,36 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Anagram Solver | Find Exact and Partial Anagrams',
+-  description: 'Find exact anagrams, partial anagrams, and words made from your letters.',
+-  alternates: { canonical: '/word-games/anagram-jumble/anagram-solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function AnagramSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Anagram Solver',
+-    description: 'Find exact anagrams, partial anagrams, and words made from your letters.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Anagram Solver', url: `${BASE}/word-games/anagram-jumble/anagram-solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Anagram Solver"
+-        subtitle="Find every possible anagram for a word or phrase. Toggle 'Exact Only' to find perfect matches."
+-        mode="unscramble"
+-        defaultOptions={{ exactOnly: true }}
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/page.tsx b/src/app/word-games/anagram-jumble/page.tsx
+deleted file mode 100644
+index bf46b3e..0000000
+--- a/src/app/word-games/anagram-jumble/page.tsx
++++ /dev/null
+@@ -1,78 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Shuffle, ArrowLeftRight, Layers, Search } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Anagram and Jumble Solver | Unscramble Any Word',
+-  description: 'Unscramble letters, find anagrams, descramble jumbled words, and create word scrambles. Free tools for puzzle lovers.',
+-  alternates: { canonical: '/word-games/anagram-jumble/' },
+-};
+-
+-export default function AnagramJumbleHubPage() {
+-  const modes = [
+-    {
+-      title: 'Unscramble Words',
+-      desc: 'Turn scrambled letters into valid words, grouped by length.',
+-      href: '/word-games/anagram-jumble/unscramble',
+-      icon: Shuffle,
+-      color: 'bg-purple-50 text-purple-700',
+-    },
+-    {
+-      title: 'Word Descrambler',
+-      desc: 'Decode jumbled text back into real dictionary words instantly.',
+-      href: '/word-games/anagram-jumble/word-descrambler',
+-      icon: ArrowLeftRight,
+-      color: 'bg-indigo-50 text-indigo-700',
+-    },
+-    {
+-      title: 'Word Scrambler',
+-      desc: 'Scramble any word or phrase to create a custom puzzle for others.',
+-      href: '/word-games/anagram-jumble/word-scrambler',
+-      icon: Layers,
+-      color: 'bg-pink-50 text-pink-700',
+-    },
+-    {
+-      title: 'Anagram Solver',
+-      desc: 'Find exact anagrams, partial matches, and every word hiding in your letters.',
+-      href: '/word-games/anagram-jumble/anagram-solver',
+-      icon: Search,
+-      color: 'bg-blue-50 text-blue-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Anagram and Jumble Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Every tool you need to unscramble letters, solve jumbles, and find hidden anagrams in any word or phrase.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/unscramble/page.tsx b/src/app/word-games/anagram-jumble/unscramble/page.tsx
+deleted file mode 100644
+index ddc409a..0000000
+--- a/src/app/word-games/anagram-jumble/unscramble/page.tsx
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Unscramble Letters | Find Words From Scrambled Letters',
+-  description: 'Enter letters to find every valid word, grouped by length with exact anagrams and common word suggestions.',
+-  alternates: { canonical: '/word-games/anagram-jumble/unscramble/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function UnscramblePage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Unscramble Letters',
+-    description: 'Enter letters to find every valid word, grouped by length with exact anagrams and common word suggestions.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Unscramble', url: `${BASE}/word-games/anagram-jumble/unscramble/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Unscramble Letters"
+-        subtitle="Enter letters to find every valid word from our dictionary. Results are organized by word length."
+-        mode="unscramble"
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/word-descrambler/page.tsx b/src/app/word-games/anagram-jumble/word-descrambler/page.tsx
+deleted file mode 100644
+index fde8aab..0000000
+--- a/src/app/word-games/anagram-jumble/word-descrambler/page.tsx
++++ /dev/null
+@@ -1,36 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Descrambler | Decode Scrambled Letters Into Words',
+-  description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+-  alternates: { canonical: '/word-games/anagram-jumble/word-descrambler/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordDescramblerPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Descrambler',
+-    description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Word Descrambler', url: `${BASE}/word-games/anagram-jumble/word-descrambler/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Word Descrambler"
+-        subtitle="Turn jumbled letters back into valid dictionary words. Organized by length for easy solving."
+-        mode="unscramble"
+-        defaultOptions={{ minLength: 3 }}
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-jumble/word-scrambler/page.tsx b/src/app/word-games/anagram-jumble/word-scrambler/page.tsx
+deleted file mode 100644
+index 8a96b05..0000000
+--- a/src/app/word-games/anagram-jumble/word-scrambler/page.tsx
++++ /dev/null
+@@ -1,35 +0,0 @@
+-import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Scrambler | Scramble Words or Unscramble Letters',
+-  description: 'Scramble a word for practice or enter letters to find valid words and anagrams.',
+-  alternates: { canonical: '/word-games/anagram-jumble/word-scrambler/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordScramblerPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Scrambler',
+-    description: 'Scramble a word for practice or enter letters to find valid words and anagrams.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Anagram and Jumble', url: `${BASE}/word-games/anagram-jumble/` },
+-      { name: 'Word Scrambler', url: `${BASE}/word-games/anagram-jumble/word-scrambler/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <AnagramSolver
+-        title="Word Scrambler"
+-        subtitle="Need to mix up a word? Enter it below to get multiple scrambled versions instantly."
+-        mode="scramble"
+-      />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/anagram-solver/page.tsx b/src/app/word-games/anagram-solver/page.tsx
+deleted file mode 100644
+index c82924f..0000000
+--- a/src/app/word-games/anagram-solver/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function AnagramSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Anagram Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find exact anagrams for any word or phrase.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="anagram" className="block text-2xl font-bold text-slate-900">
+-              Enter word or phrase
+-            </label>
+-            <input 
+-              id="anagram"
+-              type="text" 
+-              placeholder="e.g. LISTEN" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Anagrams
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/connections-hint/page.tsx b/src/app/word-games/connections-hint/page.tsx
+deleted file mode 100644
+index 46409f5..0000000
+--- a/src/app/word-games/connections-hint/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import { ArrowRight, Lightbulb } from "lucide-react";
+-
+-export default function ConnectionsHintMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hint for Today
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Get progressive clues without spoiling the whole puzzle.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+-        <div className="flex flex-col sm:flex-row gap-4">
+-          <button className="flex-1 h-16 bg-blue-700 text-white text-xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-            <Lightbulb className="w-6 h-6" /> Reveal Hint 1
+-          </button>
+-          <button className="flex-1 h-16 bg-slate-100 text-slate-900 text-xl font-bold rounded-xl hover:bg-slate-200 border-2 border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-400 transition-colors">
+-            Reveal Hint 2
+-          </button>
+-        </div>
+-
+-        <div className="p-6 bg-slate-50 border-2 border-slate-200 rounded-xl space-y-4">
+-          <h2 className="text-2xl font-bold text-slate-900">Hint 1</h2>
+-          <p className="text-xl text-slate-700 italic">
+-            "Think about things you might wear on your head..."
+-          </p>
+-        </div>
+-
+-        <div className="border-t-2 border-slate-200 pt-8">
+-          <button className="w-full h-16 bg-white text-blue-700 text-xl font-bold rounded-xl hover:bg-blue-50 border-2 border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-            Show Full Category <ArrowRight className="w-6 h-6" />
+-          </button>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/answers/[date]/page.tsx b/src/app/word-games/connections/answers/[date]/page.tsx
+deleted file mode 100644
+index 8f9dce3..0000000
+--- a/src/app/word-games/connections/answers/[date]/page.tsx
++++ /dev/null
+@@ -1,99 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import manifest from '@/data/generated/connections/manifest.json';
+-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+-import { Badge } from '@/components/ui/badge';
+-import { notFound } from 'next/navigation';
+-import Link from 'next/link';
+-import { ArrowLeft } from 'lucide-react';
+-
+-interface PageProps {
+-  params: Promise<{
+-    date: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  return manifest.dates.map(date => ({ date }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  return {
+-    title: `Connections Answer for ${resolvedParams.date} | GridHint.com`,
+-    description: `View the fully grouped answers for the Connections puzzle on ${resolvedParams.date}.`,
+-  };
+-}
+-
+-export default async function ConnectionsAnswerPage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  
+-  // TODO: When archive grows, switch to a build-time import map keyed by date.
+-  // For now, only the latest date is supported; any other date 404s.
+-  if (resolvedParams.date !== latest.date) {
+-    notFound();
+-  }
+-
+-  const typedLatest = latest as any;
+-
+-  const difficultyColors: Record<string, string> = {
+-    yellow: "bg-yellow-100 text-yellow-800 border-yellow-200",
+-    green: "bg-green-100 text-green-800 border-green-200",
+-    blue: "bg-blue-100 text-blue-800 border-blue-200",
+-    purple: "bg-purple-100 text-purple-800 border-purple-200"
+-  };
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <header className="space-y-6">
+-        <Link 
+-          href={`/word-games/connections/hints/${resolvedParams.date}`} 
+-          className="inline-flex items-center gap-2 text-blue-700 font-bold hover:underline underline-offset-4"
+-        >
+-          <ArrowLeft className="w-5 h-5" /> Back to Hints
+-        </Link>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Answer: {resolvedParams.date}
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          The following groups and categories are the reviewed solution for today's puzzle.
+-        </p>
+-      </header>
+-
+-      <div className="grid gap-8">
+-        {typedLatest.groups.map((group: any) => (
+-          <Card key={group.difficulty} className="border-2 shadow-sm rounded-2xl overflow-hidden">
+-            <CardHeader className={`${difficultyColors[group.difficulty]} py-6 border-b-2`}>
+-              <CardTitle className="text-2xl font-black uppercase tracking-widest flex justify-between items-center">
+-                <span>{group.category}</span>
+-                <Badge variant="outline" className="font-bold border-current text-lg">
+-                  {group.difficulty}
+-                </Badge>
+-              </CardTitle>
+-            </CardHeader>
+-            <CardContent className="p-8 bg-white">
+-              <div className="flex flex-wrap gap-4">
+-                {group.words.map((word: string) => (
+-                  <div key={word} className="px-6 py-4 bg-slate-900 text-white rounded-xl text-2xl font-black tracking-widest border-2 border-slate-900">
+-                    {word}
+-                  </div>
+-                ))}
+-              </div>
+-            </CardContent>
+-          </Card>
+-        ))}
+-      </div>
+-
+-      <section className="pt-12 border-t-2 border-slate-200 text-center">
+-        <h2 className="text-2xl font-bold text-slate-900 mb-6">Need more help?</h2>
+-        <div className="flex flex-wrap justify-center gap-4">
+-          <Link href="/word-games/connections/archive" className="h-14 px-8 bg-slate-100 text-slate-900 text-lg font-bold rounded-xl border-2 border-slate-300 hover:bg-slate-200 transition-colors flex items-center justify-center">
+-            Browse Archive
+-          </Link>
+-          <Link href="/word-games/wordle-solver" className="h-14 px-8 bg-blue-700 text-white text-lg font-bold rounded-xl hover:bg-blue-800 transition-colors flex items-center justify-center">
+-            Wordle Solver
+-          </Link>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/hints/[date]/page.tsx b/src/app/word-games/connections/hints/[date]/page.tsx
+deleted file mode 100644
+index 536b2a0..0000000
+--- a/src/app/word-games/connections/hints/[date]/page.tsx
++++ /dev/null
+@@ -1,65 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import manifest from '@/data/generated/connections/manifest.json';
+-import ConnectionsHintCards from '@/components/word-games/connections/ConnectionsHintCards';
+-import { Card } from '@/components/ui/card';
+-import { notFound } from 'next/navigation';
+-
+-interface PageProps {
+-  params: Promise<{
+-    date: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  return manifest.dates.map(date => ({ date }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  return {
+-    title: `Connections Hints for ${resolvedParams.date} | GridHint.com`,
+-    description: `Progressive Connections hints for the puzzle on ${resolvedParams.date}.`,
+-  };
+-}
+-
+-export default async function ConnectionsDateHintsPage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  
+-  // TODO: When archive grows, switch to a build-time import map keyed by date.
+-  // For now, only the latest date is supported; any other date 404s.
+-  if (resolvedParams.date !== latest.date) {
+-    notFound();
+-  }
+-
+-  const typedLatest = latest as any;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hints: {resolvedParams.date}
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Progressive clues for the Connections puzzle on {resolvedParams.date}.
+-        </p>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-2xl font-bold text-slate-900 border-b-2 border-slate-300 pb-2">Puzzle Grid</h2>
+-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+-          {typedLatest.grid.map((word: string) => (
+-            <Card key={word} className="p-4 sm:p-6 text-center border-2 border-slate-300 rounded-xl bg-white">
+-              <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-wider">
+-                {word}
+-              </span>
+-            </Card>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <div className="mt-12">
+-        <ConnectionsHintCards date={typedLatest.date} groups={typedLatest.groups} />
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/hints/page.tsx b/src/app/word-games/connections/hints/page.tsx
+deleted file mode 100644
+index 344137a..0000000
+--- a/src/app/word-games/connections/hints/page.tsx
++++ /dev/null
+@@ -1,87 +0,0 @@
+-import latest from '@/data/generated/connections/latest.json';
+-import ConnectionsHintCards from '@/components/word-games/connections/ConnectionsHintCards';
+-import { Card } from '@/components/ui/card';
+-import { Metadata } from 'next';
+-import { type ConnectionsPuzzle, shuffleGrid } from '@/lib/puzzles/connections';
+-
+-export const metadata: Metadata = {
+-  title: 'Connections Hints for Today | GridHint.com',
+-  description: 'Progressive Connections hints for today. Reveal one clue at a time without jumping straight to the full answer.',
+-  alternates: { canonical: '/word-games/connections/hints/' }
+-};
+-
+-export default function ConnectionsHintsPage() {
+-  // `as unknown as ConnectionsPuzzle` is intentional: JSON imports are typed as the
+-  // literal JSON shape which TypeScript can't narrow to the strict Zod-derived type
+-  // (e.g. sourceMode is inferred as a string literal, status as string).
+-  const puzzle = latest as unknown as ConnectionsPuzzle;
+-
+-  // Deterministically shuffle the grid based on the date so it's not pre-grouped
+-  const shuffledGrid = shuffleGrid(puzzle.grid, puzzle.date);
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Connections Hints for Today
+-        </h1>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-base">
+-          <span>Date: {puzzle.date}</span>
+-          <span className="hidden sm:inline" aria-hidden="true">•</span>
+-          <span className="bg-blue-100 text-blue-900 px-3 py-1 rounded-lg border-2 border-blue-200">
+-            Independent Helper
+-          </span>
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today's puzzle hasn't been published yet. Showing hints for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <section className="space-y-8">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">Today's Grid</h2>
+-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+-          {shuffledGrid.map((word, index) => (
+-            <Card key={`${word}-${index}`} className="p-5 sm:p-8 text-center border-2 border-slate-400 rounded-2xl bg-white shadow-md">
+-              <span className="text-xl sm:text-3xl font-black text-slate-900 tracking-widest uppercase">
+-                {word}
+-              </span>
+-            </Card>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <div className="mt-16 pt-12 border-t-4 border-slate-300">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">Progressive Hints</h2>
+-        <p className="text-xl text-slate-700 mt-6 font-medium">
+-          Get just enough help to solve the puzzle yourself. Reveal one level at a time.
+-        </p>
+-        <ConnectionsHintCards date={puzzle.date} groups={puzzle.groups} />
+-      </div>
+-
+-      <section className="pt-16 border-t-4 border-slate-300 space-y-8">
+-        <h2 className="text-4xl font-black text-slate-900 tracking-tight">How to use these hints</h2>
+-        <div className="prose prose-slate max-w-none text-xl text-slate-800 leading-relaxed space-y-6">
+-          <p>
+-            Stuck on today's Connections puzzle? Our helper provides a "reveal ladder" designed for players who want a nudge, not a spoiler. 
+-          </p>
+-          <ul className="list-disc pl-8 space-y-4 font-medium">
+-            <li><strong>Hint 1 & 2:</strong> Vague associations and wordplay clues to get you thinking.</li>
+-            <li><strong>Category:</strong> Tells you the relationship between the four words.</li>
+-            <li><strong>The Words:</strong> Shows the full group if you're completely stumped.</li>
+-          </ul>
+-        </div>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/connections/page.tsx b/src/app/word-games/connections/page.tsx
+deleted file mode 100644
+index ee6e062..0000000
+--- a/src/app/word-games/connections/page.tsx
++++ /dev/null
+@@ -1,73 +0,0 @@
+-import Link from 'next/link';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Calendar, HelpCircle, CheckCircle2 } from 'lucide-react';
+-import latest from '@/data/generated/connections/latest.json';
+-
+-export default function ConnectionsHubPage() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Connections Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Get progressive hints, reveal categories, or view today's answers for the Connections word game.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        <Link href="/word-games/connections/hints" className="group">
+-          <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-            <div className="bg-blue-50 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
+-              <HelpCircle className="w-10 h-10 text-blue-700" />
+-            </div>
+-            <CardHeader className="p-0 space-y-3">
+-              <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">Today's Hints</CardTitle>
+-              <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                Need a nudge? Get progressive clues that help you solve the puzzle without giving it all away.
+-              </CardDescription>
+-            </CardHeader>
+-            <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-              <span>Get Hints</span>
+-              <ChevronRight className="w-6 h-6" />
+-            </div>
+-          </Card>
+-        </Link>
+-
+-        <Link href={`/word-games/connections/answers/${latest.date}`} className="group">
+-          <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-            <div className="bg-green-50 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-100 transition-colors">
+-              <CheckCircle2 className="w-10 h-10 text-green-700" />
+-            </div>
+-            <CardHeader className="p-0 space-y-3">
+-              <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">View Answers</CardTitle>
+-              <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                Stumped? See the fully grouped categories and words for today's Connections puzzle.
+-              </CardDescription>
+-            </CardHeader>
+-            <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-              <span>See Solution</span>
+-              <ChevronRight className="w-6 h-6" />
+-            </div>
+-          </Card>
+-        </Link>
+-      </div>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-8 sm:p-12 shadow-sm">
+-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+-          <div className="space-y-4">
+-            <div className="flex items-center gap-3 text-slate-500 uppercase font-black tracking-widest">
+-              <Calendar className="w-6 h-6" />
+-              <span>Archive</span>
+-            </div>
+-            <h2 className="text-3xl font-bold text-slate-900">Looking for a past puzzle?</h2>
+-            <p className="text-xl text-slate-700">Browse our collection of previous Connections hints and answers.</p>
+-          </div>
+-          <Link href="/word-games/connections/archive" className="w-full md:w-auto h-16 px-12 bg-slate-900 text-white text-xl font-bold rounded-xl hover:bg-black transition-colors flex items-center justify-center">
+-            Browse Archive
+-          </Link>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/crossword-solver/page.tsx b/src/app/word-games/crossword-solver/page.tsx
+deleted file mode 100644
+index f7fc3b5..0000000
+--- a/src/app/word-games/crossword-solver/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function CrosswordSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Crossword Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Fill in the known letters to find matching dictionary words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="pattern" className="block text-2xl font-bold text-slate-900">
+-              Pattern (use ? or _ for unknown letters)
+-            </label>
+-            <input 
+-              id="pattern"
+-              type="text" 
+-              placeholder="e.g. C?O?S?O?D" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Answers
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/crossword/page.tsx b/src/app/word-games/crossword/page.tsx
+deleted file mode 100644
+index d165718..0000000
+--- a/src/app/word-games/crossword/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Search } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Crossword Solver | Find Answers by Clue and Pattern',
+-  description: 'Solve crossword clues and fill in letter patterns using our free crossword solver with frequency-ranked results.',
+-  alternates: { canonical: '/word-games/crossword/' },
+-};
+-
+-export default function CrosswordHubPage() {
+-  const modes = [
+-    {
+-      title: 'Crossword Solver',
+-      desc: 'Enter a clue and known letters to find ranked crossword answers.',
+-      href: '/word-games/crossword/solver',
+-      icon: Search,
+-      color: 'bg-blue-50 text-blue-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Crossword Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Stuck on a crossword clue? Enter the letters you know and the clue text to find the best candidate answers.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/crossword/solver/page.tsx b/src/app/word-games/crossword/solver/page.tsx
+deleted file mode 100644
+index 1a88c45..0000000
+--- a/src/app/word-games/crossword/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import CrosswordSolver from '@/components/word-games/crossword/CrosswordSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Crossword Solver | Find Answers by Clue and Pattern',
+-  description: 'Enter a crossword clue, known letters, and word length to find likely crossword answers ranked by pattern and commonness.',
+-  alternates: { canonical: '/word-games/crossword/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function CrosswordSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Crossword Solver',
+-    description: 'Enter a crossword clue, known letters, and word length to find likely crossword answers ranked by pattern and commonness.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Crossword', url: `${BASE}/word-games/crossword/` },
+-      { name: 'Solver', url: `${BASE}/word-games/crossword/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Crossword Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find missing crossword answers using our powerful pattern and clue solver.
+-        </p>
+-      </section>
+-
+-      <CrosswordSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/hangman/page.tsx b/src/app/word-games/hangman/page.tsx
+deleted file mode 100644
+index 55ce0c4..0000000
+--- a/src/app/word-games/hangman/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Target } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Hangman Solver | Best Letter Guesses and Possible Words',
+-  description: 'Enter your Hangman progress to find every possible word and the safest letter to guess next. Free and instant.',
+-  alternates: { canonical: '/word-games/hangman/' },
+-};
+-
+-export default function HangmanHubPage() {
+-  const modes = [
+-    {
+-      title: 'Hangman Solver',
+-      desc: 'Enter known letters and wrong guesses to find possible words and the best next move.',
+-      href: '/word-games/hangman/solver',
+-      icon: Target,
+-      color: 'bg-red-50 text-red-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Hangman Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Never lose at Hangman again. Enter your progress to see every candidate word and the letter most likely to be in the answer.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/hangman/solver/page.tsx b/src/app/word-games/hangman/solver/page.tsx
+deleted file mode 100644
+index da0abd8..0000000
+--- a/src/app/word-games/hangman/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import HangmanSolver from '@/components/word-games/hangman/HangmanSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Hangman Solver | Best Next Letter and Possible Words',
+-  description: 'Enter your Hangman pattern and wrong letters to find possible words and the best next letter to guess.',
+-  alternates: { canonical: '/word-games/hangman/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function HangmanSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Hangman Solver',
+-    description: 'Enter your Hangman pattern and wrong letters to find possible words and the best next letter to guess.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Hangman', url: `${BASE}/word-games/hangman/` },
+-      { name: 'Solver', url: `${BASE}/word-games/hangman/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Hangman Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Win every game of Hangman. Enter your current progress and wrong guesses to see every possible word and the safest next move.
+-        </p>
+-      </section>
+-
+-      <HangmanSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/page.tsx b/src/app/word-games/page.tsx
+index ccff20c..843afaa 100644
+--- a/src/app/word-games/page.tsx
++++ b/src/app/word-games/page.tsx
+@@ -6,26 +6,26 @@ export default function WordGamesHub() {
+     {
+       title: "Daily Puzzle Solvers",
+       items: [
+-        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/word-games/connections-hint" },
+-        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/word-games/wordle-solver" },
++        { title: "Connections Hint", desc: "Progressive hints for today's Connections.", href: "/connections-hint" },
++        { title: "Wordle Solver", desc: "Get the best next guess for Wordle.", href: "/wordle-solver" },
+       ]
+     },
+     {
+       title: "Letter Scramblers",
+       items: [
+-        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/word-games/unscramble" },
+-        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-games/word-descrambler" },
+-        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-games/word-scrambler" },
+-        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/word-games/anagram-solver" },
++        { title: "Unscramble Letters", desc: "Find valid words from scrambled letters.", href: "/unscramble" },
++        { title: "Word Descrambler", desc: "Descramble jumbled letters into words.", href: "/word-descrambler" },
++        { title: "Word Scrambler", desc: "Mix up letters to create your own puzzles.", href: "/word-scrambler" },
++        { title: "Anagram Solver", desc: "Find exact anagrams for a word or phrase.", href: "/anagram-solver" },
+       ]
+     },
+     {
+       title: "Finders & Patterns",
+       items: [
+-        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/word-games/5-letter-words" },
+-        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/word-games/crossword-solver" },
+-        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/word-games/spelling-bee-helper" },
+-        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-games/word-pattern-solver" },
++        { title: "5-Letter Word Finder", desc: "Browse 5-letter words by pattern.", href: "/5-letter-words" },
++        { title: "Crossword Solver", desc: "Fill in the blanks to find crossword answers.", href: "/crossword-solver" },
++        { title: "Spelling Bee Helper", desc: "Find valid words matching Spelling Bee rules.", href: "/spelling-bee-helper" },
++        { title: "Word Pattern Solver", desc: "Solve words based on wildcard patterns.", href: "/word-pattern-solver" },
+       ]
+     }
+   ];
+diff --git a/src/app/word-games/spelling-bee-helper/page.tsx b/src/app/word-games/spelling-bee-helper/page.tsx
+deleted file mode 100644
+index 29a54e7..0000000
+--- a/src/app/word-games/spelling-bee-helper/page.tsx
++++ /dev/null
+@@ -1,52 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function SpellingBeeMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find valid words from the hive. Must use the center letter.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-             <label htmlFor="center" className="block text-2xl font-bold text-slate-900">
+-              Center Letter (Required)
+-            </label>
+-            <input 
+-              id="center"
+-              type="text" 
+-              maxLength={1}
+-              placeholder="e.g. A" 
+-              className="w-20 text-3xl font-extrabold text-center p-4 h-20 border-4 border-yellow-400 bg-yellow-50 rounded-full focus:border-blue-700 focus:outline-none uppercase"
+-            />
+-          </div>
+-
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-            <label htmlFor="outer" className="block text-2xl font-bold text-slate-900">
+-              Outer Letters (Up to 6)
+-            </label>
+-            <input 
+-              id="outer"
+-              type="text" 
+-              placeholder="e.g. B C D E F G" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase tracking-[0.5em]"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Solve Hive
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/spelling-bee/helper/page.tsx b/src/app/word-games/spelling-bee/helper/page.tsx
+deleted file mode 100644
+index 981cd99..0000000
+--- a/src/app/word-games/spelling-bee/helper/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import SpellingBeeHelper from '@/components/word-games/spelling-bee/SpellingBeeHelper';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Spelling Bee Helper | Find Words and Pangrams',
+-  description: 'Enter a center letter and six outer letters to find valid words, pangrams, and hint counts for a 7-letter word game.',
+-  alternates: { canonical: '/word-games/spelling-bee/helper/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function SpellingBeeHelperPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Spelling Bee Helper',
+-    description: 'Enter a center letter and six outer letters to find valid words, pangrams, and hint counts for a 7-letter word game.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Spelling Bee', url: `${BASE}/word-games/spelling-bee/` },
+-      { name: 'Helper', url: `${BASE}/word-games/spelling-bee/helper/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Get help finding all valid words and pangrams for today's Spelling Bee hive.
+-        </p>
+-      </section>
+-
+-      <SpellingBeeHelper />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/spelling-bee/page.tsx b/src/app/word-games/spelling-bee/page.tsx
+deleted file mode 100644
+index 64f2aed..0000000
+--- a/src/app/word-games/spelling-bee/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Hexagon } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Spelling Bee Helper | Find Words and Pangrams',
+-  description: 'Find all valid words and pangrams for the NYT Spelling Bee or any 7-letter hive puzzle. Free, instant results.',
+-  alternates: { canonical: '/word-games/spelling-bee/' },
+-};
+-
+-export default function SpellingBeeHubPage() {
+-  const modes = [
+-    {
+-      title: 'Spelling Bee Helper',
+-      desc: 'Enter center and outer letters to find every valid word and all pangrams.',
+-      href: '/word-games/spelling-bee/helper',
+-      icon: Hexagon,
+-      color: 'bg-yellow-50 text-yellow-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Spelling Bee Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find all valid words and hidden pangrams for any 7-letter Spelling Bee hive — with optional hint mode to avoid spoilers.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/spelling-bee/today/page.tsx b/src/app/word-games/spelling-bee/today/page.tsx
+deleted file mode 100644
+index c169cb2..0000000
+--- a/src/app/word-games/spelling-bee/today/page.tsx
++++ /dev/null
+@@ -1,107 +0,0 @@
+-import latest from '@/data/generated/spelling-bee/latest.json';
+-import { type SpellingBeeDaily } from '@/lib/puzzles/spelling-bee-schema';
+-import { Metadata } from 'next';
+-import Link from 'next/link';
+-import SpellingBeeTodayClient from '@/components/word-games/spelling-bee/SpellingBeeTodayClient';
+-
+-export const metadata: Metadata = {
+-  title: "Today's NYT Spelling Bee Hints, Letters & Pangram Helper | GridHint",
+-  description:
+-    "Today's NYT Spelling Bee letters, pangram count, length distribution, and a guess-checker. We won't spoil the answer list — test your words against today's puzzle.",
+-  alternates: { canonical: '/word-games/spelling-bee/today/' },
+-};
+-
+-export default function SpellingBeeTodayPage() {
+-  const puzzle = latest as unknown as SpellingBeeDaily;
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  // Sort length distribution keys numerically
+-  const lengthEntries = Object.entries(puzzle.hints.lengthDistribution)
+-    .map(([k, v]) => [Number(k), v as number] as const)
+-    .sort(([a], [b]) => a - b);
+-
+-  const startingEntries = Object.entries(puzzle.hints.startingLetterDistribution)
+-    .sort(([a], [b]) => a.localeCompare(b));
+-
+-  return (
+-    <div className="max-w-3xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-4">
+-        <p className="text-xs font-semibold uppercase tracking-wider text-amber-700">
+-          Today&apos;s NYT Spelling Bee
+-        </p>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Today&apos;s Spelling Bee Hints &amp; Helper
+-        </h1>
+-        <p className="text-xl text-slate-700 font-medium leading-relaxed">
+-          Today&apos;s 7 letters, total word count, pangram count, and a guess-checker — find words yourself with smart hints, no spoilers.
+-        </p>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-sm">
+-          <span>Date: {puzzle.date}</span>
+-          <span aria-hidden="true">•</span>
+-          <span>{puzzle.hints.totalWords} words to find</span>
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today&apos;s Spelling Bee hasn&apos;t been published yet. Showing data for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <SpellingBeeTodayClient
+-        centerLetter={puzzle.centerLetter}
+-        outerLetters={puzzle.outerLetters}
+-        answerHashes={puzzle.answerHashes}
+-        pangramHashes={puzzle.pangramHashes}
+-        totalWords={puzzle.hints.totalWords}
+-        pangramCount={puzzle.hints.pangramCount}
+-        geniusThreshold={puzzle.hints.geniusThreshold}
+-        queenBeeScore={puzzle.hints.queenBeeScore}
+-      />
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Word Length Distribution
+-        </h2>
+-        <p className="text-lg text-slate-700">How many valid words exist for each length:</p>
+-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+-          {lengthEntries.map(([len, count]) => (
+-            <div key={len} className="bg-white border-2 border-slate-300 rounded-xl p-4 text-center">
+-              <p className="text-xs font-bold uppercase tracking-widest text-slate-500">{len} letters</p>
+-              <p className="text-2xl font-extrabold text-amber-700 mt-1">{count}</p>
+-            </div>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Starting Letter Distribution
+-        </h2>
+-        <p className="text-lg text-slate-700">How many valid words start with each letter:</p>
+-        <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
+-          {startingEntries.map(([letter, count]) => (
+-            <div key={letter} className="bg-white border-2 border-slate-300 rounded-xl p-4 text-center">
+-              <p className="text-xl font-extrabold text-slate-900">{letter}</p>
+-              <p className="text-2xl font-extrabold text-amber-700 mt-1">{count as number}</p>
+-            </div>
+-          ))}
+-        </div>
+-      </section>
+-
+-      <section className="space-y-4 pt-8 border-t-2 border-slate-200">
+-        <h2 className="text-2xl font-extrabold text-slate-900">Want a different solver?</h2>
+-        <p className="text-lg text-slate-700">
+-          The <Link href="/word-games/spelling-bee/helper" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">general Spelling Bee Helper</Link> works with any 7 letters — useful for older puzzles or your own letter sets.
+-        </p>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/unscramble/[letters]/page.tsx b/src/app/word-games/unscramble/[letters]/page.tsx
+deleted file mode 100644
+index 2b8ee6a..0000000
+--- a/src/app/word-games/unscramble/[letters]/page.tsx
++++ /dev/null
+@@ -1,74 +0,0 @@
+-import { unscrambleWords } from "@/lib/words/dictionary";
+-import { Badge } from "@/components/ui/badge";
+-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+-
+-interface PageProps {
+-  params: Promise<{
+-    letters: string;
+-  }>;
+-}
+-
+-export async function generateStaticParams() {
+-  // Phase 1: Generate a small safe test set first
+-  const testLetters = ['sbitmu', 'elzzpu', 'pleap'];
+-  
+-  return testLetters.map((letters) => ({
+-    letters: letters,
+-  }));
+-}
+-
+-export async function generateMetadata({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  const upperLetters = resolvedParams.letters.toUpperCase();
+-  return {
+-    title: `Unscramble ${upperLetters} - Word Descrambler & Anagram Solver`,
+-    description: `Find all valid words that can be made from the letters ${upperLetters}. Grouped by word length for easy puzzle solving.`,
+-  };
+-}
+-
+-export default async function ProgrammaticUnscramblePage({ params }: PageProps) {
+-  const resolvedParams = await params;
+-  const letters = resolvedParams.letters.toLowerCase();
+-  const upperLetters = letters.toUpperCase();
+-  
+-  const results = unscrambleWords(letters);
+-  const lengths = Object.keys(results).map(Number).sort((a, b) => b - a);
+-  const hasResults = lengths.length > 0;
+-
+-  return (
+-    <div className="max-w-4xl mx-auto space-y-8 py-8">
+-      <h1 className="text-4xl font-extrabold text-slate-900">Unscramble {upperLetters}</h1>
+-      
+-      {!hasResults ? (
+-        <p className="text-lg text-slate-600">No words found for these letters.</p>
+-      ) : (
+-        <div className="space-y-8">
+-          {lengths.map((len) => (
+-            <Card key={len} className="border-slate-200 shadow-sm">
+-              <CardHeader className="bg-slate-50 border-b border-slate-100 pb-4">
+-                <CardTitle className="text-xl text-slate-800 flex justify-between items-center">
+-                  <span>{len}-Letter Words</span>
+-                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+-                    {results[len].length}
+-                  </Badge>
+-                </CardTitle>
+-              </CardHeader>
+-              <CardContent className="pt-6">
+-                <div className="flex flex-wrap gap-3">
+-                  {results[len].map((word) => (
+-                    <div 
+-                      key={word} 
+-                      className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-lg font-medium text-slate-800 shadow-sm"
+-                    >
+-                      {word}
+-                    </div>
+-                  ))}
+-                </div>
+-              </CardContent>
+-            </Card>
+-          ))}
+-        </div>
+-      )}
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/unscramble/page.tsx b/src/app/word-games/unscramble/page.tsx
+deleted file mode 100644
+index fca7006..0000000
+--- a/src/app/word-games/unscramble/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function UnscrambleMainMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Unscramble Letters
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter your scrambled letters below to find all possible valid words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="unscramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to unscramble
+-            </label>
+-            <input 
+-              id="unscramble"
+-              type="text" 
+-              placeholder="e.g. SBITMU" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-descrambler/page.tsx b/src/app/word-games/word-descrambler/page.tsx
+deleted file mode 100644
+index 4e596be..0000000
+--- a/src/app/word-games/word-descrambler/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordDescramblerMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Descrambler
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Turn jumbled letters back into valid dictionary words.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="descramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to descramble
+-            </label>
+-            <input 
+-              id="descramble"
+-              type="text" 
+-              placeholder="e.g. ELZZPU" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Descramble
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-ladder/page.tsx b/src/app/word-games/word-ladder/page.tsx
+deleted file mode 100644
+index da48918..0000000
+--- a/src/app/word-games/word-ladder/page.tsx
++++ /dev/null
+@@ -1,57 +0,0 @@
+-import Link from 'next/link';
+-import { Metadata } from 'next';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, ArrowRight } from 'lucide-react';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Ladder Solver | Find the Shortest Word Path',
+-  description: 'Find the shortest word ladder between any two words, changing one letter at a time. Free solver with step-by-step path.',
+-  alternates: { canonical: '/word-games/word-ladder/' },
+-};
+-
+-export default function WordLadderHubPage() {
+-  const modes = [
+-    {
+-      title: 'Word Ladder Solver',
+-      desc: 'Enter a start and end word to find the shortest path by changing one letter per step.',
+-      href: '/word-games/word-ladder/solver',
+-      icon: ArrowRight,
+-      color: 'bg-teal-50 text-teal-700',
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Word Ladder Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Go from any word to any other by changing one letter at a time. Our solver finds the shortest possible path automatically.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/word-ladder/solver/page.tsx b/src/app/word-games/word-ladder/solver/page.tsx
+deleted file mode 100644
+index 6c262c5..0000000
+--- a/src/app/word-games/word-ladder/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import WordLadderSolver from '@/components/word-games/word-ladder/WordLadderSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Word Ladder Solver | Find the Shortest Word Path',
+-  description: 'Enter a start word and end word to find the shortest word ladder where each step changes one letter.',
+-  alternates: { canonical: '/word-games/word-ladder/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordLadderSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Word Ladder Solver',
+-    description: 'Enter a start word and end word to find the shortest word ladder where each step changes one letter.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Word Ladder', url: `${BASE}/word-games/word-ladder/` },
+-      { name: 'Solver', url: `${BASE}/word-games/word-ladder/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Word Ladder Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Find the shortest path between any two words by changing one letter at a time.
+-        </p>
+-      </section>
+-
+-      <WordLadderSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/word-pattern-solver/page.tsx b/src/app/word-games/word-pattern-solver/page.tsx
+deleted file mode 100644
+index 1765343..0000000
+--- a/src/app/word-games/word-pattern-solver/page.tsx
++++ /dev/null
+@@ -1,51 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordPatternSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Pattern Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Find words that match a specific letter pattern. Use wildcards for unknown letters.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="pattern" className="block text-2xl font-bold text-slate-900">
+-              Pattern (use _ for any single letter)
+-            </label>
+-            <input 
+-              id="pattern"
+-              type="text" 
+-              placeholder="e.g. S_ING" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-
+-          <div className="space-y-3 pt-6 border-t-2 border-slate-200">
+-             <label htmlFor="exclude" className="block text-xl font-bold text-slate-900">
+-              Exclude letters
+-            </label>
+-            <input 
+-              id="exclude"
+-              type="text" 
+-              placeholder="e.g. X, Y, Z" 
+-              className="w-full text-xl p-4 h-14 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Find Matching Words
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/word-scrambler/page.tsx b/src/app/word-games/word-scrambler/page.tsx
+deleted file mode 100644
+index b56db2b..0000000
+--- a/src/app/word-games/word-scrambler/page.tsx
++++ /dev/null
+@@ -1,39 +0,0 @@
+-import { Search } from "lucide-react";
+-
+-export default function WordScramblerMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Word Scrambler
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter a word or letters to instantly jumble them up.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
+-        <form className="space-y-6">
+-          <div className="space-y-3">
+-            <label htmlFor="scramble" className="block text-2xl font-bold text-slate-900">
+-              Letters to scramble
+-            </label>
+-            <input 
+-              id="scramble"
+-              type="text" 
+-              placeholder="e.g. PUZZLE" 
+-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
+-            />
+-          </div>
+-          
+-          <button 
+-            type="button"
+-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
+-          >
+-            <Search className="w-6 h-6" /> Scramble
+-          </button>
+-        </form>
+-      </section>
+-    </div>
+-  );
+-}
+\ No newline at end of file
+diff --git a/src/app/word-games/wordle-solver/page.tsx b/src/app/word-games/wordle-solver/page.tsx
+deleted file mode 100644
+index d3ba5d1..0000000
+--- a/src/app/word-games/wordle-solver/page.tsx
++++ /dev/null
+@@ -1,54 +0,0 @@
+-import { CheckCircle2 } from "lucide-react";
+-
+-export default function WordleSolverMockup() {
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Wordle Solver
+-        </h1>
+-        <p className="text-xl text-slate-700">
+-          Enter your guess and colors to find the best next word.
+-        </p>
+-      </section>
+-
+-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+-        <div className="space-y-4">
+-          <label className="block text-2xl font-bold text-slate-900">
+-            Enter your guess
+-          </label>
+-          <div className="flex gap-2 sm:gap-4 justify-center">
+-            {['S', 'L', 'A', 'T', 'E'].map((letter, i) => (
+-              <input 
+-                key={i}
+-                type="text" 
+-                maxLength={1}
+-                defaultValue={letter}
+-                className="w-14 h-16 sm:w-20 sm:h-24 text-3xl sm:text-4xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase"
+-              />
+-            ))}
+-          </div>
+-          <div className="flex justify-center gap-4 mt-6">
+-             <button className="px-6 py-3 bg-slate-500 text-white font-bold rounded-lg">Gray</button>
+-             <button className="px-6 py-3 bg-yellow-500 text-white font-bold rounded-lg">Yellow</button>
+-             <button className="px-6 py-3 bg-green-600 text-white font-bold rounded-lg">Green</button>
+-          </div>
+-        </div>
+-
+-        <button className="w-full h-16 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3">
+-          <CheckCircle2 className="w-6 h-6" /> Analyze
+-        </button>
+-
+-        <div className="bg-slate-50 p-6 border-2 border-slate-200 rounded-xl">
+-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Best Next Guesses</h2>
+-          <ul className="space-y-3">
+-            <li className="flex justify-between items-center bg-white p-4 border-2 border-slate-200 rounded-lg">
+-              <span className="text-2xl font-bold text-blue-900 tracking-widest">CRANE</span>
+-              <span className="text-lg text-slate-500 font-bold">99% match</span>
+-            </li>
+-          </ul>
+-        </div>
+-      </section>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/page.tsx b/src/app/word-games/wordle/page.tsx
+deleted file mode 100644
+index 109a498..0000000
+--- a/src/app/word-games/wordle/page.tsx
++++ /dev/null
+@@ -1,50 +0,0 @@
+-import Link from 'next/link';
+-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+-import { ChevronRight, Calculator } from 'lucide-react';
+-
+-export default function WordleHubPage() {
+-  const modes = [
+-    {
+-      title: "Wordle Solver",
+-      desc: "Enter your guesses and feedback to find the solution.",
+-      href: "/word-games/wordle/solver",
+-      icon: Calculator,
+-      color: "bg-blue-50 text-blue-700"
+-    },
+-  ];
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-16">
+-      <section className="space-y-6 text-center">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Wordle Helper
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 max-w-2xl mx-auto font-medium">
+-          Master the daily word game with our solver, hint system, and analysis tools.
+-        </p>
+-      </section>
+-
+-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+-        {modes.map((mode) => (
+-          <Link key={mode.title} href={mode.href} className="group">
+-            <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
+-              <div className={`${mode.color} w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:opacity-80 transition-opacity`}>
+-                <mode.icon className="w-10 h-10" />
+-              </div>
+-              <CardHeader className="p-0 space-y-3">
+-                <CardTitle className="text-3xl font-bold text-blue-900 group-hover:underline underline-offset-4">{mode.title}</CardTitle>
+-                <CardDescription className="text-xl text-slate-700 font-medium leading-relaxed">
+-                  {mode.desc}
+-                </CardDescription>
+-              </CardHeader>
+-              <div className="mt-8 flex items-center gap-2 text-blue-700 font-bold text-lg">
+-                <span>Open Tool</span>
+-                <ChevronRight className="w-6 h-6" />
+-              </div>
+-            </Card>
+-          </Link>
+-        ))}
+-      </div>
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/solver/page.tsx b/src/app/word-games/wordle/solver/page.tsx
+deleted file mode 100644
+index a524231..0000000
+--- a/src/app/word-games/wordle/solver/page.tsx
++++ /dev/null
+@@ -1,40 +0,0 @@
+-import WordleSolver from '@/components/word-games/wordle/WordleSolver';
+-import { Metadata } from 'next';
+-import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
+-
+-export const metadata: Metadata = {
+-  title: 'Wordle Solver | Best Next Guess and Possible Answers',
+-  description: 'Enter green, yellow, and gray feedback to filter possible Wordle answers and rank the best next guess by information gain.',
+-  alternates: { canonical: '/word-games/wordle/solver/' }
+-};
+-
+-const BASE = 'https://www.gridhint.com';
+-
+-export default function WordleSolverPage() {
+-  const ld = softwareAppJsonLd({
+-    name: 'Wordle Solver',
+-    description: 'Enter green, yellow, and gray feedback to filter possible Wordle answers and rank the best next guess by information gain.',
+-    breadcrumbs: [
+-      { name: 'Home', url: BASE },
+-      { name: 'Word Games', url: `${BASE}/word-games/` },
+-      { name: 'Wordle', url: `${BASE}/word-games/wordle/` },
+-      { name: 'Solver', url: `${BASE}/word-games/wordle/solver/` },
+-    ],
+-  });
+-
+-  return (
+-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
+-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+-      <section className="space-y-6">
+-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+-          Wordle Solver
+-        </h1>
+-        <p className="text-xl md:text-2xl text-slate-700 font-medium">
+-          Stuck on Wordle? Enter your guesses and tile colors below to find the most likely answers and the mathematically best next guess.
+-        </p>
+-      </section>
+-
+-      <WordleSolver />
+-    </div>
+-  );
+-}
+diff --git a/src/app/word-games/wordle/today/page.tsx b/src/app/word-games/wordle/today/page.tsx
+deleted file mode 100644
+index bf3cc77..0000000
+--- a/src/app/word-games/wordle/today/page.tsx
++++ /dev/null
+@@ -1,99 +0,0 @@
+-import latest from '@/data/generated/wordle/latest.json';
+-import { type WordleDaily } from '@/lib/puzzles/wordle-schema';
+-import { Metadata } from 'next';
+-import Link from 'next/link';
+-import WordleAnswerReveal from '@/components/word-games/wordle/WordleAnswerReveal';
+-
+-export const metadata: Metadata = {
+-  title: "Today's NYT Wordle Hints & Answer | GridHint",
+-  description:
+-    "Today's NYT Wordle hints and answer — start with progressive clues (first letter, pattern, definition) before revealing the full solution.",
+-  alternates: { canonical: '/word-games/wordle/today/' },
+-};
+-
+-export default function WordleTodayPage() {
+-  const puzzle = latest as unknown as WordleDaily;
+-
+-  const todayET = new Intl.DateTimeFormat('en-CA', {
+-    timeZone: 'America/New_York',
+-    year: 'numeric',
+-    month: '2-digit',
+-    day: '2-digit',
+-  }).format(new Date());
+-  const isStale = puzzle.date !== todayET;
+-
+-  return (
+-    <div className="max-w-3xl mx-auto px-4 pt-12 space-y-12">
+-      <section className="space-y-4">
+-        <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+-          Today&apos;s NYT Wordle
+-        </p>
+-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+-          Today&apos;s Wordle Hints &amp; Answer
+-        </h1>
+-        <p className="text-xl text-slate-700 font-medium leading-relaxed">
+-          Stuck on today&apos;s New York Times Wordle? Reveal one hint at a time, or jump straight to the answer.
+-        </p>
+-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-sm">
+-          <span>Date: {puzzle.date}</span>
+-          {puzzle.dayNumber !== undefined && (
+-            <>
+-              <span aria-hidden="true">•</span>
+-              <span>Wordle #{puzzle.dayNumber}</span>
+-            </>
+-          )}
+-        </div>
+-        {isStale && (
+-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+-            Today&apos;s Wordle hasn&apos;t been published yet. Showing data for {puzzle.date}.
+-          </div>
+-        )}
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Progressive Hints
+-        </h2>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 1 — First Letter</p>
+-          <p className="text-3xl font-extrabold text-emerald-700">
+-            Today&apos;s answer starts with <span className="text-slate-900">{puzzle.hints.firstLetter}</span>
+-          </p>
+-        </div>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 2 — Letter Pattern</p>
+-          <p className="text-2xl font-bold text-slate-900">
+-            Vowel/consonant pattern: <span className="font-mono text-emerald-700">{puzzle.hints.pattern}</span>
+-          </p>
+-          <p className="text-base text-slate-600">
+-            (V = vowel, C = consonant)
+-          </p>
+-        </div>
+-
+-        <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+-          <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 3 — Definition</p>
+-          <p className="text-xl text-slate-900 leading-relaxed">
+-            {puzzle.hints.definition}
+-          </p>
+-        </div>
+-      </section>
+-
+-      <section className="space-y-6">
+-        <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+-          Today&apos;s Wordle Answer
+-        </h2>
+-        <WordleAnswerReveal solution={puzzle.solution} />
+-      </section>
+-
+-      <section className="space-y-4 pt-8 border-t-2 border-slate-200">
+-        <h2 className="text-2xl font-extrabold text-slate-900">Want to solve it yourself?</h2>
+-        <p className="text-lg text-slate-700">
+-          Use our <Link href="/word-games/wordle/solver" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">Wordle Solver</Link> to narrow down possibilities from your green and yellow letters.
+-        </p>
+-      </section>
+-
+-    </div>
+-  );
+-}
+diff --git a/src/scripts/ping-indexnow.ts b/src/scripts/ping-indexnow.ts
+index 3e8c682..0815c67 100644
+--- a/src/scripts/ping-indexnow.ts
++++ b/src/scripts/ping-indexnow.ts
+@@ -4,9 +4,9 @@
+  * Submits today's just-updated URLs to IndexNow (Bing/Yandex/Seznam/Naver/Yep).
+  *
+  * Honours GRIDHINT_INDEXNOW_TARGET env var:
+- *   - "connections"   → submit just /word-games/connections/hints/
+- *   - "wordle"        → submit just /word-games/wordle/today/
+- *   - "spelling-bee"  → submit just /word-games/spelling-bee/today/
++ *   - "connections"   → submit just /connections/hints/
++ *   - "wordle"        → submit just /wordle/today/
++ *   - "spelling-bee"  → submit just /spelling-bee/today/
+  *   - "all" / unset   → submit all three
+  *
+  * In all cases we also submit the homepage + sitemap.
+@@ -24,9 +24,9 @@ import { getNYDate } from './lib/atomic-write';
+ type Target = 'connections' | 'wordle' | 'spelling-bee' | 'all';
+ 
+ const URL_BY_GAME: Record<Exclude<Target, 'all'>, string> = {
+-  'connections': 'https://www.gridhint.com/word-games/connections/hints/',
+-  'wordle': 'https://www.gridhint.com/word-games/wordle/today/',
+-  'spelling-bee': 'https://www.gridhint.com/word-games/spelling-bee/today/',
++  'connections': 'https://www.gridhint.com/connections/hints/',
++  'wordle': 'https://www.gridhint.com/wordle/today/',
++  'spelling-bee': 'https://www.gridhint.com/spelling-bee/today/',
+ };
+ 
+ async function main(): Promise<void> {

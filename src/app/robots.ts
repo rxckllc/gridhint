@@ -27,7 +27,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/',
       },
     ],
-    sitemap: 'https://www.gridhint.com/sitemap.xml',
-    host: 'https://www.gridhint.com',
+    sitemap: 'https://gridhint.com/sitemap.xml',
+    host: 'https://gridhint.com',
   };
 }

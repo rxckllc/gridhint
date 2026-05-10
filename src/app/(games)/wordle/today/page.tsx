@@ -1,0 +1,209 @@
+import latest from '@/data/generated/wordle/latest.json';
+import { type WordleDaily } from '@/lib/puzzles/wordle-schema';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import WordleAnswerReveal from '@/components/word-games/wordle/WordleAnswerReveal';
+import fs from 'fs';
+import path from 'path';
+
+export const metadata: Metadata = {
+  title: "Today's NYT Wordle Hints & Answer | GridHint",
+  description:
+    "Today's NYT Wordle hints and answer — start with progressive clues (first letter, pattern, definition) before revealing the full solution.",
+  alternates: { canonical: '/wordle/today/' },
+  openGraph: {
+    title: "Today's NYT Wordle Hints & Answer | GridHint",
+    description: "Today's NYT Wordle hints and answer — start with progressive clues (first letter, pattern, definition) before revealing the full solution.",
+    images: ['https://gridhint.com/gridhint-logo.png'],
+    type: 'article',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Today's NYT Wordle Hints & Answer | GridHint",
+    description: "Today's NYT Wordle hints and answer — start with progressive clues (first letter, pattern, definition) before revealing the full solution.",
+    images: ['https://gridhint.com/gridhint-logo.png'],
+  },
+};
+
+export default function WordleTodayPage() {
+  const puzzle = latest as unknown as WordleDaily;
+
+  const todayET = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+  const isStale = puzzle.date !== todayET;
+
+  let dateModified = new Date().toISOString();
+  try {
+    if (isStale) {
+      dateModified = `${puzzle.date}T12:00:00Z`;
+    } else {
+      const manifestPath = path.join(process.cwd(), 'src/data/generated/wordle/manifest.json');
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      dateModified = new Date(manifest.updatedAt).toISOString();
+    }
+  } catch (e) {
+    dateModified = `${puzzle.date}T12:00:00Z`;
+  }
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://gridhint.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Wordle Today",
+            "item": "https://gridhint.com/wordle/today/"
+          }
+        ]
+      },
+      {
+        "@type": "Article",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://gridhint.com/wordle/today/"
+        },
+        "headline": `NYT Wordle Hints and Answer for ${puzzle.date}`,
+        "articleSection": "Games",
+        "inLanguage": "en-US",
+        "image": "https://gridhint.com/gridhint-logo.png",
+        "datePublished": `${puzzle.date}T00:00:00-04:00`,
+        "dateModified": dateModified,
+        "author": {
+          "@id": "https://gridhint.com/#organization"
+        },
+        "publisher": {
+          "@id": "https://gridhint.com/#organization"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `How do Wordle hints work on GridHint?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `We provide progressive clues. First, we show you the starting letter. Then, we provide the vowel/consonant pattern. Finally, we give a dictionary definition of the word. You can stop at any hint to solve it yourself.`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `What is today's Wordle answer for ${puzzle.date}?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `We have today's NYT Wordle answer available behind a spoiler reveal button. Click the reveal button on the page to see the full solution.`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "When does the Wordle puzzle update?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The New York Times Wordle puzzle updates daily at midnight local time."
+            }
+          }
+        ]
+      }
+    ]
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="max-w-3xl mx-auto px-4 pt-12 space-y-12">
+        <section className="space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+            Today&apos;s NYT Wordle
+          </p>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+            NYT Wordle Hints and Answer for {puzzle.date}
+          </h1>
+          <p className="text-xl text-slate-700 font-medium leading-relaxed">
+            Looking for today's Wordle answer for {puzzle.date}? We have progressive hints to help you figure it out, or you can skip straight to the answer below.
+          </p>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-slate-700 font-bold uppercase tracking-widest text-sm">
+            <span>Date: {puzzle.date}</span>
+            {puzzle.dayNumber !== undefined && (
+              <>
+                <span aria-hidden="true">•</span>
+                <span>Wordle #{puzzle.dayNumber}</span>
+              </>
+            )}
+          </div>
+          {isStale && (
+            <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 text-amber-900 font-bold">
+              Today&apos;s Wordle hasn&apos;t been published yet. Showing data for {puzzle.date}.
+            </div>
+          )}
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+            What is today's Wordle hint?
+          </h2>
+
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+            <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 1 — First Letter</p>
+            <p className="text-3xl font-extrabold text-emerald-700">
+              Today&apos;s answer starts with <span className="text-slate-900">{puzzle.hints.firstLetter}</span>
+            </p>
+          </div>
+
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+            <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 2 — Letter Pattern</p>
+            <p className="text-2xl font-bold text-slate-900">
+              Vowel/consonant pattern: <span className="font-mono text-emerald-700">{puzzle.hints.pattern}</span>
+            </p>
+            <p className="text-base text-slate-600">
+              (V = vowel, C = consonant)
+            </p>
+          </div>
+
+          <div className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 space-y-3">
+            <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Hint 3 — Definition</p>
+            <p className="text-xl text-slate-900 leading-relaxed">
+              {puzzle.hints.definition}
+            </p>
+          </div>
+        </section>
+
+        <section className="space-y-6">
+          <h2 className="text-3xl font-extrabold text-slate-900 border-b-4 border-slate-300 pb-2">
+            What is today's Wordle answer?
+          </h2>
+          <WordleAnswerReveal solution={puzzle.solution} />
+        </section>
+
+        <section className="space-y-4 pt-8 border-t-2 border-slate-200">
+          <h2 className="text-2xl font-extrabold text-slate-900">Want to solve it yourself?</h2>
+          <p className="text-lg text-slate-700">
+            Use our <Link href="/wordle/solver/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">Wordle Solver</Link> to narrow down possibilities from your green and yellow letters.
+          </p>
+        </section>
+
+        <div className="bg-slate-900 text-white p-6 rounded-2xl mt-12">
+          <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-2">Disclaimer</p>
+          <p className="text-sm leading-relaxed">
+            GridHint is an independent puzzle helper and is not affiliated with, endorsed by, or sponsored by The New York Times Company. Wordle is a trademark of The New York Times Company.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}

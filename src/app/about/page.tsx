@@ -27,14 +27,14 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   const tools = [
-    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/word-games/connections-hint" },
-    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/word-games/wordle-solver" },
-    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/word-games/spelling-bee-helper" },
-    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/word-games/unscramble" },
-    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/word-games/anagram-solver" },
-    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/word-games/crossword-solver" },
-    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-games/word-pattern-solver" },
-    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/word-games/5-letter-words" },
+    { title: "Connections Hint", desc: "Progressive hints for today's NYT Connections puzzle.", href: "/connections-hint" },
+    { title: "Wordle Solver", desc: "Narrow down your next guess from your green and yellow letters.", href: "/wordle-solver" },
+    { title: "Spelling Bee Helper", desc: "Find valid words from today's seven letters.", href: "/spelling-bee-helper" },
+    { title: "Unscramble Letters", desc: "Generate every valid word from a set of letters.", href: "/unscramble" },
+    { title: "Anagram Solver", desc: "Rearrange letters into all possible words.", href: "/anagram-solver" },
+    { title: "Crossword Solver", desc: "Solve crossword clues by pattern and length.", href: "/crossword-solver" },
+    { title: "Word Pattern Solver", desc: "Find words matching a pattern like C_T or B__K.", href: "/word-pattern-solver" },
+    { title: "5-Letter Words", desc: "Browse 5-letter words by starting or ending letters.", href: "/5-letter-words" },
   ];
 
   const valueProps = [
