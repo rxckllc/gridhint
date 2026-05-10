@@ -94,12 +94,6 @@ export default function WordleTodayPage() {
         </p>
       </section>
 
-      <div className="bg-slate-900 text-white p-6 rounded-2xl mt-12">
-        <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-2">Disclaimer</p>
-        <p className="text-sm leading-relaxed">
-          GridHint is an independent puzzle helper and is not affiliated with, endorsed by, or sponsored by The New York Times Company. Wordle is a trademark of The New York Times Company.
-        </p>
-      </div>
     </div>
   );
 }

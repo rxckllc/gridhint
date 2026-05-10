@@ -82,12 +82,6 @@ export default function ConnectionsHintsPage() {
         </div>
       </section>
 
-      <div className="bg-slate-900 text-white p-8 rounded-3xl mt-12">
-         <p className="text-sm font-bold uppercase tracking-widest opacity-70 mb-2 italic">Disclaimer</p>
-         <p className="text-base leading-relaxed">
-           GridHint.com is an independent word-game utility. We are not affiliated with, sponsored by, or endorsed by The New York Times or the official Connections puzzle.
-         </p>
-      </div>
     </div>
   );
 }

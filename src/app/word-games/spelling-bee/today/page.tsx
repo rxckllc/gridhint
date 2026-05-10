@@ -102,12 +102,6 @@ export default function SpellingBeeTodayPage() {
         </p>
       </section>
 
-      <div className="bg-slate-900 text-white p-6 rounded-2xl mt-12">
-        <p className="text-xs font-bold uppercase tracking-widest opacity-70 mb-2">Disclaimer</p>
-        <p className="text-sm leading-relaxed">
-          GridHint is an independent puzzle helper and is not affiliated with, endorsed by, or sponsored by The New York Times Company. We provide only metadata hints (letter set, counts, distributions) and a private client-side guess-checker — we do not republish today&apos;s answer list.
-        </p>
-      </div>
     </div>
   );
 }

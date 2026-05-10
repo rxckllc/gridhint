@@ -238,19 +238,17 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="min-h-screen bg-slate-50">
-        {/* HERO */}
-        <section className="mx-auto max-w-4xl px-4 pt-12 pb-10 sm:pt-16 sm:pb-14">
-          <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">
+        {/* HERO — compact: ~1/3 viewport on desktop */}
+        <section className="mx-auto max-w-4xl px-4 pt-6 pb-6 sm:pt-8 sm:pb-8">
+          <p className="text-xs font-semibold uppercase tracking-wider text-blue-700">
             Updated daily · Free, no sign-up
           </p>
-          <h1 className="mt-3 text-4xl font-extrabold leading-tight text-[#1E2D4A] sm:text-5xl lg:text-6xl">
+          <h1 className="mt-2 text-3xl font-extrabold leading-tight text-[#1E2D4A] sm:text-4xl">
             Daily Word Puzzle{" "}
             <span className="text-blue-700">Hints &amp; Answers</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-xl leading-relaxed text-slate-700">
-            Free helpers for NYT Connections, Wordle, and Spelling Bee —
-            plus anagram, crossword, hangman, and word ladder solvers.
-            Get unstuck in seconds.
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-700 sm:text-lg">
+            Free helpers for NYT Connections, Wordle, and Spelling Bee — plus anagram, crossword, hangman, and word ladder solvers. Get unstuck in seconds.
           </p>
         </section>
 
