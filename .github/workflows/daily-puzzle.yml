@@ -1,12 +1,28 @@
 name: Daily Puzzle Update
 
+# Three staggered cron triggers, one per game.
+# Times in UTC because GitHub Actions cron is UTC-only.
+# 09:00 UTC = 5:00 AM EDT (summer) / 4:00 AM EST (winter)
+# All three games are safely live by 03:00 ET (Spelling Bee = latest);
+# 5 AM ET buffers Akamai propagation + avoids the West-Coast-midnight rush.
+# Stagger of 5 minutes spreads the fetches per the original anti-bot brief.
 on:
   schedule:
-    # 09:00 UTC = 05:00 EDT (summer) / 04:00 EST (winter).
-    # All three NYT puzzles roll over by 03:00 ET (Spelling Bee is the latest).
-    # 5am ET gives CDN propagation buffer + avoids West-Coast-midnight rush.
-    - cron: '0 9 * * *'
+    - cron: '0 9 * * *'   # 5:00 AM EDT — Connections
+    - cron: '5 9 * * *'   # 5:05 AM EDT — Wordle
+    - cron: '10 9 * * *'  # 5:10 AM EDT — Spelling Bee
   workflow_dispatch:
+    inputs:
+      game:
+        description: 'Which game to fetch (manual trigger only)'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - connections
+          - wordle
+          - spelling-bee
 
 jobs:
   update:
@@ -28,28 +44,39 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # Each fetch step uses continue-on-error so a single 404/cooldown
-      # doesn't abort the others. We aggregate exit codes at the end and
-      # exit 1 *after* commit + IndexNow if any failed (so the run goes red
-      # but we still publish whatever did succeed).
+      # Decide which game(s) to fetch based on which cron schedule fired
+      # (or which manual choice was selected).
+      - name: Determine target game
+        id: which
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            GAME="${{ github.event.inputs.game }}"
+          else
+            case "${{ github.event.schedule }}" in
+              "0 9 * * *")  GAME="connections" ;;
+              "5 9 * * *")  GAME="wordle" ;;
+              "10 9 * * *") GAME="spelling-bee" ;;
+              *)            GAME="all" ;;
+            esac
+          fi
+          echo "game=$GAME" >> "$GITHUB_OUTPUT"
+          echo "Resolved target game: $GAME"
+
       - name: Fetch Connections
         id: connections
+        if: steps.which.outputs.game == 'connections' || steps.which.outputs.game == 'all'
         continue-on-error: true
         run: npx tsx src/scripts/import-daily-puzzles.ts
 
-      - name: Brief pause before Wordle (anti-burst)
-        run: sleep 8
-
       - name: Fetch Wordle
         id: wordle
+        if: steps.which.outputs.game == 'wordle' || steps.which.outputs.game == 'all'
         continue-on-error: true
         run: npx tsx src/scripts/import-daily-wordle.ts
 
-      - name: Brief pause before Spelling Bee (anti-burst)
-        run: sleep 8
-
       - name: Fetch Spelling Bee
         id: spelling-bee
+        if: steps.which.outputs.game == 'spelling-bee' || steps.which.outputs.game == 'all'
         continue-on-error: true
         run: npx tsx src/scripts/import-daily-spelling-bee.ts
 
@@ -69,28 +96,42 @@ jobs:
             exit 0
           fi
           DATE=$(date -u +'%Y-%m-%d')
-          git commit --no-verify -m "daily: puzzle update $DATE"
+          GAME="${{ steps.which.outputs.game }}"
+          git commit --no-verify -m "daily: $GAME update $DATE"
           git push origin HEAD
 
-      # IndexNow ping AFTER commit. The script polls each /today page for
-      # today's date string before submitting, so we don't ping until
-      # Hostinger has actually deployed the fresh content.
+      # IndexNow ping — submits only the URL(s) we just updated, after polling
+      # for fresh content on Hostinger. Safe to run for all triggers because
+      # the script polls for today's date in the page body before submitting.
       - name: Ping IndexNow
         if: always()
         continue-on-error: true
+        env:
+          GRIDHINT_INDEXNOW_TARGET: ${{ steps.which.outputs.game }}
         run: npx tsx src/scripts/ping-indexnow.ts
 
-      # Final observability: if any fetch or validation failed, fail the run
-      # AFTER all the work above completed (commit + IndexNow ran).
       - name: Report partial failures
         if: always()
         run: |
-          C=${{ steps.connections.outcome }}
-          W=${{ steps.wordle.outcome }}
-          B=${{ steps.spelling-bee.outcome }}
-          V=${{ steps.validate.outcome }}
-          echo "Outcomes: connections=$C wordle=$W spelling-bee=$B validate=$V"
-          if [ "$C" != "success" ] || [ "$W" != "success" ] || [ "$B" != "success" ] || [ "$V" != "success" ]; then
-            echo "::error::One or more steps did not succeed — see outcomes above."
+          GAME="${{ steps.which.outputs.game }}"
+          C="${{ steps.connections.outcome }}"
+          W="${{ steps.wordle.outcome }}"
+          B="${{ steps.spelling-bee.outcome }}"
+          V="${{ steps.validate.outcome }}"
+          echo "Target: $GAME | connections=$C wordle=$W spelling-bee=$B validate=$V"
+          # Only check outcomes for steps that actually ran for this trigger
+          FAIL=0
+          if [ "$GAME" = "connections" ] || [ "$GAME" = "all" ]; then
+            [ "$C" = "success" ] || FAIL=1
+          fi
+          if [ "$GAME" = "wordle" ] || [ "$GAME" = "all" ]; then
+            [ "$W" = "success" ] || FAIL=1
+          fi
+          if [ "$GAME" = "spelling-bee" ] || [ "$GAME" = "all" ]; then
+            [ "$B" = "success" ] || FAIL=1
+          fi
+          [ "$V" = "success" ] || FAIL=1
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::One or more steps did not succeed for target=$GAME"
             exit 1
           fi
