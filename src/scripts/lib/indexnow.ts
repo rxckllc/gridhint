@@ -33,7 +33,7 @@ export interface IndexNowSubmission {
 interface PollOptions {
   url: string;
   token: string;
-  /** Total seconds to poll. Default 300s (5min). */
+  /** Total seconds to poll. Default 600s (10min) — Hostinger build can take 2-4min. */
   timeoutSeconds?: number;
   /** Seconds between polls. Default 15s. */
   intervalSeconds?: number;
@@ -42,14 +42,20 @@ interface PollOptions {
 /**
  * Poll a URL until its body contains `token`, or timeout.
  * Returns true if the token appeared, false if we timed out.
+ *
+ * Uses a per-poll cache-buster query param so any intermediary CDN that
+ * ignores Cache-Control still serves the fresh edge response.
  */
 async function pollForFreshContent(opts: PollOptions): Promise<boolean> {
-  const { url, token, timeoutSeconds = 300, intervalSeconds = 15 } = opts;
+  const { url, token, timeoutSeconds = 600, intervalSeconds = 15 } = opts;
   const deadline = Date.now() + timeoutSeconds * 1000;
 
   while (Date.now() < deadline) {
     try {
-      const res = await plainFetch(url, {
+      const cacheBuster = `_t=${Date.now()}`;
+      const sep = url.includes('?') ? '&' : '?';
+      const fetchUrl = `${url}${sep}${cacheBuster}`;
+      const res = await plainFetch(fetchUrl, {
         headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
       });
       if (res.ok) {

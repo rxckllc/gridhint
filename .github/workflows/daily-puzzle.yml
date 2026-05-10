@@ -5,7 +5,7 @@ name: Daily Puzzle Update
 # 09:00 UTC = 5:00 AM EDT (summer) / 4:00 AM EST (winter)
 # All three games are safely live by 03:00 ET (Spelling Bee = latest);
 # 5 AM ET buffers Akamai propagation + avoids the West-Coast-midnight rush.
-# Stagger of 5 minutes spreads the fetches per the original anti-bot brief.
+# 5-minute stagger spreads the fetches per the original anti-bot brief.
 on:
   schedule:
     - cron: '0 9 * * *'   # 5:00 AM EDT — Connections
@@ -23,6 +23,13 @@ on:
           - connections
           - wordle
           - spelling-bee
+
+# Prevent concurrent runs of this workflow from racing on git push.
+# Default behavior queues subsequent runs until the active one finishes,
+# which makes the staggered crons safe even if any of them runs long.
+concurrency:
+  group: daily-puzzle
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -44,18 +51,19 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # Decide which game(s) to fetch based on which cron schedule fired
-      # (or which manual choice was selected).
+      # Resolve target game from minute-of-hour rather than the cron expression
+      # itself — more robust to YAML edits + clearer log output.
       - name: Determine target game
         id: which
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GAME="${{ github.event.inputs.game }}"
           else
-            case "${{ github.event.schedule }}" in
-              "0 9 * * *")  GAME="connections" ;;
-              "5 9 * * *")  GAME="wordle" ;;
-              "10 9 * * *") GAME="spelling-bee" ;;
+            MIN=$(date -u +%M)
+            case "$MIN" in
+              00|01|02|03)  GAME="connections" ;;
+              05|06|07|08)  GAME="wordle" ;;
+              10|11|12|13)  GAME="spelling-bee" ;;
               *)            GAME="all" ;;
             esac
           fi
@@ -85,7 +93,11 @@ jobs:
         continue-on-error: true
         run: npx tsx src/scripts/validate-generated.ts
 
+      # Pull --rebase before push so a slower preceding cron run that hasn't
+      # finished pushing yet doesn't reject this push. Concurrency group
+      # already prevents overlap, but this is belt-and-suspenders.
       - name: Commit and push
+        id: commit
         if: always()
         run: |
           git config user.name "gridhint-bot"
@@ -93,18 +105,23 @@ jobs:
           git add src/data/generated/ && git add -A .gridhint-cooldown.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           DATE=$(date -u +'%Y-%m-%d')
           GAME="${{ steps.which.outputs.game }}"
           git commit --no-verify -m "daily: $GAME update $DATE"
-          git push origin HEAD
+          # Rebase onto latest origin in case a prior run pushed during ours
+          git pull --rebase origin main || true
+          git push origin HEAD:main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
 
-      # IndexNow ping — submits only the URL(s) we just updated, after polling
-      # for fresh content on Hostinger. Safe to run for all triggers because
-      # the script polls for today's date in the page body before submitting.
+      # IndexNow ping — only runs if we actually pushed new content.
+      # The script polls Hostinger for today's date in the page body BEFORE
+      # submitting (cache-buster + no-cache headers), so we don't ping
+      # before the deploy lands.
       - name: Ping IndexNow
-        if: always()
+        if: always() && steps.commit.outputs.pushed == 'true'
         continue-on-error: true
         env:
           GRIDHINT_INDEXNOW_TARGET: ${{ steps.which.outputs.game }}
@@ -119,7 +136,6 @@ jobs:
           B="${{ steps.spelling-bee.outcome }}"
           V="${{ steps.validate.outcome }}"
           echo "Target: $GAME | connections=$C wordle=$W spelling-bee=$B validate=$V"
-          # Only check outcomes for steps that actually ran for this trigger
           FAIL=0
           if [ "$GAME" = "connections" ] || [ "$GAME" = "all" ]; then
             [ "$C" = "success" ] || FAIL=1
