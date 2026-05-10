@@ -51,15 +51,19 @@ export default function SpellingBeeTodayClient({
 
   const score = foundWords.reduce((acc, w) => acc + scoreWord(w.word, w.isPangram), 0);
 
+  // Rank is meaningless when the puzzle isn't loaded (queenBeeScore=0 = seed/empty
+  // state). Show "Beginner" rather than tripping the score>=queenBeeScore=0 → Queen Bee bug.
   let rank = 'Beginner';
-  const pct = queenBeeScore > 0 ? score / queenBeeScore : 0;
-  if (score >= queenBeeScore) rank = 'Queen Bee';
-  else if (score >= geniusThreshold) rank = 'Genius';
-  else if (pct >= 0.5) rank = 'Amazing';
-  else if (pct >= 0.25) rank = 'Nice';
-  else if (pct >= 0.15) rank = 'Solid';
-  else if (pct >= 0.08) rank = 'Good';
-  else if (pct > 0) rank = 'Moving Up';
+  if (queenBeeScore > 0) {
+    const pct = score / queenBeeScore;
+    if (score >= queenBeeScore) rank = 'Queen Bee';
+    else if (score >= geniusThreshold) rank = 'Genius';
+    else if (pct >= 0.5) rank = 'Amazing';
+    else if (pct >= 0.25) rank = 'Nice';
+    else if (pct >= 0.15) rank = 'Solid';
+    else if (pct >= 0.08) rank = 'Good';
+    else if (pct > 0) rank = 'Moving Up';
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

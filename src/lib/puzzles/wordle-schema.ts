@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const WordleHintsSchema = z.object({
-  /** First letter of the answer (always safe to reveal). */
-  firstLetter: z.string().length(1),
+  /** First letter of the answer — must be uppercase A-Z. */
+  firstLetter: z.string().regex(/^[A-Z]$/),
   /** Vowel/consonant pattern, e.g. "CVCVC". */
   pattern: z.string().regex(/^[CV]{5}$/),
   /** Definition or thematic clue (does NOT contain the answer word). */

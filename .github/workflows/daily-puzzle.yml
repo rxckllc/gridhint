@@ -45,30 +45,35 @@ jobs:
       INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history is required so `git pull --rebase` can compute
+          # a merge base when a prior cron run pushed during ours.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci
 
-      # Resolve target game from minute-of-hour rather than the cron expression
-      # itself — more robust to YAML edits + clearer log output.
+      # Resolve target game from the cron expression that triggered this run.
+      # github.event.schedule is set by GitHub's scheduler, not the runner clock,
+      # so it's reliable even if a queued run starts late.
+      # IMPORTANT: keep this case statement in sync with the `on.schedule:` list above.
       - name: Determine target game
         id: which
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             GAME="${{ github.event.inputs.game }}"
           else
-            MIN=$(date -u +%M)
-            case "$MIN" in
-              00|01|02|03)  GAME="connections" ;;
-              05|06|07|08)  GAME="wordle" ;;
-              10|11|12|13)  GAME="spelling-bee" ;;
+            case "${{ github.event.schedule }}" in
+              "0 9 * * *")  GAME="connections" ;;
+              "5 9 * * *")  GAME="wordle" ;;
+              "10 9 * * *") GAME="spelling-bee" ;;
               *)            GAME="all" ;;
             esac
           fi
           echo "game=$GAME" >> "$GITHUB_OUTPUT"
-          echo "Resolved target game: $GAME"
+          echo "Resolved target game: $GAME (schedule=${{ github.event.schedule }} event=${{ github.event_name }})"
 
       - name: Fetch Connections
         id: connections
@@ -111,8 +116,10 @@ jobs:
           DATE=$(date -u +'%Y-%m-%d')
           GAME="${{ steps.which.outputs.game }}"
           git commit --no-verify -m "daily: $GAME update $DATE"
-          # Rebase onto latest origin in case a prior run pushed during ours
-          git pull --rebase origin main || true
+          # Rebase onto latest origin in case a prior run pushed during ours.
+          # No `|| true` — if rebase has conflicts, fail the step loud rather
+          # than push a state that overwrites the upstream commit.
+          git pull --rebase origin main
           git push origin HEAD:main
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
@@ -135,7 +142,8 @@ jobs:
           W="${{ steps.wordle.outcome }}"
           B="${{ steps.spelling-bee.outcome }}"
           V="${{ steps.validate.outcome }}"
-          echo "Target: $GAME | connections=$C wordle=$W spelling-bee=$B validate=$V"
+          M="${{ steps.commit.outcome }}"
+          echo "Target: $GAME | connections=$C wordle=$W spelling-bee=$B validate=$V commit=$M"
           FAIL=0
           if [ "$GAME" = "connections" ] || [ "$GAME" = "all" ]; then
             [ "$C" = "success" ] || FAIL=1
@@ -147,6 +155,9 @@ jobs:
             [ "$B" = "success" ] || FAIL=1
           fi
           [ "$V" = "success" ] || FAIL=1
+          # commit step is critical — failure means rebase conflict, push rejection,
+          # or git auth issue. Surface as run failure.
+          [ "$M" = "success" ] || FAIL=1
           if [ "$FAIL" = "1" ]; then
             echo "::error::One or more steps did not succeed for target=$GAME"
             exit 1

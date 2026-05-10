@@ -77,12 +77,18 @@ export function validateSpellingBeeIntegrity(puzzle: SpellingBeeDaily): void {
   if (puzzle.validLetters.length !== 7) {
     throw new Error(`Spelling Bee validLetters must be 7; got ${puzzle.validLetters.length}`);
   }
-  const allLetters = new Set([puzzle.centerLetter, ...puzzle.outerLetters]);
-  if (allLetters.size !== 7) {
-    throw new Error('Spelling Bee letters must be unique');
+  const expected = new Set([puzzle.centerLetter, ...puzzle.outerLetters]);
+  if (expected.size !== 7) {
+    throw new Error('Spelling Bee letters must be unique (centerLetter + outerLetters)');
   }
-  if (!puzzle.validLetters.includes(puzzle.centerLetter)) {
-    throw new Error('Spelling Bee centerLetter must be in validLetters');
+  const actual = new Set(puzzle.validLetters);
+  if (actual.size !== 7) {
+    throw new Error(`Spelling Bee validLetters must contain 7 unique letters; got ${actual.size}`);
+  }
+  for (const letter of expected) {
+    if (!actual.has(letter)) {
+      throw new Error(`Spelling Bee validLetters missing "${letter}" (must equal centerLetter + outerLetters)`);
+    }
   }
   // Hashes must each be 64 hex chars
   for (const h of puzzle.answerHashes) {

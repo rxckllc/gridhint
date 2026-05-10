@@ -88,12 +88,10 @@ async function buildPuzzle(date: string, raw: unknown): Promise<SpellingBeeDaily
     throw new Error('NYT Spelling Bee response missing answers');
   }
 
-  const dateField = data.printDate ?? data.displayDate;
-  if (dateField && dateField !== date) {
-    // SB displayDate is "Month Day, Year" — printDate is YYYY-MM-DD.
-    if (data.printDate && data.printDate !== date) {
-      throw new Error(`Date mismatch: expected ${date}, NYT returned ${data.printDate}`);
-    }
+  // SB response: printDate is YYYY-MM-DD (matches our format), displayDate is
+  // "Month Day, Year". Only printDate is comparable; reject mismatches loudly.
+  if (data.printDate && data.printDate !== date) {
+    throw new Error(`Date mismatch: expected ${date}, NYT returned ${data.printDate}`);
   }
 
   const centerLetter = data.centerLetter.toUpperCase();
