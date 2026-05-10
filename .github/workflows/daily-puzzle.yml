@@ -1,0 +1,45 @@
+name: Daily Puzzle Update
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 09:00 UTC = 05:00 EDT (summer) / 04:00 EST (winter). NYT publishes Connections at midnight ET, so even the winter time is comfortably after publication.
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Fetch and update connections puzzle
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          HEALTHCHECKS_URL: ${{ secrets.HEALTHCHECKS_URL }}
+          GRIDHINT_FALLBACK_EYEFYRE: ${{ vars.GRIDHINT_FALLBACK_EYEFYRE || '0' }}
+        run: npx tsx src/scripts/import-daily-puzzles.ts
+      - name: Validate generated files
+        run: npx tsx src/scripts/validate-generated.ts
+      - name: Commit and push
+        if: always()
+        run: |
+          git config user.name "gridhint-bot"
+          git config user.email "bot@gridhint.com"
+          git add src/data/generated/connections/ && git add -A .gridhint-cooldown.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          DATE=$(date -u +'%Y-%m-%d')
+          git commit --no-verify -m "daily: connections update $DATE"
+          # Pushes to whatever branch checkout grabbed (the repo's default branch).
+          # If you renamed master → main, GHA will use main automatically.
+          # Verify the branch matches what Hostinger watches.
+          git push origin HEAD

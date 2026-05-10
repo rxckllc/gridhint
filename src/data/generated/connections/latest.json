@@ -1,0 +1,41 @@
+{
+  "date": "2026-05-09",
+  "status": "published",
+  "sourceMode": "manual_seed",
+  "grid": ["ALPHA", "BETA", "GAMMA", "DELTA", "APPLE", "BANANA", "CHERRY", "DATE", "LION", "TIGER", "BEAR", "WOLF", "PIANO", "GUITAR", "DRUMS", "FLUTE"],
+  "groups": [
+    {
+      "difficulty": "yellow",
+      "category": "Greek Letters",
+      "words": ["ALPHA", "BETA", "GAMMA", "DELTA"],
+      "hint1": "Think of an ordered set.",
+      "hint2": "These are symbols you may see in math or science.",
+      "hint3": "All four belong to the same alphabet family."
+    },
+    {
+      "difficulty": "green",
+      "category": "Fruit",
+      "words": ["APPLE", "BANANA", "CHERRY", "DATE"],
+      "hint1": "Things you might find in a kitchen.",
+      "hint2": "Natural sweets.",
+      "hint3": "Items from an orchard or market."
+    },
+    {
+      "difficulty": "blue",
+      "category": "Wild Animals",
+      "words": ["LION", "TIGER", "BEAR", "WOLF"],
+      "hint1": "Inhabitants of the wild.",
+      "hint2": "They might be in a story about Oz.",
+      "hint3": "Apex predators."
+    },
+    {
+      "difficulty": "purple",
+      "category": "Musical Instruments",
+      "words": ["PIANO", "GUITAR", "DRUMS", "FLUTE"],
+      "hint1": "Tools for a specific performance.",
+      "hint2": "They make sound when struck, plucked, or blown.",
+      "hint3": "Members of an orchestra or band."
+    }
+  ],
+  "updatedAt": "2026-05-09T04:05:00Z"
+}
