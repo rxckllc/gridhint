@@ -1,0 +1,35 @@
+# GridHint.com
+
+> GridHint is a free, independent word puzzle helper. It provides daily hints and solvers for the New York Times Connections, Wordle, and Spelling Bee puzzles, plus utility solvers for anagrams, crosswords, hangman, and word ladders. No accounts, no paywalls, updated every day at 5 AM ET.
+
+GridHint is not affiliated with The New York Times Company. "NYT", "New York Times", "Connections", "Wordle", and "Spelling Bee" are trademarks of their respective owners and are referenced descriptively to indicate the puzzles our tools help users solve.
+
+## Daily Puzzles (updated every day at 5 AM ET)
+
+- [Today's NYT Connections Hints](https://www.gridhint.com/word-games/connections/hints/): Progressive hints (vague → specific) for today's NYT Connections puzzle. Reveals one category clue at a time.
+- [Today's NYT Wordle Hints & Answer](https://www.gridhint.com/word-games/wordle/today/): First letter, vowel/consonant pattern, and definition hints for today's NYT Wordle, plus the full answer behind a click-to-reveal.
+- [Today's NYT Spelling Bee Hints](https://www.gridhint.com/word-games/spelling-bee/today/): Today's 7 letters, total word count, pangram count, length distribution, and starting-letter distribution. Includes a private client-side guess-checker that validates words via SHA-256 hashes (we never publish the answer list).
+
+## Solvers and Helpers
+
+- [Wordle Solver](https://www.gridhint.com/word-games/wordle/solver/): Enter green and yellow letters to narrow down possible Wordle answers.
+- [Spelling Bee Helper](https://www.gridhint.com/word-games/spelling-bee/helper/): General Spelling Bee solver — works with any 7 letters.
+- [Unscramble Letters](https://www.gridhint.com/word-games/anagram-jumble/unscramble/): Generate every valid word from a set of jumbled letters.
+- [Anagram Solver](https://www.gridhint.com/word-games/anagram-jumble/anagram-solver/): Find every anagram of a word or phrase.
+- [Word Descrambler](https://www.gridhint.com/word-games/anagram-jumble/word-descrambler/): Sort scrambled letters into valid words by length.
+- [Word Scrambler](https://www.gridhint.com/word-games/anagram-jumble/word-scrambler/): Generate scrambled letter sets for puzzles and games.
+- [Crossword Solver](https://www.gridhint.com/word-games/crossword/solver/): Match clues and patterns across major crossword grids.
+- [Hangman Solver](https://www.gridhint.com/word-games/hangman/solver/): Best-guess letters based on known positions and misses.
+- [Word Ladder Solver](https://www.gridhint.com/word-games/word-ladder/solver/): Build the shortest one-letter-change path between two words.
+- [Word Pattern Solver](https://www.gridhint.com/word-games/word-pattern-solver/): Find words matching a pattern with wildcard letters.
+- [5-Letter Words](https://www.gridhint.com/word-games/5-letter-words/): Browse 5-letter words by starting letters, pattern, or endings.
+
+## About
+
+- [About GridHint](https://www.gridhint.com/about/): Mission, what we do, and why.
+- [Contact](https://www.gridhint.com/contact/): info@gridhint.com
+- [Disclaimer](https://www.gridhint.com/disclaimer/): Trademarks, affiliation, and use disclaimer.
+
+## Sitemap
+
+[XML sitemap](https://www.gridhint.com/sitemap.xml) lists all pages with last-modified timestamps.
