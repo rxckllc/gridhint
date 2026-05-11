@@ -1,0 +1,10 @@
+# Configure headers for game data to prevent stale content
+/data/generated/*.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Global security headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';
