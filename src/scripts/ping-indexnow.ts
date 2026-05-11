@@ -24,9 +24,9 @@ import { getNYDate } from './lib/atomic-write';
 type Target = 'connections' | 'wordle' | 'spelling-bee' | 'all';
 
 const URL_BY_GAME: Record<Exclude<Target, 'all'>, string> = {
-  'connections': 'https://gridhint.com/connections/hints/',
-  'wordle': 'https://gridhint.com/wordle/today/',
-  'spelling-bee': 'https://gridhint.com/spelling-bee/today/',
+  'connections': 'https://gridhint.com/connections-hints/',
+  'wordle': 'https://gridhint.com/wordle-hints/',
+  'spelling-bee': 'https://gridhint.com/spelling-bee-answers/',
 };
 
 async function main(): Promise<void> {

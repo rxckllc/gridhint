@@ -16,7 +16,7 @@ export default function ConnectionsHubPage() {
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Link href="/connections/hints" className="group">
+        <Link href="/connections-hints/" className="group">
           <Card className="h-full border-2 border-slate-300 rounded-2xl p-8 hover:border-blue-700 hover:shadow-md transition-all">
             <div className="bg-blue-50 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
               <HelpCircle className="w-10 h-10 text-blue-700" />

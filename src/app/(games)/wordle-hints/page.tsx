@@ -193,7 +193,7 @@ export default function WordleTodayPage() {
         <section className="space-y-4 pt-8 border-t-2 border-slate-200">
           <h2 className="text-2xl font-extrabold text-slate-900">Want to solve it yourself?</h2>
           <p className="text-lg text-slate-700">
-            Use our <Link href="/wordle/solver/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">Wordle Solver</Link> to narrow down possibilities from your green and yellow letters.
+            Use our <Link href="/wordle-solver/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">Wordle Solver</Link> to narrow down possibilities from your green and yellow letters.
           </p>
         </section>
 

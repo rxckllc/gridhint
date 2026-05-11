@@ -89,7 +89,7 @@ export default async function ConnectionsAnswerPage({ params }: PageProps) {
           <Link href="/connections/archive" className="h-14 px-8 bg-slate-100 text-slate-900 text-lg font-bold rounded-xl border-2 border-slate-300 hover:bg-slate-200 transition-colors flex items-center justify-center">
             Browse Archive
           </Link>
-          <Link href="/wordle-solver" className="h-14 px-8 bg-blue-700 text-white text-lg font-bold rounded-xl hover:bg-blue-800 transition-colors flex items-center justify-center">
+          <Link href="/wordle-solver/" className="h-14 px-8 bg-blue-700 text-white text-lg font-bold rounded-xl hover:bg-blue-800 transition-colors flex items-center justify-center">
             Wordle Solver
           </Link>
         </div>

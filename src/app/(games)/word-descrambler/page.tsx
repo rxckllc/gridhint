@@ -1,39 +1,36 @@
-import { Search } from "lucide-react";
+import AnagramSolver from '@/components/word-games/anagram/AnagramSolver';
+import { Metadata } from 'next';
+import { softwareAppJsonLd } from '@/lib/seo/jsonLd';
 
-export default function WordDescramblerMockup() {
+export const metadata: Metadata = {
+  title: 'Word Descrambler | Decode Scrambled Letters Into Words',
+  description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+  alternates: { canonical: '/anagram-jumble/word-descrambler/' }
+};
+
+const BASE = 'https://gridhint.com';
+
+export default function WordDescramblerPage() {
+  const ld = softwareAppJsonLd({
+    name: 'Word Descrambler',
+    description: 'Paste scrambled letters and find possible words instantly. Results are grouped by length with exact and partial matches.',
+    breadcrumbs: [
+      { name: 'Home', url: BASE },
+      { name: 'Word Games', url: `${BASE}/` },
+      { name: 'Anagram and Jumble', url: `${BASE}/anagram-jumble/` },
+      { name: 'Word Descrambler', url: `${BASE}/anagram-jumble/word-descrambler/` },
+    ],
+  });
+
   return (
-    <div className="max-w-4xl mx-auto px-4 pt-12 space-y-12">
-      <section className="space-y-6">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-          Word Descrambler
-        </h1>
-        <p className="text-xl text-slate-700">
-          Turn jumbled letters back into valid dictionary words.
-        </p>
-      </section>
-
-      <section className="bg-white border-2 border-slate-300 rounded-2xl p-6 sm:p-8 shadow-sm">
-        <form className="space-y-6">
-          <div className="space-y-3">
-            <label htmlFor="descramble" className="block text-2xl font-bold text-slate-900">
-              Letters to descramble
-            </label>
-            <input 
-              id="descramble"
-              type="text" 
-              placeholder="e.g. ELZZPU" 
-              className="w-full text-2xl p-4 h-16 border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-20 uppercase"
-            />
-          </div>
-          
-          <button 
-            type="button"
-            className="w-full sm:w-auto h-16 px-10 bg-blue-700 text-white text-2xl font-bold rounded-xl hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-4 transition-colors flex items-center justify-center gap-3"
-          >
-            <Search className="w-6 h-6" /> Descramble
-          </button>
-        </form>
-      </section>
+    <div className="max-w-4xl mx-auto px-4 pt-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      <AnagramSolver
+        title="Word Descrambler"
+        subtitle="Turn jumbled letters back into valid dictionary words. Organized by length for easy solving."
+        mode="unscramble"
+        defaultOptions={{ minLength: 3 }}
+      />
     </div>
   );
 }

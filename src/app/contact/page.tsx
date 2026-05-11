@@ -71,7 +71,7 @@ export default function ContactPage() {
       <p className="text-base text-slate-600">
         Looking for legal info?{" "}
         <Link
-          href="/disclaimer"
+          href="/disclaimer/"
           className="text-blue-700 font-semibold underline underline-offset-4 hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-2 rounded"
         >
           Read our disclaimer

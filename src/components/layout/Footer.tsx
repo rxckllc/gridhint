@@ -15,9 +15,9 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-slate-900">Links</h3>
             <ul className="space-y-3 text-lg">
-              <li><Link href="/about" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">About</Link></li>
-              <li><Link href="/contact" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">Contact</Link></li>
-              <li><Link href="/disclaimer" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">Disclaimer</Link></li>
+              <li><Link href="/about/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">About</Link></li>
+              <li><Link href="/contact/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">Contact</Link></li>
+              <li><Link href="/disclaimer/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-medium">Disclaimer</Link></li>
             </ul>
           </div>
         </div>

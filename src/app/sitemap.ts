@@ -31,19 +31,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ---------------------------------------------------------------
   const dailyRoutes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}/connections/hints/`,
+      url: `${baseUrl}/connections-hints/`,
       lastModified: readManifestUpdatedAt('connections'),
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/wordle/today/`,
+      url: `${baseUrl}/wordle-hints/`,
       lastModified: readManifestUpdatedAt('wordle'),
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/spelling-bee/today/`,
+      url: `${baseUrl}/spelling-bee-answers/`,
       lastModified: readManifestUpdatedAt('spelling-bee'),
       changeFrequency: 'daily',
       priority: 1.0,
@@ -57,20 +57,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // and avoid Google "Page with redirect" errors.
   // ---------------------------------------------------------------
   const weeklyRoutes = [
-    '/wordle/solver/',
-    '/spelling-bee/helper/',
-    '/anagram-jumble/unscramble/',
-    '/anagram-jumble/anagram-solver/',
-    '/anagram-jumble/word-descrambler/',
-    '/anagram-jumble/word-scrambler/',
-    '/crossword/solver/',
-    '/hangman/solver/',
-    '/word-ladder/solver/',
+    '/wordle-solver/',
+    '/spelling-bee-helper/',
+    '/unscramble-letters/',
+    '/anagram-solver/',
+    '/word-descrambler/',
+    '/word-scrambler/',
+    '/crossword-solver/',
+    '/hangman-solver/',
+    '/word-ladder-solver/',
     '/word-pattern-solver/',
     '/5-letter-words/',
-    '/unscramble/',
-    '/word-scrambler/',
-    '/word-descrambler/',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: now,

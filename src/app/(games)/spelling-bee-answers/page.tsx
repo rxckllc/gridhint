@@ -218,7 +218,7 @@ export default function SpellingBeeTodayPage() {
         <section className="space-y-4 pt-8 border-t-2 border-slate-200">
           <h2 className="text-2xl font-extrabold text-slate-900">Want a different solver?</h2>
           <p className="text-lg text-slate-700">
-            The <Link href="/spelling-bee/helper/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">general Spelling Bee Helper</Link> works with any 7 letters — useful for older puzzles or your own letter sets.
+            The <Link href="/spelling-bee-helper/" className="text-blue-700 hover:text-blue-900 underline underline-offset-4 font-bold">general Spelling Bee Helper</Link> works with any 7 letters — useful for older puzzles or your own letter sets.
           </p>
         </section>
 

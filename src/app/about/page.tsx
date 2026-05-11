@@ -152,7 +152,7 @@ export default function AboutPage() {
           Times Company, Wordle, Connections, Spelling Bee, or any other puzzle publisher. All trademarks belong to their
           respective owners. Tools and word lists are provided for educational and entertainment purposes. See our{" "}
           <Link
-            href="/disclaimer"
+            href="/disclaimer/"
             className="text-blue-700 font-semibold underline underline-offset-4 hover:text-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-offset-2 rounded"
           >
             full disclaimer
