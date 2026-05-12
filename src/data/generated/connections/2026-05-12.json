@@ -30,9 +30,9 @@
         "VOLUME",
         "WORK"
       ],
-      "hint1": "A significant creation.",
-      "hint2": "A noteworthy written piece.",
-      "hint3": "Another term for a lengthy written composition."
+      "hint1": "Products of creative effort.",
+      "hint2": "Major literary creations.",
+      "hint3": "A weighty literary publication."
     },
     {
       "difficulty": "green",
@@ -43,9 +43,9 @@
         "PETERSBURG",
         "SALVADOR"
       ],
-      "hint1": "Places with a shared naming convention",
-      "hint2": "Urban areas linked by a common reverential term",
-      "hint3": "Cities named after a specific type of religious figure"
+      "hint1": "Associated with various locations.",
+      "hint2": "These places are often named in honor of revered figures.",
+      "hint3": "Each can be prefixed by a word referring to a holy person."
     },
     {
       "difficulty": "blue",
@@ -56,9 +56,9 @@
         "JOHNS",
         "WEEKEND"
       ],
-      "hint1": "What might stretch out?",
-      "hint2": "Consider things that extend or have notable duration.",
-      "hint3": "Words that often combine with a term for great extent."
+      "hint1": "Concepts of scope or duration.",
+      "hint2": "Think about things that extend for a while.",
+      "hint3": "Words that can complete phrases like '__ story' or '__ run'."
     },
     {
       "difficulty": "purple",
@@ -69,10 +69,10 @@
         "REALM",
         "WONK"
       ],
-      "hint1": "These words all share a significant first component.",
-      "hint2": "Each word begins with a globally recognized form of payment.",
-      "hint3": "Look for a nation's money with an extra letter added."
+      "hint1": "A common thread involving extra characters.",
+      "hint2": "An extra character appended to a circulating medium.",
+      "hint3": "Currency names, each with a single letter added at the end."
     }
   ],
-  "updatedAt": "2026-05-12T05:53:22.736Z"
+  "updatedAt": "2026-05-12T11:16:31.174Z"
 }
