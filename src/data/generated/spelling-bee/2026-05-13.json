@@ -1,0 +1,79 @@
+{
+  "date": "2026-05-13",
+  "status": "published",
+  "sourceMode": "nyt-api-v2",
+  "centerLetter": "L",
+  "outerLetters": [
+    "A",
+    "B",
+    "D",
+    "I",
+    "R",
+    "Z"
+  ],
+  "validLetters": [
+    "L",
+    "A",
+    "B",
+    "D",
+    "I",
+    "R",
+    "Z"
+  ],
+  "answerHashes": [
+    "0a460a665ef625494cce71297adcd094c2bd4a47e177b79541773901db18b626",
+    "0b095798015f244b6f742a7b11617a33db9d1290665fa542a8f08e2ae225e1a2",
+    "1d2130bdaf6b5ae308d6ff725b8300d90e9b064cf2d3f145149350d118d6cd38",
+    "22b22d26c009da0ecf4465128d9e4cf051de8181a3821ec807e82ff094185ed5",
+    "2beb983cf531567e9e7c2891c33216edb3f0df1ad632204b85226b17e0a77974",
+    "2f73c9f7c009e391220ade9b1fd1a6af6b838fc235b9b515a94cae7d873fa107",
+    "37bf94929736f786ec392b93b346e60313b23834fe4d593b8015f07b8013c4e6",
+    "3eeee0b0abf8bd3497cf49903810cc4ab24724114bb6ebaee11a45cc6cd42aaf",
+    "4d27f373f218e5e3f96bb7fc395e2e04ac6085c2522810cc8ae547a54cbd6ae3",
+    "4e00905abf490a7a405cee708ea2d67277044ae58a06571bea7ac9710d624add",
+    "585794fc317299e14e47d258fb7aa8a4c7d3a964498068c968b00002e615a07c",
+    "69a99fd1baf0097fcafbd697c0ab53cbae281f9889a5f69fc6304f732193734c",
+    "6bb9417d04fe2d77255e25bc2350b688f72eba5125cba191d43ca58a0522c05f",
+    "74ad8414d8180b9a1277f7414220795fbd6721c16a25e2855af4a4812d4e5452",
+    "7bdbf639bd24398fba0b86507003b0044b915fc09289801fb52ae51edef42e48",
+    "7c725c0facc252dfdcaa7aa8acfc6d1cd8275b59e58049902af4514f87cce251",
+    "83ddf99bad01119a253b475dfe25ac22a3aef62de5aae568e399f470caab806c",
+    "852181fe6dfb386a615f64ed3d7f323377b41dd67ce4b614123a207459aa86df",
+    "888e31ea8fbf6f006bbd6c3a5a2f1dcbd2696027856415dd65ca743e83e467f6",
+    "8d8ea339780815ade80fff5e8c97415b649c83c90535e39843e309012199c99b",
+    "92d7a4bf446f8063d2720bccd69c07ecbbded0504c8d691ab21a51d9ce0bcf3e",
+    "9bf0f101f56260bbd13d617345e95664d44808de2209f2e6840e85733c1bf606",
+    "a08feca5dfe3a712c5228a9e1d14d05e942a29c723cc7c3a10dd830fd12fb606",
+    "b163dee4236b837d1a8c5f373a380d5b5904c993be1967725f5d98777905336e",
+    "b439fe12b42ebcc5aed84108c9d28c5ed61bb7d9c26c6381be52f7879aeb64ea",
+    "b93d08d78fe9bcf1a7bb08f75d47ee94bc22d6a1402f75dbaaa1787b712f080a",
+    "bc15b34b407d0793b1442b1d8fd74a6e8ff4f159b5d79c9da68ee758d569f41f",
+    "be1a7829e51675a3c104e424158e1887da705ffee72691c1fad5f7903b5652c0",
+    "e59a116c58ed844e14816b4811e906bfab4ca9f6cdecaac7505194d7653c3c0f",
+    "e61f3a3c6af80902b7ab303ded469b76ab2e637b4be578f7eaf28752059ef0c4"
+  ],
+  "pangramHashes": [
+    "f7d16af6213a46477cd6f7c38e05cedbe6b882e70346b197e9af3bd61c2f02da"
+  ],
+  "hints": {
+    "totalWords": 30,
+    "pangramCount": 1,
+    "lengthDistribution": {
+      "4": 16,
+      "5": 3,
+      "6": 6,
+      "7": 1,
+      "8": 4
+    },
+    "startingLetterDistribution": {
+      "A": 3,
+      "B": 10,
+      "D": 3,
+      "L": 8,
+      "R": 6
+    },
+    "geniusThreshold": 74,
+    "queenBeeScore": 106
+  },
+  "updatedAt": "2026-05-14T05:18:57.602Z"
+}

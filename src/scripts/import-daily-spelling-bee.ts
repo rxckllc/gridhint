@@ -25,14 +25,29 @@ import { buildManifest, writePuzzleOutputs } from './lib/manifest';
 const DATA_DIR = path.join(process.cwd(), 'src/data/generated/spelling-bee');
 
 interface NYTSpellingBeeResponse {
+  center_letter?: string;
   centerLetter?: string;
+  outer_letters?: string[] | string;
   outerLetters?: string[];
+  valid_letters?: string[] | string;
   validLetters?: string[];
   pangrams?: string[];
   answers?: string[];
+  display_date?: string;
   displayDate?: string;
+  print_date?: string;
   printDate?: string;
   id?: number;
+  editor?: string;
+}
+
+interface NormalizedSpellingBeeResponse {
+  centerLetter: string;
+  outerLetters: string[];
+  validLetters?: string[];
+  pangrams: string[];
+  answers: string[];
+  printDate?: string;
 }
 
 function sha256(input: string): string {
@@ -77,16 +92,39 @@ function buildHints(answers: string[], pangrams: Set<string>) {
   };
 }
 
-async function buildPuzzle(date: string, raw: unknown): Promise<SpellingBeeDaily> {
-  const data = raw as NYTSpellingBeeResponse;
+function normalizeLetters(value: string[] | string | undefined): string[] | undefined {
+  if (Array.isArray(value)) return value.map(letter => String(letter));
+  if (typeof value === 'string') return value.split('');
+  return undefined;
+}
 
-  if (!data.centerLetter) throw new Error('NYT Spelling Bee response missing centerLetter');
-  if (!data.outerLetters || data.outerLetters.length !== 6) {
-    throw new Error(`NYT Spelling Bee outerLetters must be 6; got ${data.outerLetters?.length}`);
+function normalizeNYTSpellingBeeResponse(raw: unknown): NormalizedSpellingBeeResponse {
+  const data = raw as NYTSpellingBeeResponse;
+  const centerLetter = data.center_letter ?? data.centerLetter;
+  const outerLetters = normalizeLetters(data.outer_letters ?? data.outerLetters);
+  const validLetters = normalizeLetters(data.valid_letters ?? data.validLetters);
+  const printDate = data.print_date ?? data.printDate;
+
+  if (!centerLetter) throw new Error('NYT Spelling Bee response missing center_letter/centerLetter');
+  if (!outerLetters || outerLetters.length !== 6) {
+    throw new Error(`NYT Spelling Bee outer_letters/outerLetters must be 6; got ${outerLetters?.length}`);
   }
   if (!data.answers || data.answers.length === 0) {
     throw new Error('NYT Spelling Bee response missing answers');
   }
+
+  return {
+    centerLetter,
+    outerLetters,
+    validLetters,
+    pangrams: data.pangrams ?? [],
+    answers: data.answers,
+    printDate,
+  };
+}
+
+async function buildPuzzle(date: string, raw: unknown): Promise<SpellingBeeDaily> {
+  const data = normalizeNYTSpellingBeeResponse(raw);
 
   // SB response: printDate is YYYY-MM-DD (matches our format), displayDate is
   // "Month Day, Year". Only printDate is comparable; reject mismatches loudly.
@@ -118,11 +156,25 @@ async function buildPuzzle(date: string, raw: unknown): Promise<SpellingBeeDaily
   };
 }
 
+function getTargetDate(): string {
+  const args = process.argv.slice(2);
+  const dateFlagIndex = args.findIndex(arg => arg === '--date');
+  const targetDate = dateFlagIndex >= 0
+    ? args[dateFlagIndex + 1]
+    : args.find(arg => arg.startsWith('--date='))?.slice('--date='.length);
+
+  if (!targetDate) return getNYDate();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(targetDate)) {
+    throw new Error(`Invalid --date "${targetDate}". Expected YYYY-MM-DD.`);
+  }
+  return targetDate;
+}
+
 async function main(): Promise<void> {
   checkCooldown();
   await notifyStart();
 
-  const targetDate = getNYDate();
+  const targetDate = getTargetDate();
   console.log(`[bee] target date (NY): ${targetDate}`);
 
   await warmUpCookies('https://www.nytimes.com/puzzles/spelling-bee');
@@ -130,7 +182,7 @@ async function main(): Promise<void> {
   // The Spelling Bee endpoint returns full puzzle metadata including the
   // answers array we need for hashing.
   const raw = await fetchNYTDaily({
-    url: `https://www.nytimes.com/puzzles/spelling-bee/${targetDate}.json`,
+    url: `https://www.nytimes.com/svc/spelling-bee/v1/${targetDate}.json`,
     referer: 'https://www.nytimes.com/puzzles/spelling-bee',
     notFoundRetry: true,
   });
@@ -143,11 +195,11 @@ async function main(): Promise<void> {
   writePuzzleOutputs(DATA_DIR, targetDate, puzzle, manifest);
 
   console.log(`[bee] done — ${targetDate}: ${puzzle.hints.totalWords} answers, ${puzzle.hints.pangramCount} pangrams`);
-  await notifySuccess(`spelling-bee:${targetDate}`);
+  await notifySuccess(`Spelling Bee (${targetDate})`);
 }
 
 main().catch(async err => {
   console.error('[bee] FATAL:', err);
-  await notifyFailure(err);
+  await notifyFailure(err, 'Spelling Bee import');
   process.exit(1);
 });

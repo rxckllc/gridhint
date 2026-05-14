@@ -1,0 +1,86 @@
+{
+  "date": "2026-05-12",
+  "status": "published",
+  "sourceMode": "nyt-api-v2",
+  "centerLetter": "C",
+  "outerLetters": [
+    "A",
+    "B",
+    "M",
+    "N",
+    "O",
+    "T"
+  ],
+  "validLetters": [
+    "C",
+    "A",
+    "B",
+    "M",
+    "N",
+    "O",
+    "T"
+  ],
+  "answerHashes": [
+    "04cfdfc7d68b787039b58be44ef8f9f44851c050b1719c042e79d73308a2429e",
+    "0d52df6a4b066c136d1b40e1ba066fe301bf65aeb117578ff1133c7d753e1c51",
+    "0e42dbd87bddafcebc45c5267910c36e6ef4121c3ec9c4bf8a2e1886b70fd4bd",
+    "1aec750362fac0fcd43761bf6c273fb754e84b45277237926e2cd0c057376dec",
+    "2a9c1eca1c8b2862b934f8e6a937346d36b5e333c5052f3b65be5449a280100c",
+    "3795a93914d3e2a8d2d747ad40c7fd13145785af908dc35fa14e0154bec32d7b",
+    "38ed181d67e80846068d874e339e85031e16c4e92ddd03178b9ca09662ef3918",
+    "3ee94fd21189fa94d8a2dfb9913c84a6a86a52ad377192e3aaf2e4e4a7050963",
+    "436c48d705f70e638b0fd57bafa60b1e68d1ce24927eedfe8e5b5acc51defe16",
+    "52ecd9be92949b7ca56c752f74e9919e578eca89c099290848b04ba89e6afe0d",
+    "58d9c29c5d768111200f9682d3eb2640f858b5f5308139e6b9a0f49492ad5204",
+    "63cd922cfacd65d4ee4506997ea700d407762ea0c9f6211b304ee5c672e9f361",
+    "69e66461f5c67a9c172191f23c3a37a91196bf3002edaf9cc79b9461678459d0",
+    "6b081253715865cccab7e979ec6040a24fd8ca83dc581904bc11fbcd8e7b13ce",
+    "7202e15131f4a1959e1ce8c9ec5176a5e369be39634aacd8ece99a4b7c23a349",
+    "7953cf0107b7188619026acb20c3c61a0fe52a5c3f13588ac7828dedae37b436",
+    "7f047458ed3c16eb185ae8c4531c81b0a09b34e70a5d9a36a2152dfb4b9c6b5d",
+    "8ca2abaf2e1d78203d0433a22f8e821fbcf58bb23676e62a4ee8bc9361e2e545",
+    "8f1be68c9b143e15586aa0117cdbb889aea369688567e818d74a61436fc66060",
+    "a4bb7e88c035cafb2506b26a0d0e9666f2df5122aa3fbe7dfc4a419da4786e80",
+    "a55574e006fa00ac194ad9f38f504c1d46378702e28ac0c664fab478ac247390",
+    "a5b70994b1baf5dfd6ee13c3f70077f8013e9ead42bbdca77e93a50f3004fbd3",
+    "a5f1c03cd3c9dcd9aefdce0f0365c227f99b1e401ee56a3f3a2568d14f7757b8",
+    "aa2e225c4fd9d0f18672fc3592332fc9fd7c35f8289927ddf9f7b53df621e178",
+    "af8e167003d056cb063bfb013dd8e6f738cd759febb0fecaeb77679b07074cae",
+    "b201795615a685035ab3b29900f625eed91f76900d79029803f550de4de5c3d4",
+    "c31041598baf6800955ff7540e0d19e9b4a27c92d38ac4bc08cb9ba0c43dbcc4",
+    "c593d19d4a018a2454e1ea27a8216f92bf29d8dc3eccb4ab6f147499f659ec05",
+    "c72f451f922cf9680a11f911aa29ac770b19ce03b610c3dd621f8e02ec0b5328",
+    "d1b0f50109881478d8a13fbba8a397b3c08907d3fb1df8d27b687a0f6c11bdb5",
+    "d78b7f175945b4d76996146491a09fc6ab3421a57e640075ec31bc961285b31e",
+    "db75b1614b81a7a2f24ad508e0e80b7adf07650c7693f34935542f36545fe269",
+    "de7a8a91c52e133f8ab2a1259e42f6a0f2f03039d1f0e1d6ba794ad92cfdfcc1",
+    "f04c96e4689373fe3eaabf069ef9b4651918aae6dd5c824c6027e40db2d36b04",
+    "f82ecbb5e510588c497d4cd055f5846140db9787b83838aee00808f0a5065d71",
+    "ff67263ce5e0abc6b7d943d350f439e242d1519e833e08be4db9e236dd03da45"
+  ],
+  "pangramHashes": [
+    "3500ea4636238c4c300587fb1daa06835b9aa2ca893a3dcb4913a3b19e870c8e",
+    "7b20deadf57a6e5b30ba81c00f7ed86bb15fe333ce7b2e234f40cf8495ee771f"
+  ],
+  "hints": {
+    "totalWords": 36,
+    "pangramCount": 2,
+    "lengthDistribution": {
+      "4": 10,
+      "5": 7,
+      "6": 13,
+      "7": 5,
+      "8": 1
+    },
+    "startingLetterDistribution": {
+      "B": 3,
+      "C": 26,
+      "N": 1,
+      "O": 1,
+      "T": 5
+    },
+    "geniusThreshold": 116,
+    "queenBeeScore": 166
+  },
+  "updatedAt": "2026-05-14T05:18:35.128Z"
+}

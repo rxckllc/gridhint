@@ -91,7 +91,7 @@ jobs:
         id: spelling-bee
         if: steps.which.outputs.game == 'spelling-bee' || steps.which.outputs.game == 'all'
         continue-on-error: true
-        run: npx tsx src/scripts/import-daily-spelling-bee.ts
+        run: npm run data:import:spelling-bee
 
       - name: Validate generated files
         id: validate
