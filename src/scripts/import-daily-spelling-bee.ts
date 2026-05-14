@@ -200,6 +200,6 @@ async function main(): Promise<void> {
 
 main().catch(async err => {
   console.error('[bee] FATAL:', err);
-  await notifyFailure(err, 'Spelling Bee import');
+  await notifyFailure(err);
   process.exit(1);
 });
