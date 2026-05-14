@@ -37,14 +37,14 @@ export async function notifyStart(): Promise<void> {
   await healthchecksPost('start');
 }
 
-export async function notifySuccess(date: string): Promise<void> {
+export async function notifySuccess(context: string): Promise<void> {
   await Promise.all([
     healthchecksPost(''),
-    discordPost(`[gridhint-bot] Connections puzzle updated for ${date}.`),
+    discordPost(`[gridhint-bot] ${context} updated successfully.`),
   ]);
 }
 
-export async function notifyFailure(error: unknown): Promise<void> {
+export async function notifyFailure(error: unknown, context: string = 'import'): Promise<void> {
   const stack = error instanceof Error
     ? `${error.message}\n${error.stack ?? ''}`
     : String(error);
@@ -53,6 +53,6 @@ export async function notifyFailure(error: unknown): Promise<void> {
   const cleaned = stack.replace(/`/g, 'ˋ').slice(0, 1500);
   await Promise.all([
     healthchecksPost('fail'),
-    discordPost(`[gridhint-bot] FAILURE importing connections puzzle:\n\`\`\`\n${cleaned}\n\`\`\``),
+    discordPost(`[gridhint-bot] FAILURE during ${context}:\n\`\`\`\n${cleaned}\n\`\`\``),
   ]);
 }

@@ -156,11 +156,11 @@ async function main(): Promise<void> {
   writePuzzleOutputs(DATA_DIR, targetDate, puzzle, manifest);
 
   console.log(`[wordle] done — ${targetDate} solution=${puzzle.solution}`);
-  await notifySuccess(`wordle:${targetDate}`);
+  await notifySuccess(`Wordle (${targetDate})`);
 }
 
 main().catch(async err => {
   console.error('[wordle] FATAL:', err);
-  await notifyFailure(err);
+  await notifyFailure(err, 'Wordle import');
   process.exit(1);
 });

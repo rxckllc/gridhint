@@ -254,11 +254,11 @@ async function main(): Promise<void> {
   writePuzzleOutputs(DATA_DIR, targetDate, puzzle, manifest);
 
   console.log(`[main] done — Connections for ${targetDate} written.`);
-  await notifySuccess(targetDate);
+  await notifySuccess(`Connections (${targetDate})`);
 }
 
 main().catch(async err => {
   console.error('[main] FATAL:', err);
-  await notifyFailure(err);
+  await notifyFailure(err, 'Connections import');
   process.exit(1);
 });
