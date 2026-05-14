@@ -99,7 +99,7 @@ export default function WordleSolver() {
         <div className="space-y-6">
           {rows.map((row, rowIndex) => (
             <div key={rowIndex} className="flex flex-col sm:flex-row gap-4 items-center">
-              <div className="relative w-full max-w-[350px]">
+              <div className="relative w-full min-w-0 max-w-[350px]">
                 <input 
                   type="text"
                   maxLength={5}
@@ -109,13 +109,13 @@ export default function WordleSolver() {
                   className="w-full h-16 sm:h-20 text-3xl sm:text-4xl font-black text-center border-4 border-slate-300 rounded-2xl focus:border-blue-700 focus:outline-none uppercase tracking-[0.2em] placeholder:text-slate-300 placeholder:tracking-normal"
                 />
               </div>
-              <div className="flex gap-2">
+              <div className="grid w-full min-w-0 max-w-[350px] grid-cols-5 gap-2">
                 {row.pattern.map((state, tileIndex) => (
                   <button
                     key={tileIndex}
                     onClick={() => toggleTile(rowIndex, tileIndex)}
                     disabled={row.guess.length <= tileIndex}
-                    className={`w-12 h-14 sm:w-16 sm:h-16 rounded-xl border-2 border-slate-400 flex items-center justify-center transition-all ${row.guess.length > tileIndex ? colorClasses[state] : 'bg-slate-100 opacity-50'} shadow-[0_4px_0_rgba(0,0,0,0.1)] active:translate-y-1 active:shadow-none`}
+                    className={`h-14 w-full min-w-0 rounded-xl border-2 border-slate-400 flex items-center justify-center transition-all sm:h-16 ${row.guess.length > tileIndex ? colorClasses[state] : 'bg-slate-100 opacity-50'} shadow-[0_4px_0_rgba(0,0,0,0.1)] active:translate-y-1 active:shadow-none`}
                   >
                     <span className="text-white text-xl font-black uppercase">
                       {row.guess[tileIndex] || ''}

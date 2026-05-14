@@ -18,14 +18,14 @@ export default function FiveLetterWordsMockup() {
             <label className="block text-2xl font-bold text-slate-900">
               Pattern (use _ for blanks)
             </label>
-            <div className="flex gap-2 sm:gap-4 justify-start">
+            <div className="grid grid-cols-5 gap-2 sm:gap-4">
               {['_', 'R', 'A', '_', 'E'].map((letter, i) => (
                 <input 
                   key={i}
                   type="text" 
                   maxLength={1}
                   defaultValue={letter !== '_' ? letter : ''}
-                  className="w-14 h-16 sm:w-20 sm:h-20 text-3xl sm:text-4xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase"
+                  className="h-16 w-full min-w-0 text-3xl font-extrabold text-center border-2 border-slate-300 rounded-xl focus:border-blue-700 focus:outline-none uppercase sm:h-20 sm:text-4xl"
                 />
               ))}
             </div>

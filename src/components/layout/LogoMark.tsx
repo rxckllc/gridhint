@@ -5,8 +5,9 @@ interface LogoMarkProps {
 }
 
 export function LogoMark({ size = "md" }: LogoMarkProps) {
-  const svgSize = size === "sm" ? 40 : 72;
-  const textClass = size === "sm" ? "text-2xl" : "text-5xl";
+  const svgSize = size === "sm" ? 40 : 56;
+  const svgClass = size === "sm" ? "h-10 w-10" : "h-14 w-14 sm:h-16 sm:w-16 md:h-[72px] md:w-[72px]";
+  const textClass = size === "sm" ? "text-2xl" : "text-3xl sm:text-4xl md:text-5xl";
 
   return (
     <Link
@@ -21,7 +22,7 @@ export function LogoMark({ size = "md" }: LogoMarkProps) {
         role="img"
         aria-hidden="true"
         focusable="false"
-        className="shrink-0"
+        className={`${svgClass} shrink-0`}
       >
         {/* Row 1 — navy */}
         <rect x="0"   y="0"   width="7" height="7" rx="1.6" fill="#1E2D4A" />
