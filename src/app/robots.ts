@@ -2,6 +2,16 @@ import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';
 
+const aiCrawlers = [
+  'GPTBot',
+  'ClaudeBot',
+  'PerplexityBot',
+  'Google-Extended',
+  'CCBot',
+  'ChatGPT-User',
+  'OAI-SearchBot',
+];
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -11,6 +21,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
       },
+      ...aiCrawlers.map((userAgent) => ({
+        userAgent,
+        allow: '/',
+      })),
       // Block SEO-tool scrapers that consume bandwidth without providing value.
       // These bots scrape competitive intelligence — we don't need them indexed.
       {
