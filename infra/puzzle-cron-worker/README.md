@@ -49,7 +49,7 @@ Worker vars in `wrangler.toml`:
 Worker secrets:
 
 - `GITHUB_TOKEN`: fine-grained PAT for dispatching GridHint workflows.
-- `MANUAL_TRIGGER_TOKEN`: optional shared secret for `/trigger`.
+- `MANUAL_TRIGGER_TOKEN`: shared secret required for `/trigger`.
 
 ## Fine-Grained PAT
 
@@ -68,7 +68,7 @@ cd infra/puzzle-cron-worker
 npx wrangler secret put GITHUB_TOKEN
 ```
 
-If using the manual HTTP endpoint, also store:
+Also store a manual trigger token:
 
 ```bash
 npx wrangler secret put MANUAL_TRIGGER_TOKEN
@@ -164,4 +164,3 @@ After deploy:
 2. Fire `POST /trigger?game=wordle`.
 3. Confirm a `Daily Puzzle Update` run starts in `rxckllc/gridhint`.
 4. Confirm the run exits `already fresh` or completes the refresh path.
-

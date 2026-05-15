@@ -181,10 +181,8 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
 }
 
 function authorizeManualRequest(request: Request, env: Env, url: URL): Response | null {
-  // Leave manual triggering open only if no token is configured. Production
-  // should set MANUAL_TRIGGER_TOKEN and use the Authorization header.
   if (!env.MANUAL_TRIGGER_TOKEN) {
-    return null;
+    return jsonResponse({ ok: false, error: "manual_trigger_token_not_configured" }, 503);
   }
 
   const authorization = request.headers.get("Authorization") || "";
