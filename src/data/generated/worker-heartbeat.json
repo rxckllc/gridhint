@@ -1,24 +1,33 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-15T21:34:36.465Z",
+  "updatedAt": "2026-05-15T21:39:16.706Z",
   "timeZone": "America/New_York",
-  "githubPatExpires": "2026-06-14",
+  "githubPatExpires": "2026-05-20",
   "summaryDispatchEt": "07:45",
   "dispatches": {
     "wordle": {
       "target": "wordle",
       "workflowId": "daily-puzzle.yml",
-      "lastAttemptAt": "2026-05-15T21:22:49.361Z",
+      "lastAttemptAt": "2026-05-15T21:39:16.451Z",
       "lastAttemptEtDate": "2026-05-15",
       "lastSource": "manual",
       "lastStatus": 204,
       "lastMessage": "workflow_dispatch accepted by GitHub",
-      "lastSuccessfulDispatchAt": "2026-05-15T21:22:49.361Z",
+      "lastSuccessfulDispatchAt": "2026-05-15T21:39:16.451Z",
       "lastSuccessfulDispatchEtDate": "2026-05-15",
       "lastSuccessfulStatus": 204,
       "history": [
         {
           "at": "2026-05-15T21:22:49.361Z",
+          "etDate": "2026-05-15",
+          "source": "manual",
+          "ok": true,
+          "status": 204,
+          "workflowId": "daily-puzzle.yml",
+          "message": "workflow_dispatch accepted by GitHub"
+        },
+        {
+          "at": "2026-05-15T21:39:16.451Z",
           "etDate": "2026-05-15",
           "source": "manual",
           "ok": true,
