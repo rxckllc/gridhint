@@ -1,4 +1,5 @@
 name = "gridhint-puzzle-cron-worker"
+account_id = "04b7cf27f4ece0ebeb36a2c9572e4848"
 main = "src/index.ts"
 compatibility_date = "2026-05-15"
 workers_dev = true
