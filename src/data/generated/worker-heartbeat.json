@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-15T21:34:35.388Z",
+  "updatedAt": "2026-05-15T21:34:36.465Z",
   "timeZone": "America/New_York",
   "githubPatExpires": "2026-06-14",
   "summaryDispatchEt": "07:45",
@@ -42,6 +42,29 @@
       "history": [
         {
           "at": "2026-05-15T21:34:35.021Z",
+          "etDate": "2026-05-15",
+          "source": "manual",
+          "ok": true,
+          "status": 204,
+          "workflowId": "daily-puzzle.yml",
+          "message": "workflow_dispatch accepted by GitHub"
+        }
+      ]
+    },
+    "connections": {
+      "target": "connections",
+      "workflowId": "daily-puzzle.yml",
+      "lastAttemptAt": "2026-05-15T21:34:36.267Z",
+      "lastAttemptEtDate": "2026-05-15",
+      "lastSource": "manual",
+      "lastStatus": 204,
+      "lastMessage": "workflow_dispatch accepted by GitHub",
+      "lastSuccessfulDispatchAt": "2026-05-15T21:34:36.267Z",
+      "lastSuccessfulDispatchEtDate": "2026-05-15",
+      "lastSuccessfulStatus": 204,
+      "history": [
+        {
+          "at": "2026-05-15T21:34:36.267Z",
           "etDate": "2026-05-15",
           "source": "manual",
           "ok": true,
