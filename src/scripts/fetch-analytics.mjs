@@ -10,6 +10,72 @@ const PROPERTY_ID = process.env.GA4_PROPERTY_ID;
 const OUTPUT_DIR = path.join(__dirname, '../data');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'dashboard.json');
 
+function parseJson(value) {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+}
+
+function maybeDecodeBase64(value) {
+    const normalized = value.trim().replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    if (!normalized || normalized.length % 4 === 1 || !/^[A-Za-z0-9+/=]+$/.test(normalized)) {
+        return null;
+    }
+
+    try {
+        const decoded = Buffer.from(normalized, 'base64').toString('utf8').trim();
+        return decoded.startsWith('{') || decoded.startsWith('"') ? decoded : null;
+    } catch {
+        return null;
+    }
+}
+
+function repairPrivateKeyNewlines(value) {
+    return value.replace(/("private_key"\s*:\s*")([\s\S]*?)("\s*(?:,|}))/m, (_match, prefix, key, suffix) => {
+        const normalizedKey = key
+            .replace(/\\r\\n/g, '\n')
+            .replace(/\\n/g, '\n')
+            .replace(/\\(?=\r?\n)/g, '')
+            .replace(/\r?\n/g, '\n');
+
+        return `${prefix.slice(0, -1)}${JSON.stringify(normalizedKey)}${suffix.slice(1)}`;
+    });
+}
+
+function parseServiceAccountCredentials(rawValue) {
+    const raw = rawValue.trim();
+    const candidates = [{ label: 'raw JSON', value: raw }];
+
+    const unwrapped = parseJson(raw);
+    if (typeof unwrapped === 'string') {
+        candidates.push({ label: 'JSON string', value: unwrapped.trim() });
+    }
+
+    const decoded = maybeDecodeBase64(raw);
+    if (decoded) {
+        candidates.push({ label: 'base64 JSON', value: decoded });
+    }
+
+    for (const candidate of candidates) {
+        const parsed = parseJson(candidate.value);
+        if (parsed && typeof parsed === 'object') {
+            return { credentials: parsed, source: candidate.label };
+        }
+
+        const repaired = repairPrivateKeyNewlines(candidate.value);
+        if (repaired !== candidate.value) {
+            const repairedParsed = parseJson(repaired);
+            if (repairedParsed && typeof repairedParsed === 'object') {
+                return { credentials: repairedParsed, source: `${candidate.label} with repaired private_key newlines` };
+            }
+        }
+    }
+
+    throw new Error('GA4_SERVICE_ACCOUNT_KEY must be valid service account JSON or base64-encoded JSON.');
+}
+
 async function main() {
     if (!PROPERTY_ID) {
         if (process.env.CI) {
@@ -24,10 +90,11 @@ async function main() {
     if (process.env.GA4_SERVICE_ACCOUNT_KEY) {
         try {
             console.log('Parsing GA4_SERVICE_ACCOUNT_KEY...');
-            clientOpts.credentials = JSON.parse(process.env.GA4_SERVICE_ACCOUNT_KEY);
-            console.log(`GA4 client configured for: ${clientOpts.credentials.client_email}`);
+            const { credentials, source } = parseServiceAccountCredentials(process.env.GA4_SERVICE_ACCOUNT_KEY);
+            clientOpts.credentials = credentials;
+            console.log(`GA4 client configured for: ${clientOpts.credentials.client_email} (${source})`);
         } catch (e) {
-            console.error('Failed to parse GA4_SERVICE_ACCOUNT_KEY JSON:', e);
+            console.error('Failed to parse GA4_SERVICE_ACCOUNT_KEY:', e.message);
             if (process.env.CI) throw e;
             generateMockData();
             return;
