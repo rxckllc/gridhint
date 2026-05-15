@@ -1,6 +1,9 @@
 name = "gridhint-puzzle-cron-worker"
 main = "src/index.ts"
 compatibility_date = "2026-05-15"
+routes = [
+  { pattern = "gridhint.com/puzzle-cron-worker/*", zone_name = "gridhint.com" }
+]
 
 [triggers]
 crons = [

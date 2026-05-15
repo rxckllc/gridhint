@@ -2,7 +2,9 @@
 
 Cloudflare Worker scheduler for GridHint daily puzzle refreshes. The Worker is the only cron layer. GitHub Actions keeps `workflow_dispatch` for manual runs and for Worker API dispatches, but GitHub schedule cron is intentionally not used.
 
-Do not add a deployed Worker URL here until one exists.
+Configured route after deployment:
+
+- `https://gridhint.com/puzzle-cron-worker/*`
 
 ## Trigger Flow
 
@@ -37,6 +39,7 @@ DST dates to remember:
 
 Worker vars in `wrangler.toml`:
 
+- `routes`: `gridhint.com/puzzle-cron-worker/*`
 - `GITHUB_OWNER=rxckllc`
 - `GITHUB_REPO=gridhint`
 - `GITHUB_REF=main`
