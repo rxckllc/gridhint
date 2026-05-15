@@ -1,4 +1,5 @@
 name: Daily Puzzle Update
+run-name: Daily Puzzle (${{ github.event.inputs.game || 'all' }})
 
 # Cloudflare Worker Cron is the only scheduler for this workflow.
 # Keep workflow_dispatch so each game can still be fired manually from GitHub UI

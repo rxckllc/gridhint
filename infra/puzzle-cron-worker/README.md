@@ -9,31 +9,28 @@ Configured URL after deployment:
 ## Trigger Flow
 
 1. Cloudflare Cron Trigger fires this Worker on the configured UTC schedule.
-2. For puzzle ticks, the Worker checks each game's UTC window and dispatches `.github/workflows/daily-puzzle.yml` with the matching `game` input.
+2. For puzzle ticks, the Worker checks each game's America/New_York window and dispatches `.github/workflows/daily-puzzle.yml` with the matching `game` input.
 3. GitHub Actions runs the import script, validates generated files, commits changed puzzle data, pushes to `main`, waits for fresh public content, pings IndexNow, and commits `src/data/generated/<game>/indexnow-status.json`.
 4. The repository push triggers the site deploy.
-5. At the daily summary tick, the Worker dispatches `.github/workflows/daily-puzzle-summary.yml` for one combined puzzle + IndexNow email.
+5. After each dispatch, the Worker writes `src/data/generated/worker-heartbeat.json` with last successful dispatch times, PAT expiry metadata, and recent dispatch history.
+6. At the daily summary tick, the Worker dispatches `.github/workflows/daily-puzzle-summary.yml` for one combined system health + puzzle + IndexNow email.
 
-## Current UTC Schedule
+## Current Cron Schedule
 
-These expressions are for Eastern daylight time, UTC-4.
+Cloudflare cron is UTC, but the Worker filters in `America/New_York`. DST does not require cron edits.
 
-Puzzle ticks use minute offsets `05`, `25`, `45` and never `00`.
+Current expression:
 
-- Connections and Wordle, 12:05 AM-2:05 AM ET: `5,25,45 4-5 * * *` and `5 6 * * *`
-- Spelling Bee, 3:05 AM-6:05 AM ET: `5,25,45 7-9 * * *` and `5 10 * * *`
-- Daily summary email, 7:30 AM ET: `30 11 * * *`
+- `5,25,45 4-12 * * *`
 
-Cloudflare cron is UTC. When Eastern time switches to standard time, move these one hour later in UTC:
+The Worker dispatches only during these ET windows:
 
-- Connections and Wordle: `5,25,45 5-6 * * *` and `5 7 * * *`
-- Spelling Bee: `5,25,45 8-10 * * *` and `5 11 * * *`
-- Daily summary email: `30 12 * * *`
+- Connections: `00:05-02:05`
+- Wordle: `00:05-02:05`
+- Spelling Bee: `03:05-06:05`
+- Summary email: `07:45`
 
-DST dates to remember:
-
-- 2026 daylight saving starts March 8, 2026 and ends November 1, 2026.
-- 2027 daylight saving starts March 14, 2027 and ends November 7, 2027.
+The cron includes the 12 UTC hour so the 7:45 AM ET summary still fires during standard time.
 
 ## Required Configuration
 
@@ -45,13 +42,16 @@ Worker vars in `wrangler.toml`:
 - `GITHUB_REF=main`
 - `GITHUB_WORKFLOW_ID=daily-puzzle.yml`
 - `SUMMARY_WORKFLOW_ID=daily-puzzle-summary.yml`
-- `CONNECTIONS_WINDOW_UTC=04:05-06:05`
-- `WORDLE_WINDOW_UTC=04:05-06:05`
-- `SPELLING_BEE_WINDOW_UTC=07:05-10:05`
+- `GITHUB_PAT_EXPIRES=2026-06-14`
+- `HEARTBEAT_PATH=src/data/generated/worker-heartbeat.json`
+- `CONNECTIONS_WINDOW_ET=00:05-02:05`
+- `WORDLE_WINDOW_ET=00:05-02:05`
+- `SPELLING_BEE_WINDOW_ET=03:05-06:05`
+- `SUMMARY_DISPATCH_ET=07:45`
 
 Worker secrets:
 
-- `GITHUB_TOKEN`: fine-grained PAT for dispatching GridHint workflows.
+- `GITHUB_TOKEN`: fine-grained PAT for dispatching GridHint workflows and writing the heartbeat file.
 - `MANUAL_TRIGGER_TOKEN`: shared secret required for `/trigger`.
 
 ## Fine-Grained PAT
@@ -62,7 +62,7 @@ Create the PAT in the browser. Do not use a classic broad token.
 2. Generate new token.
 3. Resource owner: `rxckllc`.
 4. Repository access: Only select repositories -> `gridhint`.
-5. Repository permissions: set `Actions` to `Read and write`. Leave unrelated permissions at `No access`.
+5. Repository permissions: set `Actions` to `Read and write` and `Contents` to `Read and write`. Leave unrelated permissions at `No access`.
 6. Choose an expiration and generate the token.
 7. Store it in Cloudflare:
 
@@ -77,7 +77,7 @@ Also store a manual trigger token:
 npx wrangler secret put MANUAL_TRIGGER_TOKEN
 ```
 
-Rotate before expiry by putting the new secret, testing one manual dispatch, then revoking the old token in GitHub.
+Rotate before expiry by putting the new secret, updating `GITHUB_PAT_EXPIRES`, testing one manual dispatch, then revoking the old token in GitHub.
 
 ## Retry Behavior
 
@@ -127,6 +127,12 @@ IndexNow:
 
 The IndexNow status file contains `timestamp`, `overall`, `submittedUrls`, per-endpoint HTTP results, and consecutive endpoint failure counts used by the daily summary email.
 
+Worker heartbeat:
+
+- `src/data/generated/worker-heartbeat.json`
+
+The heartbeat file contains `githubPatExpires`, the ET summary dispatch time, and per-target last attempt / last successful dispatch timestamps. The daily summary uses it to report PAT expiration and whether the Worker dispatched each game today.
+
 Cooldown:
 
 - `.gridhint-cooldown.json` appears when NYT returns 403 or 429.
@@ -145,6 +151,7 @@ GitHub side:
 - Confirm the Worker received HTTP `204` from workflow dispatch.
 - Check the `Daily Puzzle Update` run input.
 - Check import logs for `already fresh`, `not posted yet`, or real errors.
+- Check `src/data/generated/worker-heartbeat.json` for the last successful Worker dispatch per game.
 - Check the commit step for `pushed=true`.
 - Check `Ping IndexNow` and `Commit IndexNow status`.
 - Check the `Daily Puzzle Summary Email` run after 7:30 AM ET.
@@ -166,4 +173,5 @@ After deploy:
 1. Tail logs with `npx wrangler tail`.
 2. Fire `POST /trigger?game=wordle`.
 3. Confirm a `Daily Puzzle Update` run starts in `rxckllc/gridhint`.
-4. Confirm the run exits `already fresh` or completes the refresh path.
+4. Confirm `src/data/generated/worker-heartbeat.json` updates.
+5. Confirm the run exits `already fresh` or completes the refresh path.

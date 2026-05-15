@@ -26,7 +26,8 @@ The daily data path is:
 2. The Worker dispatches `.github/workflows/daily-puzzle.yml` with `game=connections`, `game=wordle`, or `game=spelling-bee`.
 3. The workflow runs the matching import script, validates generated files, commits changes under `src/data/generated/`, rebases, pushes to `main`, and pings IndexNow only when content changed.
 4. IndexNow results are committed to `src/data/generated/<game>/indexnow-status.json`.
-5. The Worker dispatches `.github/workflows/daily-puzzle-summary.yml` once daily for the combined puzzle + IndexNow email.
+5. The Worker writes `src/data/generated/worker-heartbeat.json` after dispatches so the email can confirm the cron pipeline actually fired.
+6. The Worker dispatches `.github/workflows/daily-puzzle-summary.yml` once daily for the combined system health + puzzle + IndexNow email.
 
 Manual fire path:
 
@@ -48,5 +49,6 @@ Retry behavior:
 - If NYT returns 404, the import logs `not posted yet, will retry next tick` and exits successfully. The next Worker tick tries again.
 - Network, parse, Gemini, and validation errors fail the workflow and surface in the daily summary when the puzzle is still missing or invalid.
 - IndexNow is soft-fail for the refresh workflow but records per-endpoint status for Bing, Yandex, Seznam, Naver, and Yep.
+- The daily summary starts with System Health: GitHub PAT expiry, Worker heartbeat/workflow-run checks, and DST-safe cron status.
 
-The Cloudflare Worker runbook for the external scheduler, including trigger flow, debugging, fine-grained PAT rotation, DST dates for 2026 and 2027, retries, manual firing, status files, and deploy/test steps, is in [infra/puzzle-cron-worker/README.md](infra/puzzle-cron-worker/README.md).
+The Cloudflare Worker runbook for the external scheduler, including trigger flow, debugging, fine-grained PAT rotation, DST-safe ET filtering, retries, manual firing, status files, and deploy/test steps, is in [infra/puzzle-cron-worker/README.md](infra/puzzle-cron-worker/README.md).

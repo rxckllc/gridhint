@@ -12,8 +12,13 @@ const SMTP_USER = process.env.REPORT_SMTP_USER;
 const SMTP_PASS = process.env.REPORT_SMTP_PASS;
 const REPORT_RECEIVER = process.env.REPORT_RECEIVER || 'bernicetsai@yahoo.com';
 const DRY_RUN = process.argv.includes('--dry-run');
+const HTML_OUT = process.env.SUMMARY_HTML_OUT || '';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'rxckllc/gridhint';
+const PUZZLE_WORKFLOW_ID = process.env.PUZZLE_WORKFLOW_ID || 'daily-puzzle.yml';
 
 const GENERATED_ROOT = path.join(__dirname, '../data/generated');
+const WORKER_HEARTBEAT_PATH = path.join(GENERATED_ROOT, 'worker-heartbeat.json');
 
 const GAMES = [
   {
@@ -63,6 +68,38 @@ function todayInNewYork() {
 }
 
 const TARGET_DATE = process.env.SUMMARY_DATE || todayInNewYork();
+
+function dateInNewYork(date) {
+  const value = date instanceof Date ? date : new Date(date);
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(value);
+  const byType = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${byType.year}-${byType.month}-${byType.day}`;
+}
+
+function parseDateOnly(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ''));
+  if (!match) return null;
+  return Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function daysUntil(expirationDate, fromDate) {
+  const expires = parseDateOnly(expirationDate);
+  const from = parseDateOnly(fromDate);
+  if (expires === null || from === null) return null;
+  return Math.ceil((expires - from) / 86400000);
+}
+
+function isWithinLastHours(isoValue, hours) {
+  if (!isoValue) return false;
+  const timestamp = Date.parse(isoValue);
+  if (Number.isNaN(timestamp)) return false;
+  return Date.now() - timestamp <= hours * 60 * 60 * 1000;
+}
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -215,7 +252,205 @@ function checkIndexNow(game) {
   }
 }
 
-function subjectFor(rows) {
+function readWorkerHeartbeat() {
+  if (!fs.existsSync(WORKER_HEARTBEAT_PATH)) {
+    return {
+      status: 'MISSING',
+      notes: [`Missing ${relative(WORKER_HEARTBEAT_PATH)}`],
+      data: null,
+    };
+  }
+
+  try {
+    return { status: 'OK', notes: [], data: readJson(WORKER_HEARTBEAT_PATH) };
+  } catch (err) {
+    return {
+      status: 'ERROR',
+      notes: [`Could not parse ${relative(WORKER_HEARTBEAT_PATH)}: ${err.message}`],
+      data: null,
+    };
+  }
+}
+
+async function fetchWorkflowRuns() {
+  if (!GITHUB_TOKEN) {
+    return {
+      status: 'UNKNOWN',
+      notes: ['GITHUB_TOKEN is unavailable; workflow run checks skipped'],
+      runs: [],
+    };
+  }
+
+  const url = `https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/${PUZZLE_WORKFLOW_ID}/runs?event=workflow_dispatch&per_page=100`;
+  const response = await fetch(url, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      'User-Agent': 'gridhint-daily-puzzle-summary',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  const body = await response.text();
+  if (!response.ok) {
+    return {
+      status: 'ERROR',
+      notes: [`GitHub workflow run check failed: HTTP ${response.status} ${body.slice(0, 240)}`],
+      runs: [],
+    };
+  }
+
+  const payload = JSON.parse(body);
+  return {
+    status: 'OK',
+    notes: [],
+    runs: Array.isArray(payload.workflow_runs) ? payload.workflow_runs : [],
+  };
+}
+
+function workflowRunMatchesGame(run, game) {
+  const title = `${run.display_title || ''} ${run.name || ''}`.toLowerCase();
+  return title.includes(`(${game.key})`) || title.includes('(all)');
+}
+
+function buildWorkflowHealth(workflowRuns) {
+  const todayRuns = workflowRuns.runs.filter((run) => dateInNewYork(run.created_at) === TARGET_DATE);
+  const byGame = Object.fromEntries(GAMES.map((game) => {
+    const matches = todayRuns.filter((run) => workflowRunMatchesGame(run, game));
+    const latest = matches.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0] || null;
+    return [game.key, {
+      status: latest ? 'OK' : 'MISSING',
+      lastRunAt: latest?.created_at || '',
+      conclusion: latest?.conclusion || latest?.status || '',
+      url: latest?.html_url || '',
+    }];
+  }));
+
+  return {
+    status: workflowRuns.status,
+    notes: workflowRuns.notes,
+    byGame,
+  };
+}
+
+function buildPatHealth(heartbeat) {
+  const expirationDate = process.env.GITHUB_PAT_EXPIRES || heartbeat?.githubPatExpires || heartbeat?.patExpires || '';
+  const remainingDays = daysUntil(expirationDate, TARGET_DATE);
+
+  if (!expirationDate || remainingDays === null) {
+    return {
+      status: 'UNKNOWN',
+      color: 'YELLOW',
+      subject: null,
+      message: 'GitHub PAT: expiration date unknown',
+      detail: 'Set GITHUB_PAT_EXPIRES in the Worker vars.',
+      remainingDays: null,
+      expirationDate,
+    };
+  }
+
+  if (remainingDays < 0) {
+    return {
+      status: 'EXPIRED',
+      color: 'RED',
+      subject: 'PAT EXPIRED - puzzle refresh broken',
+      message: 'GitHub PAT: expired',
+      detail: `Expiration date: ${expirationDate}`,
+      remainingDays,
+      expirationDate,
+    };
+  }
+
+  if (remainingDays < 7) {
+    return {
+      status: 'URGENT',
+      color: 'RED',
+      subject: `URGENT: PAT expires in ${remainingDays} days`,
+      message: `GitHub PAT: expires in ${remainingDays} days`,
+      detail: `Expiration date: ${expirationDate}`,
+      remainingDays,
+      expirationDate,
+    };
+  }
+
+  if (remainingDays < 30) {
+    return {
+      status: 'WARNING',
+      color: 'YELLOW',
+      subject: `PAT expires in ${remainingDays} days`,
+      message: `GitHub PAT: expires in ${remainingDays} days`,
+      detail: `Expiration date: ${expirationDate}`,
+      remainingDays,
+      expirationDate,
+    };
+  }
+
+  return {
+    status: 'OK',
+    color: 'GREEN',
+    subject: null,
+    message: `GitHub PAT: expires in ${remainingDays} days`,
+    detail: `Expiration date: ${expirationDate}`,
+    remainingDays,
+    expirationDate,
+  };
+}
+
+function buildCronHealth(heartbeatState, workflowHealth) {
+  const heartbeat = heartbeatState.data;
+  const dispatches = heartbeat?.dispatches || {};
+  const dispatchByGame = Object.fromEntries(GAMES.map((game) => {
+    const entry = dispatches[game.key] || {};
+    const okToday = entry.lastSuccessfulDispatchEtDate === TARGET_DATE;
+    return [game.key, {
+      status: okToday ? 'OK' : 'MISSING',
+      lastDispatchAt: entry.lastSuccessfulDispatchAt || '',
+      message: entry.lastMessage || '',
+    }];
+  }));
+
+  const successfulDispatchTimes = Object.values(dispatches)
+    .map((entry) => entry?.lastSuccessfulDispatchAt)
+    .filter(Boolean);
+  const silent24h = successfulDispatchTimes.length === 0
+    || !successfulDispatchTimes.some((value) => isWithinLastHours(value, 24));
+  const missingDispatches = Object.values(dispatchByGame).some((entry) => entry.status !== 'OK');
+  const missingRuns = Object.values(workflowHealth.byGame || {}).some((entry) => entry.status !== 'OK');
+  const status = silent24h ? 'SILENT' : (missingDispatches || missingRuns || heartbeatState.status !== 'OK' || workflowHealth.status === 'ERROR' ? 'WARNING' : 'OK');
+
+  return {
+    status,
+    color: status === 'OK' ? 'GREEN' : (silent24h ? 'RED' : 'YELLOW'),
+    subject: silent24h ? 'URGENT: Cron pipeline silent for 24h' : null,
+    dispatchByGame,
+    workflowByGame: workflowHealth.byGame,
+    silent24h,
+    notes: [...heartbeatState.notes, ...workflowHealth.notes],
+  };
+}
+
+function buildDstHealth() {
+  return {
+    status: 'OK',
+    color: 'GREEN',
+    message: 'DST: automatic America/New_York filtering active',
+    detail: 'Cloudflare cron fires a wide UTC window; the Worker filters real ET puzzle windows.',
+  };
+}
+
+function buildSystemHealth(heartbeatState, workflowHealth) {
+  const heartbeat = heartbeatState.data || {};
+  return {
+    pat: buildPatHealth(heartbeat),
+    cron: buildCronHealth(heartbeatState, workflowHealth),
+    dst: buildDstHealth(),
+  };
+}
+
+function subjectFor(rows, systemHealth) {
+  if (systemHealth.pat.status === 'EXPIRED') return systemHealth.pat.subject;
+  if (systemHealth.pat.status === 'URGENT') return systemHealth.pat.subject;
+  if (systemHealth.cron.silent24h) return systemHealth.cron.subject;
+
   const puzzleProblem = rows.find((row) => row.puzzle.status === 'MISSING' || row.puzzle.status === 'ERROR');
   if (puzzleProblem) return `GridHint daily: ${puzzleProblem.label} ${puzzleProblem.puzzle.status}`;
 
@@ -228,8 +463,7 @@ function subjectFor(rows) {
     return `GridHint daily: ${repeated.label} ${first.endpoint} IndexNow failed ${first.days} days`;
   }
 
-  const notAttempted = rows.find((row) => row.indexNow.status === 'NOT_ATTEMPTED');
-  if (notAttempted) return `GridHint daily: ${notAttempted.label} IndexNow not attempted`;
+  if (systemHealth.pat.status === 'WARNING') return systemHealth.pat.subject;
 
   return 'GridHint daily: all OK';
 }
@@ -260,6 +494,55 @@ function statusPill(status) {
   return `<span style="display:inline-block; min-width:92px; text-align:center; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700; color:${statusColor(status)}; background:${statusBackground(status)};">${escapeHtml(status)}</span>`;
 }
 
+function healthColors(color) {
+  return {
+    GREEN: { border: '#86efac', background: '#f0fdf4', text: '#166534' },
+    YELLOW: { border: '#facc15', background: '#fefce8', text: '#854d0e' },
+    RED: { border: '#fca5a5', background: '#fef2f2', text: '#991b1b' },
+  }[color] || { border: '#cbd5e1', background: '#f8fafc', text: '#334155' };
+}
+
+function renderHealthRow(label, color, message, detail) {
+  const colors = healthColors(color);
+  return `
+    <tr>
+      <td style="padding:10px 12px; border-top:1px solid #e2e8f0; font-weight:700;">${escapeHtml(label)}</td>
+      <td style="padding:10px 12px; border-top:1px solid #e2e8f0;">
+        <span style="display:inline-block; min-width:72px; text-align:center; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700; color:${colors.text}; background:${colors.background}; border:1px solid ${colors.border};">${escapeHtml(color)}</span>
+      </td>
+      <td style="padding:10px 12px; border-top:1px solid #e2e8f0;">${escapeHtml(message)}<br><span style="color:#64748b;">${escapeHtml(detail)}</span></td>
+    </tr>
+  `;
+}
+
+function summarizeGameMap(prefix, byGame) {
+  const parts = GAMES.map((game) => `${game.key} ${byGame?.[game.key]?.status || 'UNKNOWN'}`);
+  return `${prefix}: ${parts.join(', ')}`;
+}
+
+function renderSystemHealth(systemHealth) {
+  const cronDetail = [
+    summarizeGameMap('Worker dispatches today', systemHealth.cron.dispatchByGame),
+    summarizeGameMap('Workflow runs today', systemHealth.cron.workflowByGame),
+    ...systemHealth.cron.notes,
+  ].filter(Boolean).join(' | ');
+
+  return `
+    <div style="margin:0 0 18px; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden;">
+      <div style="padding:12px 14px; background:#ecfeff; border-bottom:1px solid #e2e8f0;">
+        <h2 style="margin:0; font-size:18px; color:#164e63;">System Health</h2>
+      </div>
+      <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-size:14px;">
+        <tbody>
+          ${renderHealthRow('GitHub PAT', systemHealth.pat.color, systemHealth.pat.message, systemHealth.pat.detail)}
+          ${renderHealthRow('Cron pipeline', systemHealth.cron.color, systemHealth.cron.silent24h ? 'Cron pipeline silent for 24h' : 'Cron pipeline heartbeat active', cronDetail)}
+          ${renderHealthRow('DST', systemHealth.dst.color, systemHealth.dst.message, systemHealth.dst.detail)}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 function renderList(items, empty = 'None') {
   const clean = [...new Set(items.filter(Boolean))];
   if (!clean.length) return `<span style="color:#64748b;">${escapeHtml(empty)}</span>`;
@@ -275,7 +558,7 @@ function renderEndpointSummary(endpoints) {
   }).join('')}</ul>`;
 }
 
-function buildHtml(rows, subject) {
+function buildHtml(rows, subject, systemHealth) {
   const tableRows = rows.map((row) => {
     const lastAttempt = row.indexNow.lastAttempt || row.puzzle.lastAttempt || 'unknown';
     const notes = [
@@ -304,6 +587,7 @@ function buildHtml(rows, subject) {
         <p style="color:#cbd5e1; margin:6px 0 0; font-size:14px;">${escapeHtml(TARGET_DATE)} - ${escapeHtml(subject)}</p>
       </div>
       <div style="padding:24px; border:1px solid #e2e8f0; border-top:none; background:#f8fafc; border-radius:0 0 12px 12px;">
+        ${renderSystemHealth(systemHealth)}
         <table role="presentation" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; font-size:14px;">
           <thead>
             <tr style="background:#eef2ff; color:#334155; text-align:left;">
@@ -333,12 +617,25 @@ async function sendSummary() {
     puzzle: checkGeneratedPuzzle(game),
     indexNow: checkIndexNow(game),
   }));
-  const subject = subjectFor(rows);
-  const html = buildHtml(rows, subject);
+  const heartbeatState = readWorkerHeartbeat();
+  const workflowRuns = await fetchWorkflowRuns();
+  const workflowHealth = buildWorkflowHealth(workflowRuns);
+  const systemHealth = buildSystemHealth(heartbeatState, workflowHealth);
+  const subject = subjectFor(rows, systemHealth);
+  const html = buildHtml(rows, subject, systemHealth);
 
   console.log(`[daily-puzzle-summary] date=${TARGET_DATE} subject="${subject}"`);
+  console.log(`[daily-puzzle-summary] system: pat=${systemHealth.pat.status} cron=${systemHealth.cron.status} dst=${systemHealth.dst.status}`);
+  console.log(`[daily-puzzle-summary] ${summarizeGameMap('worker-dispatches', systemHealth.cron.dispatchByGame)}`);
+  console.log(`[daily-puzzle-summary] ${summarizeGameMap('workflow-runs', systemHealth.cron.workflowByGame)}`);
   for (const row of rows) {
     console.log(`[daily-puzzle-summary] ${row.key}: puzzle=${row.puzzle.status} indexnow=${row.indexNow.status}`);
+  }
+
+  if (HTML_OUT) {
+    fs.mkdirSync(path.dirname(HTML_OUT), { recursive: true });
+    fs.writeFileSync(HTML_OUT, html, 'utf8');
+    console.log(`[daily-puzzle-summary] wrote HTML preview to ${HTML_OUT}`);
   }
 
   if (DRY_RUN) {

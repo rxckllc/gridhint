@@ -6,11 +6,7 @@ workers_dev = true
 
 [triggers]
 crons = [
-  "5,25,45 4-5 * * *",
-  "5 6 * * *",
-  "5,25,45 7-9 * * *",
-  "5 10 * * *",
-  "30 11 * * *"
+  "5,25,45 4-12 * * *"
 ]
 
 [vars]
@@ -19,9 +15,12 @@ GITHUB_REPO = "gridhint"
 GITHUB_REF = "main"
 GITHUB_WORKFLOW_ID = "daily-puzzle.yml"
 SUMMARY_WORKFLOW_ID = "daily-puzzle-summary.yml"
+GITHUB_PAT_EXPIRES = "2026-06-14"
+HEARTBEAT_PATH = "src/data/generated/worker-heartbeat.json"
 
-# UTC windows. The Worker checks each game independently on every
-# 05/25/45 cron tick and dispatches only games whose window is active.
-CONNECTIONS_WINDOW_UTC = "04:05-06:05"
-WORDLE_WINDOW_UTC = "04:05-06:05"
-SPELLING_BEE_WINDOW_UTC = "07:05-10:05"
+# ET windows. The cron fires over a wide UTC range year-round and the Worker
+# filters in America/New_York, so DST does not require cron edits.
+CONNECTIONS_WINDOW_ET = "00:05-02:05"
+WORDLE_WINDOW_ET = "00:05-02:05"
+SPELLING_BEE_WINDOW_ET = "03:05-06:05"
+SUMMARY_DISPATCH_ET = "07:45"
