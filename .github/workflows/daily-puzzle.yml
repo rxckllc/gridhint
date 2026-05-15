@@ -24,11 +24,11 @@ on:
           - wordle
           - spelling-bee
 
-# Prevent concurrent runs of this workflow from racing on git push.
-# Default behavior queues subsequent runs until the active one finishes,
-# which makes the staggered crons safe even if any of them runs long.
+# GitHub keeps at most one pending run per concurrency group. Include the
+# schedule expression or manual input so a delayed run for one game cannot
+# cancel the next game's pending refresh.
 concurrency:
-  group: daily-puzzle
+  group: daily-puzzle-${{ github.event.schedule || github.event.inputs.game || github.run_id }}
   cancel-in-progress: false
 
 jobs:
@@ -119,9 +119,17 @@ jobs:
           # Rebase onto latest origin in case a prior run pushed during ours.
           # No `|| true` — if rebase has conflicts, fail the step loud rather
           # than push a state that overwrites the upstream commit.
-          git pull --rebase origin main
-          git push origin HEAD:main
-          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          for attempt in 1 2 3; do
+            git pull --rebase origin main
+            if git push origin HEAD:main; then
+              echo "pushed=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; retrying after rebase..."
+            sleep 5
+          done
+          echo "::error::git push failed after 3 attempts"
+          exit 1
 
       # IndexNow ping — only runs if we actually pushed new content.
       # The script polls Hostinger for today's date in the page body BEFORE
