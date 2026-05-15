@@ -1,0 +1,39 @@
+name: Daily Puzzle Summary Email
+
+# Cloudflare Worker Cron dispatches this workflow at 7:30 AM ET.
+# Do not add a GitHub schedule trigger; Worker Cron is the only scheduler.
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Puzzle date to summarize (YYYY-MM-DD). Defaults to today in America/New_York.'
+        required: false
+        type: string
+
+jobs:
+  summary:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send puzzle summary email
+        run: node src/scripts/send-daily-puzzle-summary.mjs
+        env:
+          SUMMARY_DATE: ${{ github.event.inputs.date || '' }}
+          REPORT_SMTP_USER: ${{ secrets.REPORT_SMTP_USER }}
+          REPORT_SMTP_PASS: ${{ secrets.REPORT_SMTP_PASS }}
+          REPORT_RECEIVER: ${{ secrets.REPORT_RECEIVER }}
+          REPORT_SMTP_HOST: ${{ secrets.REPORT_SMTP_HOST }}
+          REPORT_SMTP_PORT: ${{ secrets.REPORT_SMTP_PORT }}

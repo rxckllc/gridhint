@@ -10,6 +10,7 @@
  */
 
 import path from 'path';
+import fs from 'fs';
 import { createHash } from 'crypto';
 import {
   SpellingBeeDailySchema,
@@ -48,6 +49,23 @@ interface NormalizedSpellingBeeResponse {
   pangrams: string[];
   answers: string[];
   printDate?: string;
+}
+
+function existingPuzzleIsFresh(date: string): boolean {
+  const datePath = path.join(DATA_DIR, `${date}.json`);
+  if (!fs.existsSync(datePath)) return false;
+
+  try {
+    const puzzle = SpellingBeeDailySchema.parse(JSON.parse(fs.readFileSync(datePath, 'utf8')));
+    if (puzzle.date !== date) {
+      throw new Error(`date field ${puzzle.date} does not match ${date}`);
+    }
+    validateSpellingBeeIntegrity(puzzle);
+    return true;
+  } catch (err) {
+    console.warn(`[bee] existing ${datePath} failed validation: ${err}`);
+    return false;
+  }
 }
 
 function sha256(input: string): string {
@@ -171,11 +189,15 @@ function getTargetDate(): string {
 }
 
 async function main(): Promise<void> {
-  checkCooldown();
-  await notifyStart();
-
   const targetDate = getTargetDate();
   console.log(`[bee] target date (NY): ${targetDate}`);
+  if (existingPuzzleIsFresh(targetDate)) {
+    console.log(`[bee] already fresh: ${targetDate}`);
+    return;
+  }
+
+  checkCooldown();
+  await notifyStart();
 
   await warmUpCookies('https://www.nytimes.com/puzzles/spelling-bee');
 

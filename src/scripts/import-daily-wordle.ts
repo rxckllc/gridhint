@@ -7,6 +7,7 @@
  */
 
 import path from 'path';
+import fs from 'fs';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import {
   WordleDailySchema,
@@ -28,6 +29,23 @@ interface NYTWordleResponse {
   print_date?: string;
   days_since_launch?: number;
   editor?: string;
+}
+
+function existingPuzzleIsFresh(date: string): boolean {
+  const datePath = path.join(DATA_DIR, `${date}.json`);
+  if (!fs.existsSync(datePath)) return false;
+
+  try {
+    const puzzle = WordleDailySchema.parse(JSON.parse(fs.readFileSync(datePath, 'utf8')));
+    if (puzzle.date !== date) {
+      throw new Error(`date field ${puzzle.date} does not match ${date}`);
+    }
+    validateWordleIntegrity(puzzle);
+    return true;
+  } catch (err) {
+    console.warn(`[wordle] existing ${datePath} failed validation: ${err}`);
+    return false;
+  }
 }
 
 function patternFor(word: string): string {
@@ -130,6 +148,13 @@ async function buildPuzzle(date: string, raw: unknown): Promise<WordleDaily> {
 }
 
 async function main(): Promise<void> {
+  const targetDate = getNYDate();
+  console.log(`[wordle] target date (NY): ${targetDate}`);
+  if (existingPuzzleIsFresh(targetDate)) {
+    console.log(`[wordle] already fresh: ${targetDate}`);
+    return;
+  }
+
   const geminiKey = process.env.GEMINI_API_KEY;
   if (!geminiKey || geminiKey.length < 20) {
     throw new Error('GEMINI_API_KEY missing or too short.');
@@ -137,9 +162,6 @@ async function main(): Promise<void> {
 
   checkCooldown();
   await notifyStart();
-
-  const targetDate = getNYDate();
-  console.log(`[wordle] target date (NY): ${targetDate}`);
 
   await warmUpCookies('https://www.nytimes.com/games/wordle');
   const raw = await fetchNYTDaily({

@@ -110,73 +110,57 @@ export interface FetchOptions {
   url: string;
   /** Referer for the XHR fetch (typically the game landing page). */
   referer: string;
-  /** Treat 404 as "not yet posted" and retry on a delayed schedule. */
+  /** Deprecated: NYT 404 is now treated as a soft "not posted yet" exit. */
   notFoundRetry?: boolean;
 }
 
 /**
  * Fetch a daily NYT JSON endpoint with status-differentiated retry.
- * - 404: retry at +15min, +30min, +60min (if notFoundRetry=true)
+ * - 404: log "not posted yet, will retry next tick" and exit 0
  * - 5xx/network: exponential backoff (5s, 10s, 20s) up to 3 attempts
  * - 403/429: write 48h cooldown and abort
  *
  * Returns the parsed JSON.
- * Exits process(2) on persistent 404 (puzzle not posted).
  */
 export async function fetchNYTDaily(opts: FetchOptions): Promise<unknown> {
-  const { url, referer, notFoundRetry = true } = opts;
-  const notFoundDelays = notFoundRetry
-    ? [0, 15 * 60 * 1000, 30 * 60 * 1000, 60 * 60 * 1000]
-    : [0];
+  const { url, referer } = opts;
 
-  for (let attempt = 0; attempt < notFoundDelays.length; attempt++) {
-    if (notFoundDelays[attempt] > 0) {
-      console.log(`[fetch] 404 retry in ${notFoundDelays[attempt] / 60000}min...`);
-      await sleep(notFoundDelays[attempt]);
-    }
-
-    let lastError: unknown;
-    for (let retry = 0; retry < 3; retry++) {
-      try {
-        if (retry > 0) {
-          const backoff = 5000 * Math.pow(2, retry - 1);
-          console.log(`[fetch] retry ${retry}/2 after ${backoff}ms`);
-          await sleep(backoff);
-        }
-
-        console.log(`[fetch] GET ${url} (attempt ${attempt + 1})`);
-        const res = await fetchJSON(url, referer);
-
-        if (res.ok) return await res.json();
-
-        if (res.status === 404) {
-          console.warn('[fetch] 404 — puzzle not yet posted.');
-          break;
-        }
-
-        if (res.status === 403 || res.status === 429) {
-          console.error(`[fetch] BLOCKED: HTTP ${res.status}. Writing 48h cooldown and aborting.`);
-          writeCooldown(48);
-          throw makeFetchError(res.status, `NYT blocked us with ${res.status}`);
-        }
-
-        if (res.status >= 500) {
-          lastError = makeFetchError(res.status, `NYT returned ${res.status}`);
-          continue;
-        }
-
-        throw makeFetchError(res.status, `Unexpected HTTP ${res.status}`);
-      } catch (err) {
-        const fe = err as FetchError;
-        if (fe.status === 403 || fe.status === 429) throw err;
-        lastError = err;
-        if (retry === 2) throw lastError;
+  let lastError: unknown;
+  for (let retry = 0; retry < 3; retry++) {
+    try {
+      if (retry > 0) {
+        const backoff = 5000 * Math.pow(2, retry - 1);
+        console.log(`[fetch] retry ${retry}/2 after ${backoff}ms`);
+        await sleep(backoff);
       }
-    }
 
-    if (attempt === notFoundDelays.length - 1) {
-      console.error('[fetch] puzzle still not posted after all 404 retries; exit 2.');
-      process.exit(2);
+      console.log(`[fetch] GET ${url} (attempt ${retry + 1})`);
+      const res = await fetchJSON(url, referer);
+
+      if (res.ok) return await res.json();
+
+      if (res.status === 404) {
+        console.warn('[fetch] not posted yet, will retry next tick');
+        process.exit(0);
+      }
+
+      if (res.status === 403 || res.status === 429) {
+        console.error(`[fetch] BLOCKED: HTTP ${res.status}. Writing 48h cooldown and aborting.`);
+        writeCooldown(48);
+        throw makeFetchError(res.status, `NYT blocked us with ${res.status}`);
+      }
+
+      if (res.status >= 500) {
+        lastError = makeFetchError(res.status, `NYT returned ${res.status}`);
+        continue;
+      }
+
+      throw makeFetchError(res.status, `Unexpected HTTP ${res.status}`);
+    } catch (err) {
+      const fe = err as FetchError;
+      if (fe.status === 403 || fe.status === 429) throw err;
+      lastError = err;
+      if (retry === 2) throw lastError;
     }
   }
 

@@ -1,0 +1,25 @@
+name = "gridhint-puzzle-cron-worker"
+main = "src/index.ts"
+compatibility_date = "2026-05-15"
+
+[triggers]
+crons = [
+  "5,25,45 4-5 * * *",
+  "5 6 * * *",
+  "5,25,45 7-9 * * *",
+  "5 10 * * *",
+  "30 11 * * *"
+]
+
+[vars]
+GITHUB_OWNER = "rxckllc"
+GITHUB_REPO = "gridhint"
+GITHUB_REF = "main"
+GITHUB_WORKFLOW_ID = "daily-puzzle.yml"
+SUMMARY_WORKFLOW_ID = "daily-puzzle-summary.yml"
+
+# UTC windows. The Worker checks each game independently on every
+# 05/25/45 cron tick and dispatches only games whose window is active.
+CONNECTIONS_WINDOW_UTC = "04:05-06:05"
+WORDLE_WINDOW_UTC = "04:05-06:05"
+SPELLING_BEE_WINDOW_UTC = "07:05-10:05"

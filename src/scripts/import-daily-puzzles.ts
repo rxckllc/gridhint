@@ -18,6 +18,7 @@
  */
 
 import path from 'path';
+import fs from 'fs';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import {
   ConnectionsPuzzleSchema,
@@ -36,6 +37,23 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.5-flash';
 const DIFFICULTY_MAP: Record<number, 'yellow' | 'green' | 'blue' | 'purple'> = {
   0: 'yellow', 1: 'green', 2: 'blue', 3: 'purple',
 };
+
+function existingPuzzleIsFresh(date: string): boolean {
+  const datePath = path.join(DATA_DIR, `${date}.json`);
+  if (!fs.existsSync(datePath)) return false;
+
+  try {
+    const puzzle = ConnectionsPuzzleSchema.parse(JSON.parse(fs.readFileSync(datePath, 'utf8')));
+    if (puzzle.date !== date) {
+      throw new Error(`date field ${puzzle.date} does not match ${date}`);
+    }
+    validatePuzzleIntegrity(puzzle);
+    return true;
+  } catch (err) {
+    console.warn(`[main] existing ${datePath} failed validation: ${err}`);
+    return false;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Gemini hint generation (Connections-specific prompt)
@@ -212,6 +230,13 @@ async function tryEyefyreFallback(date: string): Promise<unknown | null> {
 // ---------------------------------------------------------------------------
 
 async function main(): Promise<void> {
+  const targetDate = getNYDate();
+  console.log(`[main] target date (NY): ${targetDate}`);
+  if (existingPuzzleIsFresh(targetDate)) {
+    console.log(`[main] already fresh: Connections ${targetDate}`);
+    return;
+  }
+
   const geminiKey = process.env.GEMINI_API_KEY;
   if (!geminiKey || geminiKey.length < 20) {
     throw new Error('GEMINI_API_KEY is missing or too short. Aborting.');
@@ -219,9 +244,6 @@ async function main(): Promise<void> {
 
   checkCooldown();
   await notifyStart();
-
-  const targetDate = getNYDate();
-  console.log(`[main] target date (NY): ${targetDate}`);
 
   let rawNYT: unknown;
   try {

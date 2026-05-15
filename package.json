@@ -16,7 +16,8 @@
     "data:lexicon": "tsx src/scripts/import-lexicon.ts",
     "data:ladder-index": "tsx src/scripts/generate-ladder-index.ts",
     "data:dashboard": "node src/scripts/fetch-analytics.mjs",
-    "data:report": "node src/scripts/send-daily-report.mjs"
+    "data:report": "node src/scripts/send-daily-report.mjs",
+    "data:puzzle-summary": "node src/scripts/send-daily-puzzle-summary.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

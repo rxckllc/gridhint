@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GridHint
 
-## Getting Started
+GridHint is a Next.js app for daily puzzle hints and word-game tools. Daily puzzle data is generated into `src/data/generated/` and committed back to the repository by automation.
 
-First, run the development server:
+## Local Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Useful checks:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+npm run data:validate
+```
 
-## Learn More
+## Daily Puzzle Automation
 
-To learn more about Next.js, take a look at the following resources:
+The daily data path is:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Cloudflare Worker Cron is the only scheduler.
+2. The Worker dispatches `.github/workflows/daily-puzzle.yml` with `game=connections`, `game=wordle`, or `game=spelling-bee`.
+3. The workflow runs the matching import script, validates generated files, commits changes under `src/data/generated/`, rebases, pushes to `main`, and pings IndexNow only when content changed.
+4. IndexNow results are committed to `src/data/generated/<game>/indexnow-status.json`.
+5. The Worker dispatches `.github/workflows/daily-puzzle-summary.yml` once daily for the combined puzzle + IndexNow email.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Manual fire path:
 
-## Deploy on Vercel
+```text
+GitHub Actions -> Daily Puzzle Update -> Run workflow -> choose all/connections/wordle/spelling-bee
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Generated status files:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `src/data/generated/<game>/{date}.json`
+- `src/data/generated/<game>/latest.json`
+- `src/data/generated/<game>/manifest.json`
+- `src/data/generated/<game>/indexnow-status.json`
+- `.gridhint-cooldown.json` when NYT returns 403 or 429 and imports should pause
+
+Retry behavior:
+
+- If today's generated file already exists and validates, the import logs `already fresh` and exits without fetch, commit, or push.
+- If NYT returns 404, the import logs `not posted yet, will retry next tick` and exits successfully. The next Worker tick tries again.
+- Network, parse, Gemini, and validation errors fail the workflow and surface in the daily summary when the puzzle is still missing or invalid.
+- IndexNow is soft-fail for the refresh workflow but records per-endpoint status for Bing, Yandex, Seznam, Naver, and Yep.
+
+The Cloudflare Worker runbook for the external scheduler, including trigger flow, debugging, fine-grained PAT rotation, DST dates for 2026 and 2027, retries, manual firing, status files, and deploy/test steps, is in [infra/puzzle-cron-worker/README.md](infra/puzzle-cron-worker/README.md).
