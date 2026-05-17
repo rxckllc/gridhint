@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-17T08:05:54.246Z",
+  "updatedAt": "2026-05-17T08:25:54.049Z",
   "timeZone": "America/New_York",
   "githubPatExpires": "2026-05-20",
   "summaryDispatchEt": "07:45",
@@ -166,12 +166,12 @@
     "spelling-bee": {
       "target": "spelling-bee",
       "workflowId": "daily-puzzle.yml",
-      "lastAttemptAt": "2026-05-17T08:05:54.007Z",
+      "lastAttemptAt": "2026-05-17T08:25:53.861Z",
       "lastAttemptEtDate": "2026-05-17",
       "lastSource": "cron",
       "lastStatus": 204,
       "lastMessage": "workflow_dispatch accepted by GitHub",
-      "lastSuccessfulDispatchAt": "2026-05-17T08:05:54.007Z",
+      "lastSuccessfulDispatchAt": "2026-05-17T08:25:53.861Z",
       "lastSuccessfulDispatchEtDate": "2026-05-17",
       "lastSuccessfulStatus": 204,
       "history": [
@@ -303,6 +303,15 @@
         },
         {
           "at": "2026-05-17T08:05:54.007Z",
+          "etDate": "2026-05-17",
+          "source": "cron",
+          "ok": true,
+          "status": 204,
+          "workflowId": "daily-puzzle.yml",
+          "message": "workflow_dispatch accepted by GitHub"
+        },
+        {
+          "at": "2026-05-17T08:25:53.861Z",
           "etDate": "2026-05-17",
           "source": "cron",
           "ok": true,
