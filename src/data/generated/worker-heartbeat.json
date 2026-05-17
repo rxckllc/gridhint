@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-17T04:05:54.269Z",
+  "updatedAt": "2026-05-17T04:25:54.030Z",
   "timeZone": "America/New_York",
   "githubPatExpires": "2026-05-20",
   "summaryDispatchEt": "07:45",
@@ -8,12 +8,12 @@
     "wordle": {
       "target": "wordle",
       "workflowId": "daily-puzzle.yml",
-      "lastAttemptAt": "2026-05-17T04:05:54.018Z",
+      "lastAttemptAt": "2026-05-17T04:25:53.837Z",
       "lastAttemptEtDate": "2026-05-17",
       "lastSource": "cron",
       "lastStatus": 204,
       "lastMessage": "workflow_dispatch accepted by GitHub",
-      "lastSuccessfulDispatchAt": "2026-05-17T04:05:54.018Z",
+      "lastSuccessfulDispatchAt": "2026-05-17T04:25:53.837Z",
       "lastSuccessfulDispatchEtDate": "2026-05-17",
       "lastSuccessfulStatus": 204,
       "history": [
@@ -100,6 +100,15 @@
         },
         {
           "at": "2026-05-17T04:05:54.018Z",
+          "etDate": "2026-05-17",
+          "source": "cron",
+          "ok": true,
+          "status": 204,
+          "workflowId": "daily-puzzle.yml",
+          "message": "workflow_dispatch accepted by GitHub"
+        },
+        {
+          "at": "2026-05-17T04:25:53.837Z",
           "etDate": "2026-05-17",
           "source": "cron",
           "ok": true,
@@ -225,12 +234,12 @@
     "connections": {
       "target": "connections",
       "workflowId": "daily-puzzle.yml",
-      "lastAttemptAt": "2026-05-17T04:05:54.059Z",
+      "lastAttemptAt": "2026-05-17T04:25:53.814Z",
       "lastAttemptEtDate": "2026-05-17",
       "lastSource": "cron",
       "lastStatus": 204,
       "lastMessage": "workflow_dispatch accepted by GitHub",
-      "lastSuccessfulDispatchAt": "2026-05-17T04:05:54.059Z",
+      "lastSuccessfulDispatchAt": "2026-05-17T04:25:53.814Z",
       "lastSuccessfulDispatchEtDate": "2026-05-17",
       "lastSuccessfulStatus": 204,
       "history": [
@@ -308,6 +317,15 @@
         },
         {
           "at": "2026-05-17T04:05:54.059Z",
+          "etDate": "2026-05-17",
+          "source": "cron",
+          "ok": true,
+          "status": 204,
+          "workflowId": "daily-puzzle.yml",
+          "message": "workflow_dispatch accepted by GitHub"
+        },
+        {
+          "at": "2026-05-17T04:25:53.814Z",
           "etDate": "2026-05-17",
           "source": "cron",
           "ok": true,
