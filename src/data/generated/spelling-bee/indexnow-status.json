@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-05-17T07:10:22.972Z",
-  "updatedAt": "2026-05-17T07:10:22.972Z",
+  "timestamp": "2026-05-18T07:10:07.998Z",
+  "updatedAt": "2026-05-18T07:10:07.998Z",
   "game": "spelling-bee",
   "overall": "PARTIAL",
   "submittedUrls": [
@@ -42,13 +42,13 @@
       "body": "{\"success\":false,\"message\":\"Failed to get key file\"}"
     }
   },
-  "consecutiveFailures": 2,
+  "consecutiveFailures": 3,
   "endpointConsecutiveFailures": {
     "bing": 0,
     "yandex": 0,
     "seznam": 0,
     "naver": 0,
-    "yep": 2
+    "yep": 3
   },
   "history": [
     {
@@ -96,6 +96,49 @@
     },
     {
       "timestamp": "2026-05-17T07:10:22.972Z",
+      "overall": "PARTIAL",
+      "submittedUrls": [
+        "https://gridhint.com/spelling-bee-answers/",
+        "https://gridhint.com/",
+        "https://gridhint.com/sitemap.xml"
+      ],
+      "endpoints": {
+        "bing": {
+          "endpoint": "bing",
+          "url": "https://www.bing.com/indexnow",
+          "status": 200,
+          "ok": true
+        },
+        "yandex": {
+          "endpoint": "yandex",
+          "url": "https://yandex.com/indexnow",
+          "status": 202,
+          "ok": true,
+          "body": "{\n  \"success\":true\n}"
+        },
+        "seznam": {
+          "endpoint": "seznam",
+          "url": "https://search.seznam.cz/indexnow",
+          "status": 200,
+          "ok": true
+        },
+        "naver": {
+          "endpoint": "naver",
+          "url": "https://searchadvisor.naver.com/indexnow",
+          "status": 200,
+          "ok": true
+        },
+        "yep": {
+          "endpoint": "yep",
+          "url": "https://indexnow.yep.com/indexnow",
+          "status": 422,
+          "ok": false,
+          "body": "{\"success\":false,\"message\":\"Failed to get key file\"}"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-05-18T07:10:07.998Z",
       "overall": "PARTIAL",
       "submittedUrls": [
         "https://gridhint.com/spelling-bee-answers/",
